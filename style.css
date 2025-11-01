@@ -5835,6 +5835,16 @@ body.translation-mode .skip-btn:hover {
 
 .missions-content {
     padding: 20px 0;
+    max-height: 70vh;
+    overflow-y: auto;
+    /* 📱 Samsung M33: Touch scroll optimization */
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.missions-content::-webkit-scrollbar {
+    display: none;
 }
 
 .missions-summary {
@@ -5872,6 +5882,9 @@ body.translation-mode .skip-btn:hover {
     grid-template-columns: 1fr;
     gap: 16px;
     padding: 0 20px;
+    /* 📱 Samsung M33: Smooth touch scrolling */
+    touch-action: pan-y;
+    scroll-behavior: smooth;
 }
 
 .mission-card {
