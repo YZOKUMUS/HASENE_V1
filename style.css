@@ -2406,10 +2406,51 @@ body {
         transform: translateY(1px);
     }
     
+    /* 📱 Samsung M33 Enhanced Touch Scrolling */
+    .achievements-container, .calendar-modal-content, .stats-modal-content {
+        scroll-behavior: smooth;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Scroll indicator for long content */
+    .scroll-container {
+        position: relative;
+    }
+    
+    .scroll-indicator {
+        position: absolute;
+        right: 5px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 2px;
+        height: 30px;
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 1px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    .scroll-container:hover .scroll-indicator {
+        opacity: 1;
+    }
+    
     /* 📱 Samsung M33 Performance Optimization */
-    .achievements-grid, .calendar-grid, .stats-container {
+    /* 📱 Samsung M33 Touch Scrolling - Scroll Bar Gizli */
+    .achievements-grid, .calendar-grid, .stats-container, .modal-content {
         will-change: scroll-position;
         -webkit-overflow-scrolling: touch;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE/Edge */
+    }
+    
+    /* Chrome/Safari scroll bar gizleme */
+    .achievements-grid::-webkit-scrollbar,
+    .calendar-grid::-webkit-scrollbar,
+    .stats-container::-webkit-scrollbar,
+    .modal-content::-webkit-scrollbar,
+    .achievements-container::-webkit-scrollbar {
+        display: none;
     }
     
     /* Hardware acceleration for animations */
@@ -2605,6 +2646,11 @@ input:focus {
     padding: 25px;
     max-height: 400px;
     overflow-y: auto;
+    /* 📱 Samsung M33: Scroll bar gizli, touch scroll */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
 }
 
 .achievement-item {
@@ -3762,6 +3808,15 @@ input:focus {
         gap: 8px;
         padding: 15px;
         max-height: calc(100vh - 80px);
+        /* 📱 Samsung M33: Parmak kaydırma optimizasyonu */
+        overscroll-behavior: contain;
+        scroll-snap-type: y proximity;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Achievement items smooth scroll */
+    .achievement-item {
+        scroll-snap-align: start;
     }
     
     /* 📱 Mobile Achievement Cards - Minimal & Clean */
@@ -6667,6 +6722,10 @@ input:checked + .toggle-slider:before {
     max-height: 50vh;
     overflow-y: auto;
     scroll-behavior: smooth;
+    /* 📱 Samsung M33: Scroll bar gizli */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
 }
 
 .achievements-grid {
