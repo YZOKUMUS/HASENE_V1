@@ -47,15 +47,25 @@ const MobileDebugger = {
             console.log('🎯 Found option buttons:', optionButtons.length);
             
             optionButtons.forEach((button, index) => {
-                // Add touch event listener
-                button.addEventListener('touchend', (e) => {
+                // Multiple event types for better compatibility
+                const handleSelection = (eventType, e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    console.log('📱 Touch detected on option', index);
+                    console.log(`📱 ${eventType} detected on option`, index);
                     selectOption(button, index);
+                };
+                
+                // Add multiple event listeners
+                button.addEventListener('touchend', (e) => handleSelection('Touch', e), { passive: false });
+                button.addEventListener('pointerup', (e) => handleSelection('Pointer', e), { passive: false });
+                button.addEventListener('mouseup', (e) => {
+                    // Only trigger if not already handled by touch
+                    if (!e.isTrusted || e.pointerType !== 'touch') {
+                        handleSelection('Mouse', e);
+                    }
                 }, { passive: false });
                 
-                console.log('✅ Added touch handler to button', index);
+                console.log('✅ Added touch/pointer/mouse handlers to button', index);
             });
         };
         
@@ -63,6 +73,17 @@ const MobileDebugger = {
         addOptionHandlers();
         setTimeout(addOptionHandlers, 1000);
         setTimeout(addOptionHandlers, 3000); // Extra delay for game load
+        
+        // Also add a global touch test
+        document.addEventListener('touchstart', () => {
+            console.log('🔥 Global touchstart detected!');
+        }, { passive: true });
+        
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('option-btn')) {
+                console.log('🖱️ Click detected on option button via delegation');
+            }
+        });
     }
 
 };
