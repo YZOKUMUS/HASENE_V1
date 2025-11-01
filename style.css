@@ -1067,11 +1067,22 @@ body {
     display: flex;
     align-items: center;
     gap: 20px;
+    /* 📱 Samsung M33 Touch Optimization */
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    user-select: none;
+    min-height: 44px;
 }
 
 .game-mode-btn:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-medium);
+}
+
+/* 📱 Samsung M33 Game Mode Button Touch Feedback */
+.game-mode-btn:active {
+    transform: scale(0.97);
+    filter: brightness(1.1);
 }
 
 /* Disabled game mode buttons */
