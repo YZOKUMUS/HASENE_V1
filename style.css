@@ -7086,3 +7086,36 @@ input:checked + .toggle-slider:before {
         padding: 20px;
     }
 }
+
+/* 🚫 PWA Install Butonu ve Debug Butonları Gizle */
+/* Chrome PWA install button */
+#pwa-install-button,
+button[aria-label*="Install"],
+button[title*="Install"],
+.pwa-install-prompt,
+
+/* Browser extension buttons */
+.extension-button,
+.debug-button,
+.clear-console-button,
+
+/* Floating debug/test buttons */
+div[style*="position: fixed"][style*="bottom"][style*="right"],
+button[style*="position: fixed"][style*="bottom"][style*="right"],
+
+/* Specific debug button patterns */
+button[onclick*="clear"],
+button[onclick*="console"],
+button[onclick*="debug"],
+button[onclick*="test"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+}
+
+/* Ekstra güvenlik - tüm fixed positioned kırmızı butonları gizle */
+*[style*="position: fixed"][style*="background: red"],
+*[style*="position: fixed"][style*="background-color: red"],
+*[style*="position: fixed"][style*="#ff"] {
+    display: none !important;
+}
