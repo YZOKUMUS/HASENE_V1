@@ -1030,6 +1030,13 @@ class ArabicLearningGame {
                 newWordsLearned: 0
             };
             this.saveDailyProgress();
+        } else {
+            // Convert modesPlayed array back to Set if it exists
+            if (this.dailyProgress.modesPlayed && Array.isArray(this.dailyProgress.modesPlayed)) {
+                this.dailyProgress.modesPlayed = new Set(this.dailyProgress.modesPlayed);
+            } else if (!this.dailyProgress.modesPlayed) {
+                this.dailyProgress.modesPlayed = new Set();
+            }
         }
     }
     
