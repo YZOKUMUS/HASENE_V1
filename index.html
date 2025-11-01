@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body ontouchstart="" tabindex="0">
+<body tabindex="0">
     <!-- 🎨 Duolingo-Style Loading Screen -->
     <div id="loadingScreen" class="screen duo-loading">
         <div class="duo-loading-container">
@@ -153,19 +153,19 @@
             </div>
 
             <div class="quick-actions">
-                <button id="dailyMissionsBtn" class="action-btn missions" onclick="showDailyMissions()" 
+                <button id="dailyMissionsBtn" class="action-btn missions" onclick="showDailyMissions()" ontouchstart="this.click()"
                         aria-label="Günlük görevleri görüntüle" title="Bugünün özel görevleri ve ödülleri">
                     <i class="fas fa-tasks" aria-hidden="true"></i>
                     <span>Günlük Görevler</span>
                     <span id="missionsBadgeCount" class="badge-counter" style="display: none;">0</span>
                 </button>
-                <button id="achievementsBtn" class="action-btn achievements" onclick="showAchievements()" 
+                <button id="achievementsBtn" class="action-btn achievements" onclick="showAchievements()" ontouchstart="this.click()"
                         aria-label="Başarıları görüntüle" title="Başarıları ve rozetleri görüntüle">
                     <i class="fas fa-trophy" aria-hidden="true"></i>
                     <span>Başarılar</span>
                     <span id="unlockedBadgeCount" class="badge-counter" style="display: none;">0</span>
                 </button>
-                <button id="statsBtn" class="action-btn stats" onclick="showStats()" 
+                <button id="statsBtn" class="action-btn stats" onclick="showStats()" ontouchstart="this.click()"
                         aria-label="İstatistikleri görüntüle" title="Öğrenme istatistiklerin ve ilerlemen">
                     <i class="fas fa-chart-bar" aria-hidden="true"></i>
                     <span>İstatistikler</span>
@@ -175,7 +175,7 @@
                     <i class="fas fa-music" aria-hidden="true"></i>
                     <span>Ses Ayarları</span>
                 </button>
-                <button class="action-btn calendar" onclick="toggleCalendar()" ontouchstart="" tabindex="0">
+                <button class="action-btn calendar" onclick="toggleCalendar()" ontouchstart="this.click()" tabindex="0">
                     <i class="fas fa-calendar-alt"></i>
                     <span>Takvim</span>
                 </button>
@@ -508,34 +508,34 @@
                         </div>
                     </div>
                 </div>
-                <button class="close-modal-btn" onclick="closeAchievementsModal()" ontouchstart="" tabindex="0">
+                <button class="close-modal-btn" onclick="closeAchievementsModal()" ontouchstart="this.click()" tabindex="0">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             
             <!-- Rarity Filter Tabs -->
             <div class="rarity-tabs">
-                <button class="rarity-tab active" onclick="filterByRarity('all')" ontouchstart="" data-rarity="all" tabindex="0">
+                <button class="rarity-tab active" onclick="filterByRarity('all')" ontouchstart="this.click()" data-rarity="all" tabindex="0">
                     <i class="fas fa-medal"></i>
                     <span>Tümü</span>
                     <span class="tab-count" id="allCount">0</span>
                 </button>
-                <button class="rarity-tab bronze" onclick="filterByRarity('bronze')" ontouchstart="" data-rarity="bronze" tabindex="0">
+                <button class="rarity-tab bronze" onclick="filterByRarity('bronze')" ontouchstart="this.click()" data-rarity="bronze" tabindex="0">
                     <i class="fas fa-medal"></i>
                     <span>Bronz</span>
                     <span class="tab-count" id="bronzeCount">0</span>
                 </button>
-                <button class="rarity-tab silver" onclick="filterByRarity('silver')" ontouchstart="" data-rarity="silver" tabindex="0">
+                <button class="rarity-tab silver" onclick="filterByRarity('silver')" ontouchstart="this.click()" data-rarity="silver" tabindex="0">
                     <i class="fas fa-medal"></i>
                     <span>Gümüş</span>
                     <span class="tab-count" id="silverCount">0</span>
                 </button>
-                <button class="rarity-tab gold" onclick="filterByRarity('gold')" ontouchstart="" data-rarity="gold" tabindex="0">
+                <button class="rarity-tab gold" onclick="filterByRarity('gold')" ontouchstart="this.click()" data-rarity="gold" tabindex="0">
                     <i class="fas fa-medal"></i>
                     <span>Altın</span>
                     <span class="tab-count" id="goldCount">0</span>
                 </button>
-                <button class="rarity-tab diamond" onclick="filterByRarity('diamond')" ontouchstart="" data-rarity="diamond" tabindex="0">
+                <button class="rarity-tab diamond" onclick="filterByRarity('diamond')" ontouchstart="this.click()" data-rarity="diamond" tabindex="0">
                     <i class="fas fa-gem"></i>
                     <span>Elmas</span>
                     <span class="tab-count" id="diamondCount">0</span>
@@ -605,7 +605,7 @@
         <div class="modal-content missions-modal">
             <div class="modal-header">
                 <h2><i class="fas fa-tasks"></i> Günlük Görevler</h2>
-                <button class="close-modal-btn" onclick="closeDailyMissionsModal()" ontouchstart="" tabindex="0">
+                <button class="close-modal-btn" onclick="closeDailyMissionsModal()" ontouchstart="this.click()" tabindex="0">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -636,15 +636,15 @@
         <div class="modal-content calendar-modal">
             <div class="modal-header">
                 <h2><i class="fas fa-calendar-alt"></i> Streak Takviminiz</h2>
-                <button class="close-modal-btn" onclick="closeCalendarModal()" ontouchstart="" tabindex="0">
+                <button class="close-modal-btn" onclick="closeCalendarModal()" ontouchstart="this.click()" tabindex="0">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             <div class="calendar-modal-content">
                 <div class="calendar-header">
-                    <button class="calendar-nav" onclick="changeMonth(-1)" ontouchstart="" tabindex="0">‹</button>
+                    <button class="calendar-nav" onclick="changeMonth(-1)" ontouchstart="this.click()" tabindex="0">‹</button>
                     <h4 id="currentMonth">Ekim 2025</h4>
-                    <button class="calendar-nav" onclick="changeMonth(1)" ontouchstart="" tabindex="0">›</button>
+                    <button class="calendar-nav" onclick="changeMonth(1)" ontouchstart="this.click()" tabindex="0">›</button>
                 </div>
                 <div class="calendar-grid" id="calendarGrid">
                     <!-- Takvim günleri buraya JavaScript ile eklenecek -->
@@ -732,7 +732,7 @@
         <div class="modal-content hadis-modal">
             <div class="modal-header">
                 <h2><i class="fas fa-book-open"></i> Günün Hadisi</h2>
-                <button class="close-modal-btn" onclick="closeHadisModal()" ontouchstart="" tabindex="0">
+                <button class="close-modal-btn" onclick="closeHadisModal()" ontouchstart="this.click()" tabindex="0">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -747,7 +747,7 @@
         <div class="modal-content stats-modal">
             <div class="modal-header">
                 <h2><i class="fas fa-chart-bar"></i> Detaylı İstatistikler</h2>
-                <button class="close-modal-btn" onclick="closeStatsModal()" ontouchstart="" tabindex="0">
+                <button class="close-modal-btn" onclick="closeStatsModal()" ontouchstart="this.click()" tabindex="0">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -892,7 +892,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2>🛡️ Streak Koruma Mağazası</h2>
-                <button class="close-modal-btn" onclick="closeStreakShop()" ontouchstart="" tabindex="0">
+                <button class="close-modal-btn" onclick="closeStreakShop()" ontouchstart="this.click()" tabindex="0">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -905,7 +905,7 @@
                     <p>1 gün koruma sağlar. Bir gün oynayamazsan streak'in kırılmaz.</p>
                     <div class="item-price">💰 100 Hasene</div>
                     <div class="item-owned">Sahip olduğun: <span id="ownedStreakFreezes">0</span></div>
-                    <button class="shop-buy-btn" onclick="buyItem('streakFreeze')">Satın Al</button>
+                    <button class="shop-buy-btn" onclick="buyItem('streakFreeze')" ontouchstart="this.click()">Satın Al</button>
                 </div>
                 
                 <div class="shop-item">
@@ -914,7 +914,7 @@
                     <p>2 gün koruma sağlar. Hafta sonu için mükemmel!</p>
                     <div class="item-price">💰 180 Hasene</div>
                     <div class="item-owned">Sahip olduğun: <span id="ownedWeekendPasses">0</span></div>
-                    <button class="shop-buy-btn" onclick="buyItem('weekendPass')">Satın Al</button>
+                    <button class="shop-buy-btn" onclick="buyItem('weekendPass')" ontouchstart="this.click()">Satın Al</button>
                 </div>
             </div>
             
