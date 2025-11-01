@@ -44,10 +44,35 @@
 
 ## 🚀 Kurulum ve Çalıştırma
 
-### 1. Repository'yi Klonlayın
+### 🌐 Online Oynama (Önerilen)
+**Canlı Demo**: https://yzokumus.github.io/HASENE-ARABIC-GAME-MAIN/
+
+### 📱 Mobil Cihazlarda (Samsung M33 Dahil Tüm Android Cihazlar)
+
+#### 🌐 Web Browser ile Oynama:
+1. **Samsung Internet** veya **Chrome** uygulamasını aç
+2. **Adres çubuğuna** git: `https://yzokumus.github.io/HASENE-ARABIC-GAME-MAIN/`
+3. **3 nokta menü** → **Ana ekrana ekle** → **Ekle**
+4. 🎉 **Ana ekranında** HASENE ikonu görünür, uygulama gibi çalışır!
+
+#### 📶 Offline Özellikler:
+- ✅ **İnternet olmadan** da çalışır (PWA teknolojisi)
+- ✅ **Hızlı yükleme** (3 saniye loading)
+- ✅ **6.4" Samsung M33** ekranına optimize
+- ✅ **Touch-friendly** butonlar
+- ✅ **Düşük RAM** kullanımı
+
+#### 🔧 Samsung M33 Optimizasyonları:
+- **Android 12+** uyumlu
+- **Exynos 1280** işlemci optimize
+- **6GB RAM** için optimize edilmiş
+- **90Hz ekran** için smooth animasyonlar
+
+### 💻 Local Çalıştırma
+#### 1. Repository'yi Klonlayın
 ```bash
-git clone https://github.com/[kullanıcı-adı]/HASENE-Arabic-Learning-Game.git
-cd HASENE-Arabic-Learning-Game
+git clone https://github.com/YZOKUMUS/HASENE-ARABIC-GAME-MAIN.git
+cd HASENE-ARABIC-GAME-MAIN
 ```
 
 ### 2. Yerel Sunucu Başlatın
