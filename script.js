@@ -104,7 +104,8 @@ function updateBuildTimestamp() {
         const month = String(now.getMonth() + 1).padStart(2, '0');
         const hours = String(now.getHours()).padStart(2, '0');
         const minutes = String(now.getMinutes()).padStart(2, '0');
-        timestampElement.textContent = `Build: ${day}${month}.${hours}${minutes}`;
+        const timestamp = `Build: ${day}${month}.${hours}${minutes}`;
+        timestampElement.textContent = timestamp;
     }
 }
 
