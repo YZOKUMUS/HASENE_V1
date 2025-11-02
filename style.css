@@ -2866,7 +2866,7 @@ input:focus {
 
 /* Calendar Modal */
 .calendar-modal-content {
-    padding: 25px;
+    padding: 15px; /* Reduced from 25px */
     max-height: 500px;
     position: relative;
     /* 📱 Mobile touch scroll */
@@ -2892,7 +2892,7 @@ input:focus {
 
 /* Stats Modal */
 .stats-content {
-    padding: 25px;
+    padding: 15px; /* Reduced from 25px */
     position: relative;
 }
 
@@ -2906,15 +2906,15 @@ input:focus {
 
 .stats-summary {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 12px;
-    margin-bottom: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Reduced from 140px */
+    gap: 10px; /* Reduced from 12px */
+    margin-bottom: 20px; /* Reduced from 30px */
 }
 
 .stat-item {
     background: linear-gradient(135deg, #1cb0f6, #ce82ff);
     color: white;
-    padding: 20px;
+    padding: 15px; /* Reduced from 20px */
     border-radius: var(--border-radius);
     display: flex;
     align-items: center;
@@ -3230,9 +3230,9 @@ input:focus {
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 3px;
-    margin-bottom: 15px;
-    padding: 10px;
+    gap: 2px; /* Reduced from 3px */
+    margin-bottom: 10px; /* Reduced from 15px */
+    padding: 8px; /* Reduced from 10px */
     background: #fafbfc;
     border-radius: var(--border-radius-small);
     border: 1px solid #e5e7eb;
@@ -3244,14 +3244,14 @@ input:focus {
 }
 
 .calendar-day {
-    width: 36px;
-    height: 36px;
+    width: 32px; /* Reduced from 36px */
+    height: 32px; /* Reduced from 36px */
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.85rem;
+    font-size: 0.8rem; /* Reduced from 0.85rem */
     font-weight: 600;
-    border-radius: 8px;
+    border-radius: 6px; /* Reduced from 8px */
     cursor: pointer;
     transition: all 0.2s ease;
     position: relative;
@@ -3264,7 +3264,7 @@ input:focus {
     color: #8b9cb3;
     font-weight: 800;
     cursor: default;
-    font-size: 0.75rem;
+    font-size: 0.7rem; /* Reduced from 0.75rem */
     text-transform: uppercase;
     border: none;
 }
@@ -3487,50 +3487,50 @@ input:focus {
 
 /* 📊 Calendar Stats Panel */
 .calendar-stats-panel {
-    margin-top: 20px;
-    padding: 20px;
+    margin-top: 15px; /* Reduced from 20px */
+    padding: 15px; /* Reduced from 20px */
     background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-    border-radius: 16px;
+    border-radius: 12px; /* Reduced from 16px */
     border: 1px solid #e2e8f0;
     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
 .stats-header {
     text-align: center;
-    margin-bottom: 16px;
+    margin-bottom: 12px; /* Reduced from 16px */
 }
 
 .stats-header h4 {
     color: var(--text-dark);
-    font-size: 1.1rem;
+    font-size: 1rem; /* Reduced from 1.1rem */
     font-weight: 700;
     margin: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 6px; /* Reduced from 8px */
 }
 
 .stats-header h4 i {
     color: var(--primary-blue);
-    font-size: 1rem;
+    font-size: 0.9rem; /* Reduced from 1rem */
 }
 
 .stats-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 16px;
+    gap: 10px; /* Reduced from 12px */
+    margin-bottom: 12px; /* Reduced from 16px */
 }
 
 .stat-card {
     background: white;
-    padding: 12px;
-    border-radius: 12px;
+    padding: 10px; /* Reduced from 12px */
+    border-radius: 10px; /* Reduced from 12px */
     border: 1px solid #e5e7eb;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px; /* Reduced from 10px */
     transition: all 0.3s ease;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
@@ -3541,24 +3541,24 @@ input:focus {
 }
 
 .stat-card.best {
-    border-left: 4px solid #fbbf24;
+    border-left: 3px solid #fbbf24; /* Reduced from 4px */
 }
 
 .stat-card.current {
-    border-left: 4px solid #f87171;
+    border-left: 3px solid #f87171; /* Reduced from 4px */
 }
 
 .stat-card.total {
-    border-left: 4px solid #60a5fa;
+    border-left: 3px solid #60a5fa; /* Reduced from 4px */
 }
 
 .stat-card.month {
-    border-left: 4px solid #34d399;
+    border-left: 3px solid #34d399; /* Reduced from 4px */
 }
 
 .stat-icon {
-    font-size: 1.5rem;
-    min-width: 24px;
+    font-size: 1.3rem; /* Reduced from 1.5rem */
+    min-width: 20px; /* Reduced from 24px */
     text-align: center;
 }
 
@@ -3567,14 +3567,14 @@ input:focus {
 }
 
 .stat-number {
-    font-size: 1.2rem;
+    font-size: 1.05rem; /* Reduced from 1.2rem */
     font-weight: 800;
     color: var(--text-dark);
     line-height: 1;
 }
 
 .stat-label {
-    font-size: 0.75rem;
+    font-size: 0.7rem; /* Reduced from 0.75rem */
     color: #6b7280;
     font-weight: 600;
     line-height: 1;
