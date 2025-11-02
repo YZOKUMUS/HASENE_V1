@@ -2695,6 +2695,7 @@ input:focus {
     padding: 0;
     touch-action: pan-y;
     overscroll-behavior: contain;
+    overflow: hidden;
 }
 
 .modal-header {
@@ -3223,6 +3224,15 @@ input:focus {
     background: #fafbfc;
     border-radius: var(--border-radius-small);
     border: 1px solid #e5e7eb;
+    max-height: 400px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.calendar-grid::-webkit-scrollbar {
+    display: none;
 }
 
 .calendar-day {
@@ -6018,13 +6028,13 @@ body.translation-mode .skip-btn:hover {
 .missions-modal {
     max-width: 800px;
     max-height: 90vh;
-    overflow-y: auto;
+    overflow: hidden;
 }
 
 .missions-content {
     padding: 20px 0;
     max-height: 70vh;
-    overflow-y: auto;
+    overflow: hidden;
     -webkit-overflow-scrolling: touch;
     /* Scroll rules in global section */
 }
@@ -7006,8 +7016,7 @@ input:checked + .toggle-slider:before {
     padding: 30px;
     max-height: 60vh;
     position: relative;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+    overflow: hidden; /* Parent doesn't scroll - let child grid handle it */
     /* Scroll rules in global section */
 }
 
