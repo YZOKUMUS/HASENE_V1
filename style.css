@@ -2696,14 +2696,20 @@ input:focus {
     /* Enable scrolling */
     display: flex;
     flex-direction: column;
-    touch-action: pan-y;
+    touch-action: pan-y !important;
     overscroll-behavior: contain;
-    overflow-y: scroll !important; /* Force scroll - temporarily show scrollbar for testing */
+    overflow-y: auto !important;
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
-    /* Temporarily show scrollbar for debugging */
-    scrollbar-width: thin;
-    -ms-overflow-style: auto;
+    /* Hide scrollbar */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.achievements-modal::-webkit-scrollbar,
+.stats-modal::-webkit-scrollbar,
+.calendar-modal::-webkit-scrollbar {
+    display: none;
 }
 
 .achievements-modal::-webkit-scrollbar,
@@ -2897,6 +2903,13 @@ input:focus {
     flex: 1; /* Take remaining space */
     overflow-y: auto; /* This section scrolls */
     min-height: 0; /* Important for flex scroll */
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.stats-content::-webkit-scrollbar {
+    display: none;
 }
 
 .stats-content::-webkit-scrollbar {
@@ -6029,13 +6042,17 @@ body.translation-mode .skip-btn:hover {
     /* Enable scrolling */
     display: flex;
     flex-direction: column;
-    overflow-y: scroll !important; /* Force scroll - temporarily show scrollbar for testing */
+    overflow-y: auto !important;
     -webkit-overflow-scrolling: touch;
-    touch-action: pan-y;
+    touch-action: pan-y !important;
     scroll-behavior: smooth;
-    /* Temporarily show scrollbar for debugging */
-    scrollbar-width: thin;
-    -ms-overflow-style: auto;
+    /* Hide scrollbar */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.missions-modal::-webkit-scrollbar {
+    display: none;
 }
 }
 
@@ -6045,6 +6062,13 @@ body.translation-mode .skip-btn:hover {
     flex: 1; /* Take remaining space */
     overflow-y: auto; /* This section scrolls */
     min-height: 0; /* Important for flex scroll */
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.missions-content::-webkit-scrollbar {
+    display: none;
 }
 
 .missions-summary {
@@ -7011,6 +7035,9 @@ input:checked + .toggle-slider:before {
     flex: 1; /* Take remaining space */
     overflow-y: auto; /* This section scrolls */
     min-height: 0; /* Important for flex scroll */
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     /* Scroll rules in global section */
 }
 
