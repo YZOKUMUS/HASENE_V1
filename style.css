@@ -2695,12 +2695,12 @@ input:focus {
     padding: 0;
     touch-action: pan-y;
     overscroll-behavior: contain;
-    overflow-y: auto;
+    overflow-y: scroll !important; /* Force scroll - temporarily show scrollbar for testing */
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
-    /* Hide scrollbar like game-modes */
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    /* Temporarily show scrollbar for debugging */
+    scrollbar-width: thin;
+    -ms-overflow-style: auto;
 }
 
 .achievements-modal::-webkit-scrollbar,
@@ -6019,17 +6019,13 @@ body.translation-mode .skip-btn:hover {
 .missions-modal {
     max-width: 800px;
     max-height: 90vh;
-    overflow-y: auto;
+    overflow-y: scroll !important; /* Force scroll - temporarily show scrollbar for testing */
     -webkit-overflow-scrolling: touch;
     touch-action: pan-y;
     scroll-behavior: smooth;
-    /* Hide scrollbar like game-modes */
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-
-.missions-modal::-webkit-scrollbar {
-    display: none;
+    /* Temporarily show scrollbar for debugging */
+    scrollbar-width: thin;
+    -ms-overflow-style: auto;
 }
 }
 
