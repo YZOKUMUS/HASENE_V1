@@ -1119,6 +1119,13 @@ body {
     max-height: calc(100vh - 250px);
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
+    /* Scrollbar gizle */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.game-modes::-webkit-scrollbar {
+    display: none;
 }
 
 .game-mode-btn {
@@ -5912,6 +5919,13 @@ body.translation-mode .skip-btn:hover {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
+    /* Scrollbar gizle */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.achievements-grid::-webkit-scrollbar {
+    display: none;
 }
 
 /* Rarity Badge in Corner */
@@ -6054,6 +6068,13 @@ body.translation-mode .skip-btn:hover {
     overflow-y: auto;
     max-height: calc(100vh - 350px);
     -webkit-overflow-scrolling: touch;
+    /* Scrollbar gizle */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.missions-grid::-webkit-scrollbar {
+    display: none;
 }
 
 .mission-card {
