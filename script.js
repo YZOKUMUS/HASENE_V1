@@ -481,6 +481,9 @@ class ArabicLearningGame {
             this.hearts = 5; // Duolingo gibi 5 kalp
             this.gameXP = 0;
         
+        // Race condition önleme flag'i
+        this.isProcessingAnswer = false;
+        
         // Sınırsız kalp kontrolü - şimdilik devre dışı
         unlimitedHeartsActive = false; // localStorage.getItem('unlimitedHearts') === 'true';
         
@@ -1948,6 +1951,9 @@ class ArabicLearningGame {
             return;
         }
         
+        // Race condition flag'ini sıfırla
+        this.isProcessingAnswer = false;
+        
         // 🔧 Güvenli difficulty kullanımı
         const safeDifficulty = this.getDifficulty();
         
@@ -2574,11 +2580,20 @@ class ArabicLearningGame {
     }
     
     selectOption(button, index) {
+        // Race condition önleme: Zaten bir cevap işleniyor mu kontrol et
+        if (this.isProcessingAnswer) {
+            return;
+        }
+        
+        this.isProcessingAnswer = true;
+        
         const question = this.questions[this.currentQuestion];
         
-        // Disable all options
+        // Disable all options - Hem CSS hem de attribute ile
         document.querySelectorAll('.option-btn').forEach(btn => {
             btn.classList.add('disabled');
+            btn.disabled = true;
+            btn.style.pointerEvents = 'none'; // Tıklamayı tamamen engelle
         });
         
         // Mark selected option
@@ -2912,6 +2927,8 @@ class ArabicLearningGame {
     }
     
     nextQuestion() {
+        // Race condition flag'ini sıfırla
+        this.isProcessingAnswer = false;
         
         // Hide continue button
         document.getElementById('continueBtn').style.display = 'none';
