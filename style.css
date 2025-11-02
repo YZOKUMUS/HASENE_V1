@@ -1948,14 +1948,7 @@ body {
     max-width: 400px;
     width: 90%;
     max-height: 90vh;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    touch-action: pan-y;
-    overscroll-behavior: contain;
-    /* Force hardware acceleration */
-    will-change: scroll-position;
-    transform: translateZ(0);
-    touch-action: pan-y;
+    /* Scroll rules moved to global section at end */
     animation: scaleIn 0.3s ease;
 }
 
@@ -2409,11 +2402,8 @@ body {
     .modal-content {
         padding: 20px 15px;
         max-height: 90vh;
-        overflow-y: auto;
         border-radius: 12px 12px 0 0;
-        -webkit-overflow-scrolling: touch;
-        touch-action: pan-y;
-        overscroll-behavior: contain;
+        /* Scroll rules in global section */
     }
     
     .modal-header {
@@ -2479,8 +2469,7 @@ body {
     /* 📱 Samsung M33 Enhanced Touch Scrolling */
     .achievements-container, .calendar-modal-content, .stats-modal-content {
         scroll-behavior: smooth;
-        overscroll-behavior: contain;
-        -webkit-overflow-scrolling: touch;
+        /* Scroll rules in global section */
     }
     
     /* Scroll indicator for long content */
@@ -2508,10 +2497,9 @@ body {
     /* 📱 Samsung M33 Performance Optimization */
     /* 📱 Samsung M33 Touch Scrolling - Scroll Bar Gizli */
     .achievements-grid, .calendar-grid, .stats-container, .modal-content {
-        will-change: scroll-position;
-        -webkit-overflow-scrolling: touch;
         scrollbar-width: none; /* Firefox */
         -ms-overflow-style: none; /* IE/Edge */
+        /* Scroll rules in global section */
     }
     
     /* Chrome/Safari scroll bar gizleme */
@@ -2730,14 +2718,11 @@ input:focus {
     gap: 15px;
     padding: 25px;
     max-height: 400px;
-    overflow-y: auto;
     /* 📱 Samsung M33: Scroll bar gizli, touch scroll */
     scrollbar-width: none;
     -ms-overflow-style: none;
-    -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
-    touch-action: pan-y;
-    overscroll-behavior: contain;
+    /* Scroll rules in global section */
 }
 
 .achievement-item {
@@ -2838,18 +2823,11 @@ input:focus {
 .calendar-modal-content {
     padding: 25px;
     max-height: 500px;
-    overflow-y: auto;
-    overflow-x: hidden;
     position: relative;
     /* 📱 Mobile touch scroll */
-    -webkit-overflow-scrolling: touch;
-    touch-action: pan-y;
-    overscroll-behavior: contain;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    /* GPU acceleration */
-    will-change: scroll-position;
-    transform: translate3d(0, 0, 0);
+    /* Scroll rules in global section */
 }
 
 .calendar-modal-content::-webkit-scrollbar {
@@ -2869,18 +2847,11 @@ input:focus {
 .stats-content {
     padding: 25px;
     max-height: 500px;
-    overflow-y: auto;
-    overflow-x: hidden;
     position: relative;
     /* 📱 Mobile touch scroll */
-    -webkit-overflow-scrolling: touch;
-    touch-action: pan-y;
-    overscroll-behavior: contain;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    /* GPU acceleration */
-    will-change: scroll-position;
-    transform: translate3d(0, 0, 0);
+    /* Scroll rules in global section */
 }
 
 .stats-content::-webkit-scrollbar {
@@ -3937,10 +3908,7 @@ input:focus {
         gap: 8px;
         padding: 15px;
         max-height: calc(100vh - 80px);
-        /* 📱 Samsung M33: Parmak kaydırma optimizasyonu */
-        overscroll-behavior: contain;
-        scroll-snap-type: y proximity;
-        -webkit-overflow-scrolling: touch;
+        /* Scroll rules in global section */
     }
     
     /* Achievement items smooth scroll */
@@ -4036,19 +4004,13 @@ input:focus {
     .calendar-modal-content {
         padding: 15px;
         max-height: calc(100vh - 80px);
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-        touch-action: pan-y;
-        overscroll-behavior: contain;
+        /* Scroll rules in global section */
     }
 
     .stats-content {
         padding: 15px;
         max-height: calc(100vh - 80px);
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-        touch-action: pan-y;
-        overscroll-behavior: contain;
+        /* Scroll rules in global section */
     }
     
     .stats-summary {
@@ -5120,9 +5082,8 @@ input:focus {
     /* Rarity tabs mobilde daha kompakt */
     .rarity-tabs {
         flex-wrap: nowrap;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
+        /* Scroll rules in global section */
     }
     
     .rarity-tabs::-webkit-scrollbar {
@@ -6010,19 +5971,7 @@ body.translation-mode .skip-btn:hover {
 .missions-content {
     padding: 20px 0;
     max-height: 70vh;
-    overflow-y: auto;
-    overflow-x: hidden;
-    position: relative;
-    /* 📱 Samsung M33: Touch scroll optimization */
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    touch-action: pan-y;
-    overscroll-behavior: contain;
-    /* Force GPU acceleration */
-    will-change: scroll-position;
-    transform: translate3d(0, 0, 0);
-    -webkit-transform: translate3d(0, 0, 0);
+    /* Scroll rules in global section */
 }
 
 .missions-content::-webkit-scrollbar {
@@ -6423,13 +6372,11 @@ body.translation-mode .skip-btn:hover {
 .missions-grid,
 .achievements-container,
 .missions-content {
-    -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
-    touch-action: pan-y;
-    overscroll-behavior: contain;
     /* Samsung M33: Hide scrollbars but keep functionality */
     scrollbar-width: none;
     -ms-overflow-style: none;
+    /* Scroll rules in global section */
 }
 
 .achievements-list::-webkit-scrollbar,
@@ -6644,13 +6591,7 @@ button:focus {
     max-width: 500px;
     width: 90vw;
     max-height: 85vh;
-    overflow-y: auto;
-    /* 📱 Mobile touch scroll */
-    -webkit-overflow-scrolling: touch;
-    touch-action: pan-y;
-    overscroll-behavior: contain;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    /* Scroll rules in global section */
 }
 
 .sound-settings-modal::-webkit-scrollbar {
@@ -6659,14 +6600,8 @@ button:focus {
 
 .modal-body {
     max-height: 60vh;
-    overflow-y: auto;
     padding: 20px;
-    /* 📱 Mobile touch scroll */
-    -webkit-overflow-scrolling: touch;
-    touch-action: pan-y;
-    overscroll-behavior: contain;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    /* Scroll rules in global section */
 }
 
 .modal-body::-webkit-scrollbar {
@@ -7000,20 +6935,8 @@ input:checked + .toggle-slider:before {
     background: white;
     padding: 30px;
     max-height: 60vh;
-    overflow-y: auto;
-    overflow-x: hidden;
     position: relative;
-    scroll-behavior: smooth;
-    /* 📱 Samsung M33: Enhanced touch scroll */
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    -webkit-overflow-scrolling: touch;
-    touch-action: pan-y;
-    overscroll-behavior: contain;
-    /* Force GPU acceleration */
-    will-change: scroll-position;
-    transform: translate3d(0, 0, 0);
-    -webkit-transform: translate3d(0, 0, 0);
+    /* Scroll rules in global section */
 }
 
 .achievements-container::-webkit-scrollbar {
@@ -7274,13 +7197,10 @@ input:checked + .toggle-slider:before {
         max-height: 55vh;
         border-radius: 0;
         /* Enhanced Samsung M33 touch scroll */
-        -webkit-overflow-scrolling: touch;
-        touch-action: pan-y;
         scroll-behavior: smooth;
-        overscroll-behavior: contain;
-        overflow-y: auto;
         scrollbar-width: none;
         -ms-overflow-style: none;
+        /* Scroll rules in global section */
     }
     
     .achievements-container::-webkit-scrollbar {
@@ -7291,9 +7211,7 @@ input:checked + .toggle-slider:before {
         grid-template-columns: 1fr;
         gap: 15px;
         padding: 5px;
-        /* Mobil kaydırma iyileştirmesi */
-        touch-action: pan-y;
-        -webkit-overflow-scrolling: touch;
+        /* Scroll rules in global section */
     }
     
     /* Achievement kartları mobilde tam genişlik */
@@ -7345,3 +7263,51 @@ button[onclick*="test"] {
 *[style*="position: fixed"][style*="#ff"] {
     display: none !important;
 }
+
+/* ============================================
+   🔥 CRITICAL: MOBILE SCROLL FIX - RESET ALL
+   ============================================ */
+
+/* Remove ALL conflicting touch-action rules */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Allow natural scrolling on body and html */
+html, body {
+    touch-action: auto !important;
+    -webkit-overflow-scrolling: auto !important;
+    overscroll-behavior: auto !important;
+}
+
+/* ONLY scrollable containers get scroll properties */
+.modal-content,
+.achievements-container,
+.missions-content,
+.stats-content,
+.calendar-modal-content,
+.modal-body,
+.sound-settings-modal {
+    /* Simple, working scroll */
+    overflow-y: scroll !important;
+    -webkit-overflow-scrolling: touch !important;
+    /* Remove ALL blocking properties */
+    touch-action: auto !important;
+    overscroll-behavior: auto !important;
+    /* Remove GPU tricks that may block scroll */
+    will-change: auto !important;
+    transform: none !important;
+}
+
+/* Scrollbar hidden but scrolling enabled */
+.modal-content::-webkit-scrollbar,
+.achievements-container::-webkit-scrollbar,
+.missions-content::-webkit-scrollbar,
+.stats-content::-webkit-scrollbar,
+.calendar-modal-content::-webkit-scrollbar,
+.modal-body::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+    display: none;
+}
+
