@@ -190,21 +190,59 @@
                 </button>
 
                 <script>
-                    let currentAudio = null; // Global değişken
+                    let currentAudio = null;
+                    let isPlayingMusic = false;
 
                     function playMusic() {
+                        // Prevent double-trigger on mobile
+                        if (isPlayingMusic) {
+                            return;
+                        }
+                        
+                        isPlayingMusic = true;
+                        
                         if (currentAudio) {
                             if (!currentAudio.paused) {
-                                currentAudio.pause(); // Çalan sesi durdur
-                                currentAudio.currentTime = 0; // Sesi başa sar
-                                return;
+                                // Müzik çalıyor - durdur
+                                currentAudio.pause();
+                                currentAudio.currentTime = 0;
+                                const btn = document.getElementById('musicButton');
+                                if (btn) {
+                                    btn.innerHTML = '<i class="fas fa-music"></i> İlahi';
+                                }
+                            } else {
+                                // Müzik durdu - çal
+                                currentAudio.currentTime = 0;
+                                currentAudio.play();
+                                const btn = document.getElementById('musicButton');
+                                if (btn) {
+                                    btn.innerHTML = '<i class="fas fa-pause"></i> Durdur';
+                                }
                             }
                         } else {
+                            // İlk çalma
                             currentAudio = new Audio('https://dinimizislam.com/Download/Ses/Ilahiler/4/AyDo%C4%9Fdu.mp3');
+                            currentAudio.currentTime = 0;
+                            currentAudio.play();
+                            const btn = document.getElementById('musicButton');
+                            if (btn) {
+                                btn.innerHTML = '<i class="fas fa-pause"></i> Durdur';
+                            }
+                            
+                            // Müzik bittiğinde butonu resetle
+                            currentAudio.addEventListener('ended', function() {
+                                const btn = document.getElementById('musicButton');
+                                if (btn) {
+                                    btn.innerHTML = '<i class="fas fa-music"></i> İlahi';
+                                }
+                                isPlayingMusic = false;
+                            });
                         }
-
-                        currentAudio.currentTime = 0; // Sesi başa sar
-                        currentAudio.play(); // Sesi çal
+                        
+                        // Reset flag after 300ms
+                        setTimeout(() => {
+                            isPlayingMusic = false;
+                        }, 300);
                     }
                 </script>
             </div>
