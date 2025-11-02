@@ -6959,28 +6959,30 @@ function filterByRarity(rarity) {
 function initializeMobileRarityTabs() {
     const tabs = document.querySelectorAll('.rarity-tab');
     tabs.forEach(tab => {
+        let touchStartTime = 0;
+        
         // Touch events for mobile
         tab.addEventListener('touchstart', function(e) {
-            e.preventDefault();
-            const rarity = this.dataset.rarity;
-            filterByRarity(rarity);
-        }, { passive: false });
+            touchStartTime = Date.now();
+            this.style.transform = 'scale(0.98)';
+        }, { passive: true });
+        
+        tab.addEventListener('touchend', function(e) {
+            const touchDuration = Date.now() - touchStartTime;
+            
+            // Quick tap -> trigger action
+            if (touchDuration < 300) {
+                const rarity = this.dataset.rarity;
+                filterByRarity(rarity);
+            }
+            
+            this.style.transform = 'scale(1)';
+        });
         
         // Click events for desktop fallback
         tab.addEventListener('click', function(e) {
             const rarity = this.dataset.rarity;
             filterByRarity(rarity);
-        });
-        
-        // Visual feedback
-        tab.addEventListener('touchstart', function() {
-            this.style.transform = 'scale(0.98)';
-        });
-        
-        tab.addEventListener('touchend', function() {
-            setTimeout(() => {
-                this.style.transform = 'scale(1)';
-            }, 100);
         });
     });
 }
@@ -6989,8 +6991,11 @@ function initializeMobileRarityTabs() {
 function initializeMobileCalendarNav() {
     const navButtons = document.querySelectorAll('.calendar-nav');
     navButtons.forEach(button => {
+        let touchStartTime = 0;
+        
         // Touch events for mobile
         button.addEventListener('touchstart', function(e) {
+            touchStartTime = Date.now();
             // Visual feedback
             this.style.transform = 'scale(0.95)';
             this.style.background = 'var(--primary-blue)';
@@ -6998,17 +7003,19 @@ function initializeMobileCalendarNav() {
         }, { passive: true });
         
         button.addEventListener('touchend', function() {
+            const touchDuration = Date.now() - touchStartTime;
+            
+            // Quick tap -> trigger click
+            if (touchDuration < 300) {
+                this.click();
+            }
+            
             setTimeout(() => {
                 this.style.transform = 'scale(1)';
                 this.style.background = 'none';
                 this.style.color = 'var(--text-dark)';
             }, 150);
         });
-        
-        // Prevent double-tap zoom
-        button.addEventListener('touchstart', function(e) {
-            e.preventDefault();
-        }, { passive: false });
     });
 }
 
