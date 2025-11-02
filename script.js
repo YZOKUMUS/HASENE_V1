@@ -106,6 +106,10 @@ function updateBuildTimestamp() {
         const minutes = String(now.getMinutes()).padStart(2, '0');
         const timestamp = `Build: ${day}${month}.${hours}${minutes}`;
         timestampElement.textContent = timestamp;
+        timestampElement.style.display = 'inline-block'; // Force görünür olsun
+    } else {
+        // Element bulunamazsa tekrar dene
+        setTimeout(updateBuildTimestamp, 200);
     }
 }
 
@@ -5209,8 +5213,10 @@ let game = null;
 // Initialize game when page loads
 document.addEventListener('DOMContentLoaded', () => {
     
-    // 🕐 Build timestamp'i güncelle
-    updateBuildTimestamp();
+    // 🕐 Build timestamp'i güncelle - DOM tamamen yüklenince
+    setTimeout(() => {
+        updateBuildTimestamp();
+    }, 100);
     
     // 🏷️ Update version info in UI
     updateVersionInfo();
