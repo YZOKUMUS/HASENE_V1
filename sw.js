@@ -1,6 +1,6 @@
 // HASENE Service Worker for offline functionality
 
-const CACHE_NAME = 'hasene-v2.2-samsung-m33-final';
+const CACHE_NAME = 'hasene-v2.3-compact-panels';
 const urlsToCache = [
   './',
   './index.html',
