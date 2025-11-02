@@ -5656,10 +5656,10 @@ body.translation-mode .skip-btn:hover {
 /* Rarity Badge Styles */
 .achievement-card {
     position: relative;
-    border-radius: 16px;
-    padding: 20px;
-    margin: 10px;
-    min-height: 120px;
+    border-radius: 12px;
+    padding: 12px;
+    margin: 6px;
+    min-height: 90px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -5761,9 +5761,9 @@ body.translation-mode .skip-btn:hover {
 
 /* Achievement Icon Styling */
 .achievement-icon {
-    font-size: 2.5rem;
+    font-size: 1.8rem;
     text-align: center;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     color: var(--rarity-text);
     text-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
@@ -5784,17 +5784,18 @@ body.translation-mode .skip-btn:hover {
 /* Achievement Title & Description */
 .achievement-title {
     font-weight: 700;
-    font-size: 1.1rem;
+    font-size: 0.9rem;
     color: var(--rarity-text);
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     text-align: center;
+    line-height: 1.2;
 }
 
 .achievement-description {
-    font-size: 0.9rem;
+    font-size: 0.75rem;
     color: var(--text-light);
     text-align: center;
-    line-height: 1.4;
+    line-height: 1.3;
 }
 
 /* Progress Bar System */
@@ -5894,11 +5895,10 @@ body.translation-mode .skip-btn:hover {
 /* Achievement Grid Layout */
 .achievements-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
-    padding: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+    padding: 15px;
     max-height: 60vh;
-    overflow-y: auto;
 }
 
 /* Rarity Badge in Corner */
@@ -6308,26 +6308,29 @@ body.translation-mode .skip-btn:hover {
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
     .achievements-grid {
-        grid-template-columns: 1fr;
-        gap: 15px;
-        padding: 15px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        padding: 10px;
     }
     
     .achievement-card {
-        min-height: 100px;
-        padding: 15px;
+        min-height: 85px;
+        padding: 10px;
+        margin: 0;
     }
     
     .achievement-icon {
-        font-size: 2rem;
+        font-size: 1.5rem;
     }
     
     .achievement-title {
-        font-size: 1rem;
+        font-size: 0.8rem;
+        margin-bottom: 4px;
     }
     
     .achievement-description {
-        font-size: 0.85rem;
+        font-size: 0.7rem;
+        line-height: 1.2;
     }
     
     .missions-modal {
