@@ -1799,31 +1799,34 @@ class ArabicLearningGame {
         let streakFreezes = parseInt(localStorage.getItem('streakFreezes')) || 0;
         let weekendPasses = parseInt(localStorage.getItem('weekendPasses')) || 0;
         
-        if (daysMissed === 1 && streakFreezes > 0) {
-            // 1 gün kaçırdı, Streak Freeze kullan
-            streakFreezes--;
-            localStorage.setItem('streakFreezes', streakFreezes);
-            
-            // Kullanım kaydı
-            this.logStreakProtectionUsage('Streak Freeze', 1);
-            return true;
-            
-        } else if (daysMissed === 2 && weekendPasses > 0) {
-            // 2 gün kaçırdı, Weekend Pass kullan
+        if (daysMissed === 2 && weekendPasses > 0) {
+            // 2 gün kaçırdı, Weekend Pass kullan (önce weekend pass kontrol et)
             weekendPasses--;
-            localStorage.setItem('weekendPasses', weekendPasses);
+            localStorage.setItem('weekendPasses', weekendPasses.toString());
             
             // Kullanım kaydı
             this.logStreakProtectionUsage('Weekend Pass', 2);
+            showNotification('🏖️ Weekend Pass kullanıldı! Streak korundu!', 'success');
             return true;
             
-        } else if (daysMissed <= 2 && streakFreezes >= daysMissed) {
-            // Birden fazla Streak Freeze kullan
-            streakFreezes -= daysMissed;
-            localStorage.setItem('streakFreezes', streakFreezes);
+        } else if (daysMissed === 1 && streakFreezes > 0) {
+            // 1 gün kaçırdı, Streak Freeze kullan
+            streakFreezes--;
+            localStorage.setItem('streakFreezes', streakFreezes.toString());
             
             // Kullanım kaydı
-            this.logStreakProtectionUsage(`${daysMissed}x Streak Freeze`, daysMissed);
+            this.logStreakProtectionUsage('Streak Freeze', 1);
+            showNotification('🛡️ Streak Freeze kullanıldı! Streak korundu!', 'success');
+            return true;
+            
+        } else if (daysMissed === 2 && streakFreezes >= 2) {
+            // 2 gün kaçırdı ama Weekend Pass yok, 2 Streak Freeze kullan
+            streakFreezes -= 2;
+            localStorage.setItem('streakFreezes', streakFreezes.toString());
+            
+            // Kullanım kaydı
+            this.logStreakProtectionUsage('2x Streak Freeze', 2);
+            showNotification('🛡️🛡️ 2 Streak Freeze kullanıldı! Streak korundu!', 'success');
             return true;
         }
         
