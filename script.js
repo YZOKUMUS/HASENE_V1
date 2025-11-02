@@ -419,18 +419,17 @@ async function showAyetTask() {
     }
     if (ayetAudio) {
         ayetAudio.addEventListener('ended', giveAyetHasene);
-    }
-    
-    // Modal kapandığında hasene ver (ses bitmediyse bile)
-    const closeButtons = modal.querySelectorAll('button');
-    closeButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            // Audio'nun en az yarısı dinlendiyse hasene ver
-            if (ayetAudio && !ayetAudio.paused && ayetAudio.currentTime > ayetAudio.duration * 0.5) {
-                giveAyetHasene();
-            }
+        
+        // Modal kapandığında hasene ver (ses yarıdan fazla dinlendiyse)
+        const closeButtons = modal.querySelectorAll('button');
+        closeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (ayetAudio && !ayetAudio.paused && ayetAudio.currentTime > ayetAudio.duration * 0.5) {
+                    giveAyetHasene();
+                }
+            });
         });
-    });
+    }
 }
 
 // Dua dinleme görevini tetikleyen fonksiyon
