@@ -1936,6 +1936,8 @@ body {
     align-items: center;
     z-index: 2000;
     animation: fadeIn 0.3s ease;
+    /* 📱 Prevent body scroll when modal is open */
+    overflow: hidden;
 }
 
 .modal-content {
@@ -1948,6 +1950,11 @@ body {
     max-height: 90vh;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+    overscroll-behavior: contain;
+    /* Force hardware acceleration */
+    will-change: scroll-position;
+    transform: translateZ(0);
     touch-action: pan-y;
     animation: scaleIn 0.3s ease;
 }
@@ -2832,12 +2839,17 @@ input:focus {
     padding: 25px;
     max-height: 500px;
     overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
     /* 📱 Mobile touch scroll */
     -webkit-overflow-scrolling: touch;
     touch-action: pan-y;
     overscroll-behavior: contain;
     scrollbar-width: none;
     -ms-overflow-style: none;
+    /* GPU acceleration */
+    will-change: scroll-position;
+    transform: translate3d(0, 0, 0);
 }
 
 .calendar-modal-content::-webkit-scrollbar {
@@ -2858,12 +2870,17 @@ input:focus {
     padding: 25px;
     max-height: 500px;
     overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
     /* 📱 Mobile touch scroll */
     -webkit-overflow-scrolling: touch;
     touch-action: pan-y;
     overscroll-behavior: contain;
     scrollbar-width: none;
     -ms-overflow-style: none;
+    /* GPU acceleration */
+    will-change: scroll-position;
+    transform: translate3d(0, 0, 0);
 }
 
 .stats-content::-webkit-scrollbar {
@@ -5994,12 +6011,18 @@ body.translation-mode .skip-btn:hover {
     padding: 20px 0;
     max-height: 70vh;
     overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
     /* 📱 Samsung M33: Touch scroll optimization */
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     -ms-overflow-style: none;
     touch-action: pan-y;
     overscroll-behavior: contain;
+    /* Force GPU acceleration */
+    will-change: scroll-position;
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
 }
 
 .missions-content::-webkit-scrollbar {
@@ -6978,6 +7001,8 @@ input:checked + .toggle-slider:before {
     padding: 30px;
     max-height: 60vh;
     overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
     scroll-behavior: smooth;
     /* 📱 Samsung M33: Enhanced touch scroll */
     scrollbar-width: none;
@@ -6985,6 +7010,14 @@ input:checked + .toggle-slider:before {
     -webkit-overflow-scrolling: touch;
     touch-action: pan-y;
     overscroll-behavior: contain;
+    /* Force GPU acceleration */
+    will-change: scroll-position;
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+}
+
+.achievements-container::-webkit-scrollbar {
+    display: none;
 }
 
 .achievements-grid {
