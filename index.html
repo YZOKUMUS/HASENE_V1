@@ -1107,22 +1107,22 @@
                 // Kelime verilerini yükle (Kelime Çevir ve Dinle ve Bul için)
                 const kelimeResponse = await fetch('kelimebul.json');
                 kelimeBulData = await kelimeResponse.json();
-                console.log(`${kelimeBulData.length} kelime yüklendi`);
+                // console.log(`${kelimeBulData.length} kelime yüklendi`);
                 
                 // Ayet verilerini yükle (Boşluk Doldur ve Ayet Oku için)
                 const ayetResponse = await fetch('ayetoku.json');
                 ayetOkuData = await ayetResponse.json();
-                console.log(`${ayetOkuData.length} ayet yüklendi`);
+                // console.log(`${ayetOkuData.length} ayet yüklendi`);
                 
                 // Dua verilerini yükle (Dua Et için)
                 const duaResponse = await fetch('duaet.json');
                 duaData = await duaResponse.json();
-                console.log(`${duaData.length} dua yüklendi`);
+                // console.log(`${duaData.length} dua yüklendi`);
                 
                 // Hadis verilerini yükle (Hadis Oku için)
                 const hadisResponse = await fetch('hadisoku.json');
                 hadisData = await hadisResponse.json();
-                console.log(`${hadisData.length} hadis yüklendi`);
+                // console.log(`${hadisData.length} hadis yüklendi`);
                 
                 // Mod seçiciyi başlat
                 initModeSelector();
