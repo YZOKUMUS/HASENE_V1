@@ -1029,22 +1029,22 @@
     <!-- Günlük Görevler Modal -->
     <div class="modal" id="dailyTasksModal">
         <div class="modal-content" style="max-width: 480px; max-height: 80vh; overflow-y: auto;">
-            <h3 style="margin: 15px 0 10px 0; font-size: 1.3em;">🎯 Günlük Görevler</h3>
+            <h3 style="margin: 12px 0 8px 0; font-size: 1.1em;">🎯 Günlük Görevler</h3>
             
             <!-- Genel İlerleme -->
-            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px; border-radius: 8px; margin: 15px 0; text-align: center;">
-                <div style="font-size: 1.1em; font-weight: bold;">Bugünkü İlerleme</div>
-                <div style="font-size: 0.9em; margin-top: 5px;">
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 10px; border-radius: 8px; margin: 12px 0; text-align: center;">
+                <div style="font-size: 0.95em; font-weight: bold;">Bugünkü İlerleme</div>
+                <div style="font-size: 0.8em; margin-top: 4px;">
                     <span id="completedTasks">0</span>/<span id="totalTasks">5</span> Görev Tamamlandı
                 </div>
-                <div style="background: rgba(255,255,255,0.3); border-radius: 10px; height: 8px; margin: 8px 0;">
+                <div style="background: rgba(255,255,255,0.3); border-radius: 10px; height: 6px; margin: 6px 0;">
                     <div id="taskProgress" style="background: white; height: 100%; border-radius: 10px; width: 0%; transition: width 0.3s;"></div>
                 </div>
             </div>
 
             <!-- Temel Görevler -->
-            <div style="margin: 20px 0;">
-                <h4 style="margin: 10px 0; color: #333; font-size: 1.1em;">📋 Temel Görevler</h4>
+            <div style="margin: 16px 0;">
+                <h4 style="margin: 8px 0; color: #333; font-size: 0.95em;">📋 Temel Görevler</h4>
                 
                 <div id="dailyTasksList">
                     <!-- Görevler buraya dinamik eklenecek -->
@@ -1052,8 +1052,8 @@
             </div>
 
             <!-- Bonus Görevler -->
-            <div style="margin: 20px 0;">
-                <h4 style="margin: 10px 0; color: #333; font-size: 1.1em;">⭐ Bonus Görevler</h4>
+            <div style="margin: 16px 0;">
+                <h4 style="margin: 8px 0; color: #333; font-size: 0.95em;">⭐ Bonus Görevler</h4>
                 
                 <div id="bonusTasksList">
                     <!-- Bonus görevler buraya dinamik eklenecek -->
@@ -1061,10 +1061,10 @@
             </div>
 
             <!-- Ödül Toplama -->
-            <div id="rewardsSection" style="display: none; background: #e8f5e8; border-radius: 8px; padding: 15px; margin: 15px 0; text-align: center;">
-                <div style="font-size: 1.2em; color: #2e7d2e; font-weight: bold;">🎉 Tebrikler!</div>
-                <div style="font-size: 0.9em; color: #666; margin: 5px 0;">Tüm görevleri tamamladın!</div>
-                <button id="claimRewardsBtn" onclick="claimDailyRewards()" style="background: #4caf50; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 0.9em; cursor: pointer;">
+            <div id="rewardsSection" style="display: none; background: #e8f5e8; border-radius: 8px; padding: 12px; margin: 12px 0; text-align: center;">
+                <div style="font-size: 1em; color: #2e7d2e; font-weight: bold;">🎉 Tebrikler!</div>
+                <div style="font-size: 0.8em; color: #666; margin: 4px 0;">Tüm görevleri tamamladın!</div>
+                <button id="claimRewardsBtn" onclick="claimDailyRewards()" style="background: #4caf50; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.8em; cursor: pointer;">
                     +5 ⭐ Ödül Topla
                 </button>
             </div>
@@ -2038,25 +2038,25 @@
             
             const div = document.createElement('div');
             div.style.cssText = `
-                padding: 12px; 
+                padding: 10px; 
                 border: 2px solid ${isCompleted ? '#4caf50' : '#e0e0e0'}; 
-                border-radius: 8px; 
-                margin: 8px 0;
+                border-radius: 6px; 
+                margin: 6px 0;
                 background: ${isCompleted ? '#f1f8e9' : 'white'};
             `;
             
             div.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                    <span style="font-weight: bold; color: ${isCompleted ? '#2e7d2e' : '#333'};">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <span style="font-weight: 600; font-size: 0.85em; color: ${isCompleted ? '#2e7d2e' : '#333'};">
                         ${isCompleted ? '✅' : '⏳'} ${getTaskDisplayName(task)}
                     </span>
-                    <span style="font-size: 0.9em; color: #666;">+${task.reward} ⭐</span>
+                    <span style="font-size: 0.75em; color: #666;">+${task.reward} ⭐</span>
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div style="flex: 1; background: #f0f0f0; border-radius: 10px; height: 6px; margin-right: 10px;">
-                        <div style="background: ${isCompleted ? '#4caf50' : '#2196f3'}; height: 100%; border-radius: 10px; width: ${progressPercent}%; transition: width 0.3s;"></div>
+                    <div style="flex: 1; background: #f0f0f0; border-radius: 8px; height: 5px; margin-right: 8px;">
+                        <div style="background: ${isCompleted ? '#4caf50' : '#2196f3'}; height: 100%; border-radius: 8px; width: ${progressPercent}%; transition: width 0.3s;"></div>
                     </div>
-                    <span style="font-size: 0.8em; color: #666;">${task.current}/${task.target}</span>
+                    <span style="font-size: 0.7em; color: #666; font-weight: 500;">${task.current}/${task.target}</span>
                 </div>
             `;
             
