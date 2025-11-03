@@ -2048,7 +2048,7 @@
             div.innerHTML = `
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                     <span style="font-weight: bold; color: ${isCompleted ? '#2e7d2e' : '#333'};">
-                        ${isCompleted ? '✅' : '⏳'} ${task.name}
+                        ${isCompleted ? '✅' : '⏳'} ${getTaskDisplayName(task)}
                     </span>
                     <span style="font-size: 0.9em; color: #666;">+${task.reward} ⭐</span>
                 </div>
@@ -2061,6 +2061,24 @@
             `;
             
             return div;
+        }
+
+        function getTaskDisplayName(task) {
+            // Görev tipine göre uygun isim döndür
+            const taskNames = {
+                'kelime5': 'Kelime Çevir',
+                'ayet3': 'Ayet Oku', 
+                'dua2': 'Dua Öğren',
+                'dogru10': 'Doğru Cevaplar',
+                'puan100': 'Puan Topla',
+                'perfect5': 'Mükemmel Seri',
+                'allDiff': 'Farklı Zorluklar',
+                'hadis1': 'Hadis Dinle',
+                'dinle3': 'Dinle & Bul',
+                'bosluk2': 'Boşluk Doldur'
+            };
+            
+            return taskNames[task.id] || task.name;
         }
 
         function claimDailyRewards() {
