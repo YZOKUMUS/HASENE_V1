@@ -1048,7 +1048,7 @@
             <div id="rewardsSection" style="display: none; background: #e8f5e8; border-radius: 8px; padding: 15px; margin: 15px 0; text-align: center;">
                 <div style="font-size: 1.2em; color: #2e7d2e; font-weight: bold;">🎉 Tebrikler!</div>
                 <div style="font-size: 0.9em; color: #666; margin: 5px 0;">Tüm görevleri tamamladın!</div>
-                <button id="claimRewardsBtn" style="background: #4caf50; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 0.9em; cursor: pointer;">
+                <button id="claimRewardsBtn" onclick="claimDailyRewards()" style="background: #4caf50; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 0.9em; cursor: pointer;">
                     +5 ⭐ Ödül Topla
                 </button>
             </div>
@@ -1908,6 +1908,18 @@
         }
 
         function showDailyTasksModal() {
+            // Günlük görevleri kontrol et ve güncelle
+            checkDailyTasks();
+            
+            // Debug: Görev durumunu logla
+            console.log('📋 Daily Tasks Debug:', {
+                tasks: dailyTasks.tasks.length,
+                bonusTasks: dailyTasks.bonusTasks.length,
+                completed: dailyTasks.completedTasks.length,
+                lastDate: dailyTasks.lastTaskDate,
+                today: new Date().toISOString().split('T')[0]
+            });
+            
             // Görev verilerini güncelle
             updateTasksDisplay();
             
@@ -1920,8 +1932,16 @@
         }
 
         function updateTasksDisplay() {
+            // Güvenlik kontrolü: Eğer görevler boşsa, yeniden oluştur
+            if (!dailyTasks.tasks || dailyTasks.tasks.length === 0) {
+                console.log('⚠️ Tasks boş, yeniden oluşturuluyor...');
+                generateDailyTasks(new Date().toISOString().split('T')[0]);
+            }
+            
             const completedCount = dailyTasks.completedTasks.length;
             const totalCount = dailyTasks.tasks.length + dailyTasks.bonusTasks.length;
+            
+            console.log('📊 updateTasksDisplay:', { completedCount, totalCount });
             
             // Genel ilerleme
             document.getElementById('completedTasks').textContent = completedCount;
@@ -2019,6 +2039,7 @@
         // Global fonksiyonlar
         window.showDailyTasksModal = showDailyTasksModal;
         window.closeDailyTasksModal = closeDailyTasksModal;
+        window.claimDailyRewards = claimDailyRewards;
 
         // GLOBAL PUAN FONKSİYONU (Oyun bitince çağrılır)
         function addToGlobalPoints(points, correctAnswers = 0) {
