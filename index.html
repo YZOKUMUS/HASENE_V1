@@ -1474,6 +1474,55 @@
             });
         }
 
+        // URL TABANLI VERİ SAKLAMA (Mobil fallback - hiçbir şey çalışmazsa)
+        function saveToURL() {
+            const gameData = {
+                p: totalPoints, // points
+                b: badges.bronze + ',' + badges.silver + ',' + badges.gold + ',' + badges.diamond, // badges
+                s: streakData.currentStreak, // streak
+                d: new Date().toISOString().split('T')[0] // date
+            };
+            const encoded = btoa(JSON.stringify(gameData));
+            const newUrl = window.location.origin + window.location.pathname + '?data=' + encoded;
+            
+            // URL'yi geçmişe ekle (geri butonu ile erişilebilir)
+            if (window.history.pushState) {
+                window.history.pushState({gameData: encoded}, '', newUrl);
+            }
+            console.log('🔗 URL\'ye kaydedildi:', totalPoints, 'puan');
+        }
+        
+        function loadFromURL() {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const data = urlParams.get('data');
+                if (data) {
+                    const decoded = JSON.parse(atob(data));
+                    totalPoints = parseInt(decoded.p) || 0;
+                    
+                    // Rozet verilerini yükle
+                    if (decoded.b) {
+                        const badgeArray = decoded.b.split(',');
+                        badges.bronze = parseInt(badgeArray[0]) || 0;
+                        badges.silver = parseInt(badgeArray[1]) || 0;
+                        badges.gold = parseInt(badgeArray[2]) || 0;
+                        badges.diamond = parseInt(badgeArray[3]) || 0;
+                    }
+                    
+                    // Streak verilerini yükle
+                    if (decoded.s) {
+                        streakData.currentStreak = parseInt(decoded.s) || 0;
+                    }
+                    
+                    console.log('🔗 URL\'den yüklendi:', totalPoints, 'puan');
+                    return true;
+                }
+            } catch(e) {
+                console.log('URL yükleme hatası:', e);
+            }
+            return false;
+        }
+
         // ============ İSTATİSTİK BAR FONKSİYONLARI ============
         async function loadStats() {
             try {
@@ -1490,11 +1539,28 @@
                 
                 console.log('📊 IndexedDB yüklendi:', {totalPoints, savedPoints});
             } catch (error) {
-                console.log('IndexedDB hatası, localStorage kullanılıyor:', error);
-                // Hata durumunda localStorage kullan
-                totalPoints = parseInt(localStorage.getItem('hasene_totalPoints') || '0');
-                starPoints = Math.floor(totalPoints / 500);
-                level = calculateLevel(totalPoints);
+                console.log('IndexedDB hatası, localStorage denenecek:', error);
+                try {
+                    // localStorage dene
+                    totalPoints = parseInt(localStorage.getItem('hasene_totalPoints') || '0');
+                    starPoints = Math.floor(totalPoints / 500);
+                    level = calculateLevel(totalPoints);
+                    console.log('📊 localStorage yüklendi:', totalPoints);
+                } catch (localError) {
+                    console.log('localStorage da çalışmıyor, URL deneniyor:', localError);
+                    // Son çare: URL'den yükle
+                    const urlLoaded = loadFromURL();
+                    if (urlLoaded) {
+                        starPoints = Math.floor(totalPoints / 500);
+                        level = calculateLevel(totalPoints);
+                    } else {
+                        // Hiçbir şey çalışmıyor, varsayılan değerler
+                        totalPoints = 0;
+                        starPoints = 0;
+                        level = 1;
+                        console.log('⚠️ Hiçbir veri sistemi çalışmıyor, sıfırdan başlatılıyor');
+                    }
+                }
             }
             
             // Rozet sistemi yükle
@@ -1585,7 +1651,12 @@
                     localStorage.setItem('hasene_streak', JSON.stringify(streakData));
                 } catch(e) { console.log('localStorage failed:', e); }
                 
-                console.log('💾 Veriler IndexedDB + localStorage ile kaydedildi!', totalPoints);
+                // 3. URL sistemi (son çare - mobil için)
+                try {
+                    saveToURL();
+                } catch(e) { console.log('URL save failed:', e); }
+                
+                console.log('💾 ÜÇLÜ KORUMA: IndexedDB + localStorage + URL ile kaydedildi!', totalPoints);
                 
             } catch (error) {
                 console.error('❌ Kaydetme hatası:', error);
