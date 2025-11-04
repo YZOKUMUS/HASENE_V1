@@ -1579,7 +1579,7 @@
 
         // ============ OYUN DURUMU ============
         let kelimeBulData = [];  // kelimebul.json
-        let ayetOkuData = [];    // ayetoku.json
+        let ayetOkuData = [];    // ayetoku_formatted.json (optimized)
         let duaData = [];        // duaet.json
         let hadisData = [];      // hadisoku.json
         
@@ -1813,7 +1813,7 @@
                 // console.log(`${kelimeBulData.length} kelime yüklendi`);
                 
                 // Ayet verilerini yükle (Boşluk Doldur ve Ayet Oku için)
-                const ayetResponse = await fetch('ayetoku.json');
+                const ayetResponse = await fetch('ayetoku_formatted.json');
                 ayetOkuData = await ayetResponse.json();
                 // console.log(`${ayetOkuData.length} ayet yüklendi`);
                 
