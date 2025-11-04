@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
@@ -10,6 +10,7 @@
     
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#667eea">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Hasene Arapça">
@@ -1429,17 +1430,77 @@
             }
         }
 
+        // ============ İNDEXEDDB SİSTEMİ (ÜÇÜNCü TARAF ÇEREZİ SORUNU İÇİN) ============
+        let db = null;
+        
+        function initIndexedDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open('HaseneGameDB', 1);
+                
+                request.onerror = () => reject(request.error);
+                request.onsuccess = () => {
+                    db = request.result;
+                    resolve(db);
+                };
+                
+                request.onupgradeneeded = (event) => {
+                    db = event.target.result;
+                    if (!db.objectStoreNames.contains('gameData')) {
+                        db.createObjectStore('gameData');
+                    }
+                };
+            });
+        }
+        
+        function saveToIndexedDB(key, value) {
+            if (!db) return;
+            try {
+                const transaction = db.transaction(['gameData'], 'readwrite');
+                const store = transaction.objectStore('gameData');
+                store.put(value, key);
+            } catch(e) { console.log('IndexedDB save failed:', e); }
+        }
+        
+        function loadFromIndexedDB(key) {
+            return new Promise((resolve) => {
+                if (!db) { resolve(null); return; }
+                try {
+                    const transaction = db.transaction(['gameData'], 'readonly');
+                    const store = transaction.objectStore('gameData');
+                    const request = store.get(key);
+                    request.onsuccess = () => resolve(request.result || null);
+                    request.onerror = () => resolve(null);
+                } catch(e) { resolve(null); }
+            });
+        }
+
         // ============ İSTATİSTİK BAR FONKSİYONLARI ============
-        function loadStats() {
-            // Local storage'dan puanları yükle
-            totalPoints = parseInt(localStorage.getItem('hasene_totalPoints') || '0');
-            starPoints = Math.floor(totalPoints / 500);
-            level = calculateLevel(totalPoints);
+        async function loadStats() {
+            try {
+                // IndexedDB'den yükle (üçüncü taraf çerez sorunu için)
+                const savedPoints = await loadFromIndexedDB('hasene_totalPoints');
+                const savedBadges = await loadFromIndexedDB('hasene_badges');
+                const savedStreak = await loadFromIndexedDB('hasene_streak');
+                const savedTasks = await loadFromIndexedDB('hasene_dailyTasks');
+                
+                // Puanları yükle (IndexedDB öncelikli, localStorage yedek)
+                totalPoints = parseInt(savedPoints || localStorage.getItem('hasene_totalPoints') || '0');
+                starPoints = Math.floor(totalPoints / 500);
+                level = calculateLevel(totalPoints);
+                
+                console.log('📊 IndexedDB yüklendi:', {totalPoints, savedPoints});
+            } catch (error) {
+                console.log('IndexedDB hatası, localStorage kullanılıyor:', error);
+                // Hata durumunda localStorage kullan
+                totalPoints = parseInt(localStorage.getItem('hasene_totalPoints') || '0');
+                starPoints = Math.floor(totalPoints / 500);
+                level = calculateLevel(totalPoints);
+            }
             
             // Rozet sistemi yükle
-            const savedBadges = localStorage.getItem('hasene_badges');
-            if (savedBadges) {
-                badges = JSON.parse(savedBadges);
+            const savedBadgesData = await loadFromIndexedDB('hasene_badges') || localStorage.getItem('hasene_badges');
+            if (savedBadgesData) {
+                badges = JSON.parse(savedBadgesData);
             }
             
             // Streak sistemi yükle
@@ -1497,24 +1558,38 @@
             return levelThresholds[1]; // Level 1 threshold'u
         }
 
-        function saveStats() {
-  
-            alert(`� KAYDETME:\n\n💰 Puan: ${totalPoints}\n🏆 Rozet: ${badges.bronze}\n🔥 Streak: ${streakData.currentStreak}`);
-            
-            // Local storage'a puanları kaydet
-            localStorage.setItem('hasene_totalPoints', totalPoints.toString());
-            localStorage.setItem('hasene_badges', JSON.stringify(badges));
-            localStorage.setItem('hasene_streak', JSON.stringify(streakData));
-            
-            // Set'i array'e çevir ve kaydet
-            const tasksToSave = { 
-                ...dailyTasks, 
-                todayStats: {
-                    ...dailyTasks.todayStats,
-                    farklıZorluk: Array.from(dailyTasks.todayStats.farklıZorluk)
+        async function saveStats() {
+            try {
+                // ÇOKLU KAYDETME SİSTEMİ (Üçüncü taraf çerez sorunu için)
+                
+                // 1. IndexedDB (ana sistem - çerez engellemelerinden etkilenmez)
+                if (db) {
+                    saveToIndexedDB('hasene_totalPoints', totalPoints.toString());
+                    saveToIndexedDB('hasene_badges', JSON.stringify(badges));
+                    saveToIndexedDB('hasene_streak', JSON.stringify(streakData));
+                    
+                    const tasksToSave = { 
+                        ...dailyTasks, 
+                        todayStats: {
+                            ...dailyTasks.todayStats,
+                            farklıZorluk: Array.from(dailyTasks.todayStats.farklıZorluk)
+                        }
+                    };
+                    saveToIndexedDB('hasene_dailyTasks', JSON.stringify(tasksToSave));
                 }
-            };
-            localStorage.setItem('hasene_dailyTasks', JSON.stringify(tasksToSave));
+                
+                // 2. localStorage (yedek sistem)
+                try {
+                    localStorage.setItem('hasene_totalPoints', totalPoints.toString());
+                    localStorage.setItem('hasene_badges', JSON.stringify(badges));
+                    localStorage.setItem('hasene_streak', JSON.stringify(streakData));
+                } catch(e) { console.log('localStorage failed:', e); }
+                
+                console.log('💾 Veriler IndexedDB + localStorage ile kaydedildi!', totalPoints);
+                
+            } catch (error) {
+                console.error('❌ Kaydetme hatası:', error);
+            }
         }
 
         function resetAllStats() {
@@ -2329,11 +2404,13 @@
 
         elements.backFromGameBtn.onclick = () => {
             stopTimer();
-            elements.gameScreen.style.display = 'none';
-            elements.modeSelector.style.display = 'none';
-            elements.mainMenu.removeAttribute('style');
-            elements.mainMenu.style.display = 'block';
-            elements.settingsBtn.style.display = 'none';
+            if (elements.gameScreen) elements.gameScreen.style.display = 'none';
+            if (elements.modeSelector) elements.modeSelector.style.display = 'none';
+            if (elements.mainMenu) {
+                elements.mainMenu.removeAttribute('style');
+                elements.mainMenu.style.display = 'block';
+            }
+            if (elements.settingsBtn) elements.settingsBtn.style.display = 'none';
         };
 
         elements.backFromAyetBtn.onclick = () => {
@@ -3418,18 +3495,20 @@
             
             // SON ADIM: Kaydedilmiş verileri yükle
             try {
-                // MOBİL DEBUG - Alert ile göster
-                const localStorageExists = typeof(Storage) !== "undefined";
-                const savedPoints = localStorage.getItem('hasene_totalPoints');
+                // VERI SİSTEMİ BAŞLATMA (üçüncü taraf çerez sorunu için)
+                console.log('🚀 Veri sistemi başlatılıyor...');
                 
-                alert(`� MOBİL DEBUG:\n\n📊 localStorage mevcut: ${localStorageExists}\n💾 Kaydedilmiş puan: ${savedPoints}\n🔍 Debug devam ediyor...`);
-                
-                loadStats();
-                updateStatsBar();
-                
-                alert(`� YÜKLEME SONRASI:\n\n💰 totalPoints: ${totalPoints}\n⭐ starPoints: ${starPoints}\n📈 level: ${level}`);
-                
-                console.log('✅ localStorage debug tamamlandı!');
+                // IndexedDB başlat (çerez engellemelerinden etkilenmez)
+                initIndexedDB().then(() => {
+                    console.log('✅ IndexedDB hazır!');
+                    loadStats(); // Verileri yükle (IndexedDB öncelikli)
+                    updateStatsBar();
+                    console.log('💾 Veriler yüklendi:', totalPoints, 'puan');
+                }).catch(error => {
+                    console.error('❌ IndexedDB hatası, localStorage kullanılıyor:', error);
+                    loadStats(); // Fallback olarak localStorage
+                    updateStatsBar();
+                });
             } catch (error) {
                 alert(`❌ HATA: ${error.message}`);
                 console.error('❌ Veri yükleme hatası:', error);

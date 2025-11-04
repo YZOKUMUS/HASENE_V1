@@ -1,15 +1,15 @@
 const CACHE_NAME = 'hasene-arabic-v1.0';
 const urlsToCache = [
-  '/HASENE-ARABIC-GAME-MAIN/',
-  '/HASENE-ARABIC-GAME-MAIN/index.html',
-  '/HASENE-ARABIC-GAME-MAIN/manifest.json',
-  '/HASENE-ARABIC-GAME-MAIN/icon-192-v4-RED-MUSHAF.png',
-  '/HASENE-ARABIC-GAME-MAIN/icon-512-v4-RED-MUSHAF.png',
-  '/HASENE-ARABIC-GAME-MAIN/KFGQPC Uthmanic Script HAFS Regular.otf',
-  '/HASENE-ARABIC-GAME-MAIN/kelimebul.json',
-  '/HASENE-ARABIC-GAME-MAIN/ayetoku.json',
-  '/HASENE-ARABIC-GAME-MAIN/duaet.json',
-  '/HASENE-ARABIC-GAME-MAIN/hadisoku.json'
+  '/',
+  '/index.html',
+  '/manifest.json',
+  '/icon-192-v4-RED-MUSHAF.png',
+  '/icon-512-v4-RED-MUSHAF.png',
+  '/KFGQPC Uthmanic Script HAFS Regular.otf',
+  '/kelimebul.json',
+  '/ayetoku.json',
+  '/duaet.json',
+  '/hadisoku.json'
 ];
 
 // Install event - cache files
