@@ -2266,18 +2266,18 @@
                 yesterday.setDate(yesterday.getDate() - 1);
                 const yesterdayStr = yesterday.toISOString().split('T')[0];
                 
-                // Streak kontrolü
-                if (streakData.lastPlayDate === yesterdayStr) {
-                    // Dün oynadı, streak devam ediyor
-                    streakData.currentStreak++;
-                } else if (streakData.lastPlayDate !== today) {
-                    // Streak kırıldı
+                // Streak kontrolü - sadece kırılma durumunu kontrol et
+                if (streakData.lastPlayDate !== yesterdayStr && streakData.lastPlayDate !== today && streakData.lastPlayDate !== '') {
+                    // Streak kırıldı (dün oynamadı ve bugün de henüz oynamadı)
+                    console.log(`🔴 Streak kırıldı! Son oyun: ${streakData.lastPlayDate}, dün: ${yesterdayStr}`);
                     streakData.currentStreak = 0;
                 }
                 
                 // Bugünün verilerini sıfırla
                 streakData.todayDate = today;
                 streakData.todayProgress = 0;
+                
+                console.log(`📅 Yeni gün başladı: ${today}, mevcut streak: ${streakData.currentStreak}`);
             }
         }
 
@@ -2311,9 +2311,13 @@
             
             // Günlük hedef tamamlandı mı?
             if (streakData.todayProgress >= streakData.dailyGoal && streakData.lastPlayDate !== today) {
+                console.log(`🎯 Günlük hedef tamamlandı! İlerleme: ${streakData.todayProgress}/${streakData.dailyGoal}`);
+                
                 // İlk defa bugün hedefi tamamladı
                 streakData.lastPlayDate = today;
                 streakData.totalPlayDays++;
+                
+                console.log(`📈 Toplam oyun günü: ${streakData.totalPlayDays}, önceki streak: ${streakData.currentStreak}`);
                 
                 // Oyun tarihi listesine ekle
                 if (!streakData.playDates.includes(today)) {
@@ -2321,11 +2325,22 @@
                     streakData.playDates.sort();
                 }
                 
-                // Streak güncelle
-                streakData.currentStreak = Math.max(streakData.currentStreak, 1);
+                // Streak güncelle - bugün ilk kez hedefi tamamladı
+                if (streakData.currentStreak === 0) {
+                    // İlk gün veya streak kırılmışsa 1'den başla
+                    streakData.currentStreak = 1;
+                } else {
+                    // Streak devam ediyorsa artır
+                    streakData.currentStreak++;
+                }
+                
+                // En iyi streak'i güncelle
                 if (streakData.currentStreak > streakData.bestStreak) {
                     streakData.bestStreak = streakData.currentStreak;
+                    console.log(`🏆 Yeni rekor streak: ${streakData.bestStreak} gün!`);
                 }
+                
+                console.log(`🔥 Streak güncellendi: ${streakData.currentStreak} gün (en iyi: ${streakData.bestStreak})`);
                 
                 // Veriyi kaydet
                 saveStats();
