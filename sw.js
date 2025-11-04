@@ -7,7 +7,7 @@ const urlsToCache = [
   '/icon-512-v4-RED-MUSHAF.png',
   '/KFGQPC Uthmanic Script HAFS Regular.otf',
   '/kelimebul.json',
-  '/ayetoku.json',
+  '/ayetoku_formatted.json',
   '/duaet.json',
   '/hadisoku.json'
 ];

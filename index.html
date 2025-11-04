@@ -1455,16 +1455,16 @@
 
             <!-- Filtreleme Butonları -->
             <div style="display: flex; gap: 8px; margin: 15px 0; flex-wrap: wrap;">
-                <button id="filterAll" onclick="filterWordStats('all')" class="filter-btn active" style="flex: 1; min-width: 80px; padding: 8px; border: none; border-radius: 6px; background: #3498db; color: white; font-size: 0.85em; cursor: pointer;">
+                <button id="filterAll" class="filter-btn active" style="flex: 1; min-width: 80px; padding: 8px; border: none; border-radius: 6px; background: #3498db; color: white; font-size: 0.85em; cursor: pointer;">
                     Hepsi
                 </button>
-                <button id="filterMastered" onclick="filterWordStats('mastered')" class="filter-btn" style="flex: 1; min-width: 80px; padding: 8px; border: none; border-radius: 6px; background: #95a5a6; color: white; font-size: 0.85em; cursor: pointer;">
+                <button id="filterMastered" class="filter-btn" style="flex: 1; min-width: 80px; padding: 8px; border: none; border-radius: 6px; background: #95a5a6; color: white; font-size: 0.85em; cursor: pointer;">
                     Öğrenildi
                 </button>
-                <button id="filterStruggling" onclick="filterWordStats('struggling')" class="filter-btn" style="flex: 1; min-width: 80px; padding: 8px; border: none; border-radius: 6px; background: #95a5a6; color: white; font-size: 0.85em; cursor: pointer;">
+                <button id="filterStruggling" class="filter-btn" style="flex: 1; min-width: 80px; padding: 8px; border: none; border-radius: 6px; background: #95a5a6; color: white; font-size: 0.85em; cursor: pointer;">
                     Zorlanılan
                 </button>
-                <button id="filterRecent" onclick="filterWordStats('recent')" class="filter-btn" style="flex: 1; min-width: 80px; padding: 8px; border: none; border-radius: 6px; background: #95a5a6; color: white; font-size: 0.85em; cursor: pointer;">
+                <button id="filterRecent" class="filter-btn" style="flex: 1; min-width: 80px; padding: 8px; border: none; border-radius: 6px; background: #95a5a6; color: white; font-size: 0.85em; cursor: pointer;">
                     Son Görülen
                 </button>
             </div>
@@ -1485,7 +1485,7 @@
             </div>
 
             <!-- Kapat Butonu -->
-            <button class="modal-btn" onclick="closeWordStatsModal()">Kapat</button>
+            <button id="closeWordStatsBtn" class="modal-btn">Kapat</button>
         </div>
     </div>
 
@@ -3163,9 +3163,9 @@
             console.log(`🎯 Mevcut zorluk: ${currentDifficulty}`);
             
             console.log('📋 2. Mode Selector açılıyor...');
-            elements.mainMenu.style.display = 'none';
-            elements.modeSelector.style.display = 'block';
-            elements.settingsBtn.style.display = 'block';
+            if (elements.mainMenu) elements.mainMenu.style.display = 'none';
+            if (elements.modeSelector) elements.modeSelector.style.display = 'block';
+            if (elements.settingsBtn) elements.settingsBtn.style.display = 'block';
             console.log('✅ Mode Selector açıldı!');
         };
 
@@ -3186,8 +3186,8 @@
             console.log(`🎯 Zorluk config:`, CONFIG.difficultyLevels[currentDifficulty]);
             
             console.log('📋 3. UI değiştiriliyor...');
-            elements.mainMenu.style.display = 'none';
-            elements.dinleMode.style.display = 'block';
+            if (elements.mainMenu) elements.mainMenu.style.display = 'none';
+            if (elements.dinleMode) elements.dinleMode.style.display = 'block';
             console.log('✅ UI değişikliği tamamlandı');
             
             console.log('📋 4. Oyun değişkenleri sıfırlanıyor...');
@@ -3218,8 +3218,8 @@
             console.log(`🎯 Mevcut zorluk: ${currentDifficulty}`);
             
             console.log('📋 2. UI değiştiriliyor...');
-            elements.mainMenu.style.display = 'none';
-            elements.boslukMode.style.display = 'block';
+            if (elements.mainMenu) elements.mainMenu.style.display = 'none';
+            if (elements.boslukMode) elements.boslukMode.style.display = 'block';
             console.log('✅ UI değişikliği tamamlandı');
             
             console.log('📋 3. Oyun değişkenleri sıfırlanıyor...');
@@ -3241,8 +3241,8 @@
                 alert('Dua verileri yüklenemedi!');
                 return;
             }
-            elements.mainMenu.style.display = 'none';
-            elements.duaMode.style.display = 'block';
+            if (elements.mainMenu) elements.mainMenu.style.display = 'none';
+            if (elements.duaMode) elements.duaMode.style.display = 'block';
             // Rastgele dua ile başla
             currentDuaIndex = Math.floor(Math.random() * duaData.length);
             showDua();
@@ -3254,8 +3254,8 @@
                 alert('Ayet verileri yüklenemedi!');
                 return;
             }
-            elements.mainMenu.style.display = 'none';
-            elements.ayetMode.style.display = 'block';
+            if (elements.mainMenu) elements.mainMenu.style.display = 'none';
+            if (elements.ayetMode) elements.ayetMode.style.display = 'block';
             // Rastgele ayet ile başla
             currentAyetIndex = Math.floor(Math.random() * ayetOkuData.length);
             showAyet();
@@ -3267,8 +3267,8 @@
                 alert('Hadis verileri yüklenemedi!');
                 return;
             }
-            elements.mainMenu.style.display = 'none';
-            elements.hadisMode.style.display = 'block';
+            if (elements.mainMenu) elements.mainMenu.style.display = 'none';
+            if (elements.hadisMode) elements.hadisMode.style.display = 'block';
             // Rastgele hadis ile başla
             currentHadisIndex = Math.floor(Math.random() * hadisData.length);
             showHadis();
@@ -3332,10 +3332,19 @@
             elements.dinleMode.style.display = 'none';
             elements.modeSelector.style.display = 'none';
             elements.gameScreen.style.display = 'none';
-            elements.mainMenu.removeAttribute('style');
-            elements.mainMenu.style.display = 'block';
-            elements.settingsBtn.style.display = 'none';
+            if (elements.mainMenu) {
+                elements.mainMenu.removeAttribute('style');
+                elements.mainMenu.style.display = 'block';
+            }
+            if (elements.settingsBtn) {
+                elements.settingsBtn.style.display = 'none';
+            }
         };
+
+        // Kelime İstatistikleri butonu
+        if (document.getElementById('kelimeStatsBtn')) {
+            document.getElementById('kelimeStatsBtn').onclick = showWordStatsModal;
+        }
 
         // ============ MOD SEÇİCİYİ BAŞLAT (Sadece Kelime Çevir için) ============
         function initModeSelector() {
@@ -3524,6 +3533,129 @@
 
             // Fallback: ilk kelimeyi döndür
             return wordsWithPriority[0]?.word || filteredData[0];
+        }
+
+        // ============ KELİME İSTATİSTİKLERİ MODAL FONKSİYONLARI ============
+        
+        function showWordStatsModal() {
+            console.log('📊 Kelime istatistikleri modal açılıyor...');
+            
+            const modal = document.getElementById('wordStatsModal');
+            const wordStats = loadWordStats();
+            
+            // Genel istatistikleri hesapla
+            const totalWords = Object.keys(wordStats).length;
+            const masteredWords = Object.values(wordStats).filter(stat => stat.masteryLevel >= 3.0 && stat.successRate >= 0.6).length;
+            const strugglingWords = Object.values(wordStats).filter(stat => stat.successRate < 0.6 || stat.masteryLevel < 1.0).length;
+            
+            // Genel özet güncelle
+            document.getElementById('wordStatsTotal').textContent = totalWords;
+            document.getElementById('wordStatsMastered').textContent = masteredWords;
+            document.getElementById('wordStatsStruggling').textContent = strugglingWords;
+            
+            // Kelime listesini göster (varsayılan: hepsi)
+            filterWordStats('all');
+            
+            // Event listener'ları ekle (sadece bir kez)
+            if (!modal.hasAttribute('data-listeners-added')) {
+                document.getElementById('filterAll').onclick = () => filterWordStats('all');
+                document.getElementById('filterMastered').onclick = () => filterWordStats('mastered');
+                document.getElementById('filterStruggling').onclick = () => filterWordStats('struggling');
+                document.getElementById('filterRecent').onclick = () => filterWordStats('recent');
+                document.getElementById('closeWordStatsBtn').onclick = () => closeWordStatsModal();
+                modal.setAttribute('data-listeners-added', 'true');
+            }
+            
+            modal.style.display = 'block';
+        }
+        
+        function closeWordStatsModal() {
+            document.getElementById('wordStatsModal').style.display = 'none';
+        }
+        
+        function filterWordStats(filterType) {
+            const wordStats = loadWordStats();
+            const listContainer = document.getElementById('wordStatsList');
+            
+            // Filtre butonlarını güncelle
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('filter' + filterType.charAt(0).toUpperCase() + filterType.slice(1)).classList.add('active');
+            
+            let filteredStats = [];
+            
+            // Filtreleme
+            Object.entries(wordStats).forEach(([wordId, stat]) => {
+                const wordData = kelimeBulData.find(w => w.id == wordId) || { kelime: wordId.replace('bosluk_', '').replace(/_/g, ' '), anlam: 'Bilinmiyor' };
+                
+                const shouldShow = 
+                    filterType === 'all' ||
+                    (filterType === 'mastered' && stat.masteryLevel >= 3.0 && stat.successRate >= 0.6) ||
+                    (filterType === 'struggling' && (stat.successRate < 0.6 || stat.masteryLevel < 1.0)) ||
+                    (filterType === 'recent' && (Date.now() - stat.lastSeen) < 7 * 24 * 60 * 60 * 1000); // Son 7 gün
+                
+                if (shouldShow) {
+                    filteredStats.push({ wordId, ...stat, wordData });
+                }
+            });
+            
+            // Sıralama (öncelik puanına göre)
+            filteredStats.sort((a, b) => {
+                if (filterType === 'recent') {
+                    return b.lastSeen - a.lastSeen; // En son görülenler önce
+                }
+                return b.priority - a.priority; // Yüksek öncelik önce
+            });
+            
+            // Liste içeriğini oluştur
+            if (filteredStats.length === 0) {
+                listContainer.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #666;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">🔍</div>
+                        <div>Bu kategoride kelime bulunamadı</div>
+                        <div style="font-size: 0.9em; margin-top: 5px;">Oyun oynayarak istatistik oluşturmaya başla!</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            listContainer.innerHTML = filteredStats.slice(0, 50).map(item => { // En fazla 50 kelime göster
+                const masteryColor = item.masteryLevel >= 3 ? '#27ae60' : item.masteryLevel >= 1.5 ? '#f39c12' : '#e74c3c';
+                const masteryText = item.masteryLevel >= 3 ? 'Öğrenildi' : item.masteryLevel >= 1.5 ? 'Öğreniliyor' : 'Zorlanıyor';
+                const successPercent = Math.round(item.successRate * 100);
+                
+                return `
+                    <div style="background: white; border-radius: 8px; padding: 12px; margin: 8px 0; border-left: 4px solid ${masteryColor}; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                            <div style="flex: 1;">
+                                <div style="font-size: 1.1em; font-weight: bold; color: #2c3e50; margin-bottom: 2px;">${item.wordData.kelime || item.wordId}</div>
+                                <div style="font-size: 0.9em; color: #666;">${item.wordData.anlam || 'Bilinmiyor'}</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="background: ${masteryColor}; color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.75em; font-weight: bold;">${masteryText}</div>
+                            </div>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; font-size: 0.8em;">
+                            <div style="text-align: center; padding: 6px; background: #f8f9fa; border-radius: 4px;">
+                                <div style="font-weight: bold; color: #27ae60;">${successPercent}%</div>
+                                <div style="color: #666;">Başarı</div>
+                            </div>
+                            <div style="text-align: center; padding: 6px; background: #f8f9fa; border-radius: 4px;">
+                                <div style="font-weight: bold; color: #3498db;">${item.attempts}</div>
+                                <div style="color: #666;">Deneme</div>
+                            </div>
+                            <div style="text-align: center; padding: 6px; background: #f8f9fa; border-radius: 4px;">
+                                <div style="font-weight: bold; color: #f39c12;">${Math.round(item.priority * 100) / 100}</div>
+                                <div style="color: #666;">Öncelik</div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 8px; font-size: 0.75em; color: #666; text-align: center;">
+                            Son görülme: ${new Date(item.lastSeen).toLocaleDateString('tr-TR')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
 
         // ============ SORU YÜKLEME (Kelime Çevir) ============
@@ -3847,24 +3979,24 @@
             // Session puanlarını global'e aktar
             addToGlobalPoints(sessionScore, sessionCorrect);
             
-            elements.gameOverTitle.textContent = '😢 Oyun Bitti';
-            elements.gameOverText.textContent = reason;
-            elements.finalScore.textContent = `Bu Oyun: ${sessionScore} puan\nToplam: ${totalPoints} puan`;
-            elements.gameOverModal.style.display = 'block';
+            if (elements.gameOverTitle) elements.gameOverTitle.textContent = '😢 Oyun Bitti';
+            if (elements.gameOverText) elements.gameOverText.textContent = reason;
+            if (elements.finalScore) elements.finalScore.textContent = `Bu Oyun: ${sessionScore} puan\nToplam: ${totalPoints} puan`;
+            if (elements.gameOverModal) elements.gameOverModal.style.display = 'block';
         }
 
         // ============ YENİDEN BAŞLAT ============
         elements.restartBtn.onclick = () => {
-            elements.gameOverModal.style.display = 'none';
-            elements.gameScreen.style.display = 'none';
-            elements.modeSelector.style.display = 'none';
-            elements.mainMenu.style.display = 'block';
-            elements.settingsBtn.style.display = 'none';
+            if (elements.gameOverModal) elements.gameOverModal.style.display = 'none';
+            if (elements.gameScreen) elements.gameScreen.style.display = 'none';
+            if (elements.modeSelector) elements.modeSelector.style.display = 'none';
+            if (elements.mainMenu) elements.mainMenu.style.display = 'block';
+            if (elements.settingsBtn) elements.settingsBtn.style.display = 'none';
         };
 
         // ============ MODAL KAPAT ============
         elements.modalBtn.onclick = () => {
-            elements.modal.style.display = 'none';
+            if (elements.modal) elements.modal.style.display = 'none';
             // Sadece modal'ı kapat - seviye yükselme bilgilendirmesi için gereksiz işlem yapma
         };
 
@@ -4589,123 +4721,7 @@
             }
         }
 
-        // ============ KELİME İSTATİSTİKLERİ MODAL FONKSİYONLARI ============
-        
-        function showWordStatsModal() {
-            console.log('📊 Kelime istatistikleri modal açılıyor...');
-            
-            const modal = document.getElementById('wordStatsModal');
-            const wordStats = loadWordStats();
-            
-            // Genel istatistikleri hesapla
-            const totalWords = Object.keys(wordStats).length;
-            const masteredWords = Object.values(wordStats).filter(stat => stat.masteryLevel >= 3.0 && stat.successRate >= 0.6).length;
-            const strugglingWords = Object.values(wordStats).filter(stat => stat.successRate < 0.6 || stat.masteryLevel < 1.0).length;
-            
-            // Genel özet güncelle
-            document.getElementById('wordStatsTotal').textContent = totalWords;
-            document.getElementById('wordStatsMastered').textContent = masteredWords;
-            document.getElementById('wordStatsStruggling').textContent = strugglingWords;
-            
-            // Kelime listesini göster (varsayılan: hepsi)
-            filterWordStats('all');
-            
-            modal.style.display = 'block';
-        }
-        
-        function closeWordStatsModal() {
-            document.getElementById('wordStatsModal').style.display = 'none';
-        }
-        
-        function filterWordStats(filterType) {
-            const wordStats = loadWordStats();
-            const listContainer = document.getElementById('wordStatsList');
-            
-            // Filtre butonlarını güncelle
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('filter' + filterType.charAt(0).toUpperCase() + filterType.slice(1)).classList.add('active');
-            
-            let filteredStats = [];
-            
-            // Filtreleme
-            Object.entries(wordStats).forEach(([wordId, stat]) => {
-                const wordData = kelimeBulData.find(w => w.id == wordId) || { kelime: wordId.replace('bosluk_', '').replace(/_/g, ' '), anlam: 'Bilinmiyor' };
-                
-                const shouldShow = 
-                    filterType === 'all' ||
-                    (filterType === 'mastered' && stat.masteryLevel >= 3.0 && stat.successRate >= 0.6) ||
-                    (filterType === 'struggling' && (stat.successRate < 0.6 || stat.masteryLevel < 1.0)) ||
-                    (filterType === 'recent' && (Date.now() - stat.lastSeen) < 7 * 24 * 60 * 60 * 1000); // Son 7 gün
-                
-                if (shouldShow) {
-                    filteredStats.push({ wordId, ...stat, wordData });
-                }
-            });
-            
-            // Sıralama (öncelik puanına göre)
-            filteredStats.sort((a, b) => {
-                if (filterType === 'recent') {
-                    return b.lastSeen - a.lastSeen; // En son görülenler önce
-                }
-                return b.priority - a.priority; // Yüksek öncelik önce
-            });
-            
-            // Liste içeriğini oluştur
-            if (filteredStats.length === 0) {
-                listContainer.innerHTML = `
-                    <div style="text-align: center; padding: 40px; color: #666;">
-                        <div style="font-size: 2em; margin-bottom: 10px;">🔍</div>
-                        <div>Bu kategoride kelime bulunamadı</div>
-                        <div style="font-size: 0.9em; margin-top: 5px;">Oyun oynayarak istatistik oluşturmaya başla!</div>
-                    </div>
-                `;
-                return;
-            }
-            
-            listContainer.innerHTML = filteredStats.slice(0, 50).map(item => { // En fazla 50 kelime göster
-                const masteryColor = item.masteryLevel >= 3 ? '#27ae60' : item.masteryLevel >= 1.5 ? '#f39c12' : '#e74c3c';
-                const masteryText = item.masteryLevel >= 3 ? 'Öğrenildi' : item.masteryLevel >= 1.5 ? 'Öğreniliyor' : 'Zorlanıyor';
-                const successPercent = Math.round(item.successRate * 100);
-                
-                return `
-                    <div style="background: white; border-radius: 8px; padding: 12px; margin: 8px 0; border-left: 4px solid ${masteryColor}; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-                            <div style="flex: 1;">
-                                <div style="font-size: 1.1em; font-weight: bold; color: #2c3e50; margin-bottom: 2px;">${item.wordData.kelime || item.wordId}</div>
-                                <div style="font-size: 0.9em; color: #666;">${item.wordData.anlam || 'Bilinmiyor'}</div>
-                            </div>
-                            <div style="text-align: right;">
-                                <div style="background: ${masteryColor}; color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.75em; font-weight: bold;">${masteryText}</div>
-                            </div>
-                        </div>
-                        
-                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; font-size: 0.8em;">
-                            <div style="text-align: center; padding: 6px; background: #f8f9fa; border-radius: 4px;">
-                                <div style="font-weight: bold; color: #27ae60;">${successPercent}%</div>
-                                <div style="color: #666;">Başarı</div>
-                            </div>
-                            <div style="text-align: center; padding: 6px; background: #f8f9fa; border-radius: 4px;">
-                                <div style="font-weight: bold; color: #3498db;">${item.attempts}</div>
-                                <div style="color: #666;">Deneme</div>
-                            </div>
-                            <div style="text-align: center; padding: 6px; background: #f8f9fa; border-radius: 4px;">
-                                <div style="font-weight: bold; color: #f39c12;">${Math.round(item.priority * 100) / 100}</div>
-                                <div style="color: #666;">Öncelik</div>
-                            </div>
-                        </div>
-                        
-                        <div style="margin-top: 8px; font-size: 0.75em; color: #666; text-align: center;">
-                            Son görülme: ${new Date(item.lastSeen).toLocaleDateString('tr-TR')}
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-        
-        // Ana menü buton click eventlerini ekle
-        if (document.getElementById('kelimeStatsBtn')) {
-            document.getElementById('kelimeStatsBtn').onclick = showWordStatsModal;
-        }
+
 
     </script>
 </body>
