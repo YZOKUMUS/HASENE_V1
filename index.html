@@ -3236,6 +3236,13 @@
                 
                 // Daily task progress - her doğru cevap için
                 updateTaskProgress('kelimeCevir', 1);
+                
+                // Perfect streak kontrolü - hiç yanlış yapmamışsak perfect streak artır
+                if (sessionWrong === 0) {
+                    updateTaskProgress('perfectStreak', 1);
+                    console.log(`🔥 Perfect streak artırıldı! Mevcut: ${dailyTasks.todayStats.perfectStreak}`);
+                }
+                
                 console.log(`✅ Doğru cevap işlemi tamamlandı!`);
                 
                 updateUI();
@@ -3558,6 +3565,13 @@
                 
                 // Daily task progress - her doğru cevap için
                 updateTaskProgress('dinleBul', 1);
+                
+                // Perfect streak kontrolü - hiç yanlış yapmamışsak perfect streak artır
+                if (sessionWrong === 0) {
+                    updateTaskProgress('perfectStreak', 1);
+                    console.log(`🔥 Perfect streak artırıldı! Mevcut: ${dailyTasks.todayStats.perfectStreak}`);
+                }
+                
                 console.log(`✅ Doğru cevap işlemi tamamlandı!`);
                 console.log(`📊 Sonra - session score: ${sessionScore}, session correct: ${sessionCorrect}`);
             } else {
@@ -3783,6 +3797,13 @@
                 
                 // Daily task progress - her doğru cevap için
                 updateTaskProgress('boslukDoldur', 1);
+                
+                // Perfect streak kontrolü - hiç yanlış yapmamışsak perfect streak artır
+                if (sessionWrong === 0) {
+                    updateTaskProgress('perfectStreak', 1);
+                    console.log(`🔥 Perfect streak artırıldı! Mevcut: ${dailyTasks.todayStats.perfectStreak}`);
+                }
+                
                 console.log(`✅ Doğru cevap işlemi tamamlandı!`);
 
                 // Tam ayeti göster
