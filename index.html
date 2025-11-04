@@ -1015,6 +1015,29 @@
                 <div id="calendarGrid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center;">
                     <!-- Takvim günleri buraya eklenecek -->
                 </div>
+                
+                <!-- Renk Açıklaması (Legend) -->
+                <div style="margin-top: 8px; padding-top: 6px; border-top: 1px solid #e0e0e0;">
+                    <div style="font-size: 0.6em; color: #666; margin-bottom: 4px; font-weight: 600;">Renkler:</div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.55em; color: #666; gap: 2px;">
+                        <span style="display: flex; align-items: center; gap: 2px;">
+                            <div style="width: 12px; height: 12px; background: #2196f3; border-radius: 50%; border: 1px solid #4caf50;"></div>
+                            Bugün
+                        </span>
+                        <span style="display: flex; align-items: center; gap: 2px;">
+                            <div style="width: 12px; height: 12px; background: #2e7d32; border-radius: 50%; border: 1px solid #ff9800;"></div>
+                            Streak
+                        </span>
+                        <span style="display: flex; align-items: center; gap: 2px;">
+                            <div style="width: 12px; height: 12px; background: #4caf50; border-radius: 50%;"></div>
+                            Oyun
+                        </span>
+                        <span style="display: flex; align-items: center; gap: 2px;">
+                            <div style="width: 12px; height: 12px; background: transparent; border-radius: 50%; color: #ccc; text-align: center; line-height: 10px;">·</div>
+                            Boş
+                        </span>
+                    </div>
+                </div>
             </div>
             
             <!-- Bugünkü Hedef -->
@@ -2424,6 +2447,18 @@
             // playDates array'ini Set'e çevir (çok daha hızlı arama)
             const playDatesSet = new Set(streakData.playDates);
             
+            // Mevcut streak'in tarih aralığını hesapla
+            const currentStreakDates = [];
+            if (streakData.currentStreak > 0 && streakData.lastPlayDate) {
+                const lastPlayDate = new Date(streakData.lastPlayDate);
+                for (let i = 0; i < streakData.currentStreak; i++) {
+                    const streakDate = new Date(lastPlayDate);
+                    streakDate.setDate(lastPlayDate.getDate() - i);
+                    currentStreakDates.push(streakDate.toISOString().split('T')[0]);
+                }
+            }
+            const currentStreakSet = new Set(currentStreakDates);
+
             // Ayın günlerini ekle
             const daysInMonth = new Date(year, month + 1, 0).getDate();
             for (let day = 1; day <= daysInMonth; day++) {
@@ -2431,20 +2466,28 @@
                 
                 let style = 'padding: 6px 3px; border-radius: 50%; cursor: pointer; font-size: 0.75em; min-height: 28px; display: flex; align-items: center; justify-content: center;';
                 
-                // Bugün ise vurgula
+                // Bugün ise vurgula (mavi)
                 if (day === todayDate) {
-                    style += ' background: #2196f3; color: white; font-weight: bold;';
+                    if (playDatesSet.has(dateStr)) {
+                        style += ' background: #2196f3; color: white; font-weight: bold; border: 2px solid #4caf50;'; // Bugün + oyun oynandı
+                    } else {
+                        style += ' background: #2196f3; color: white; font-weight: bold;'; // Sadece bugün
+                    }
                 }
-                // Oyun oynandıysa yeşil
+                // Mevcut streak'in bir parçasıysa (koyu yeşil)
+                else if (currentStreakSet.has(dateStr) && playDatesSet.has(dateStr)) {
+                    style += ' background: #2e7d32; color: white; border: 2px solid #ff9800;'; // Streak içinde
+                }
+                // Oyun oynandı ama streak dışında (açık yeşil)
                 else if (playDatesSet.has(dateStr)) {
-                    style += ' background: #4caf50; color: white;';
+                    style += ' background: #4caf50; color: white;'; // Normal oyun günü
                 }
                 // Geçmiş günlerse gri
                 else if (day < todayDate) {
                     style += ' color: #ccc;';
                 }
                 
-                html += `<div style="${style}">${day}</div>`;
+                html += `<div style="${style}" title="${dateStr}">${day}</div>`;
             }
             
             // Tek seferde HTML'i set et (çok hızlı)
