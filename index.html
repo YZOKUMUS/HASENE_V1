@@ -730,8 +730,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: none;
-            filter: contrast(1.3) brightness(1.1);
-            background-image: url('hoparlor1.png');
+            background-image: url('hoparlor.png');
             background-size: 100%;
             background-repeat: no-repeat;
             background-position: center;
@@ -739,8 +738,6 @@
 
         .audio-btn:hover {
             transform: scale(1.15) translateY(-2px);
-            box-shadow: 0 5px 20px rgba(139, 69, 19, 0.5);
-            filter: brightness(1.2);
         }
 
         .audio-btn:active {
@@ -1627,8 +1624,8 @@
 
         <!-- Kelime Çevir Alt Mod Seçimi -->
         <div class="mode-selector" id="modeSelector" style="display: none;">
-            <button class="back-btn" id="backToMenuBtn">
-                <i class="material-icons">west</i>
+            <button class="back-btn" id="backToMenuBtn" style="margin: 6px 8px 4px 8px; padding: 4px 8px; font-size: 0.75em;">
+                <i class="material-icons" style="font-size: 14px;">west</i>
                 Geri
             </button>
             
@@ -1639,8 +1636,8 @@
 
         <!-- Ayet Okuma Modu -->
         <div class="ayet-mode" id="ayetMode" style="display: none;">
-            <button class="back-btn" id="backFromAyetBtn">
-                <i class="material-icons">west</i>
+            <button class="back-btn" id="backFromAyetBtn" style="margin: 6px 8px 4px 8px; padding: 4px 8px; font-size: 0.75em;">
+                <i class="material-icons" style="font-size: 14px;">west</i>
                 Geri
             </button>
             <div class="ayet-card">
@@ -1657,8 +1654,8 @@
 
         <!-- Dua Modu -->
         <div class="dua-mode" id="duaMode" style="display: none;">
-            <button class="back-btn" id="backFromDuaBtn">
-                <i class="material-icons">west</i>
+            <button class="back-btn" id="backFromDuaBtn" style="margin: 6px 8px 4px 8px; padding: 4px 8px; font-size: 0.75em;">
+                <i class="material-icons" style="font-size: 14px;">west</i>
                 Geri
             </button>
             <div class="dua-card">
@@ -1675,8 +1672,8 @@
 
         <!-- Hadis Oku Modu -->
         <div class="hadis-mode" id="hadisMode" style="display: none;">
-            <button class="back-btn" id="backFromHadisBtn">
-                <i class="material-icons">west</i>
+            <button class="back-btn" id="backFromHadisBtn" style="margin: 6px 8px 4px 8px; padding: 4px 8px; font-size: 0.75em;">
+                <i class="material-icons" style="font-size: 14px;">west</i>
                 Geri
             </button>
             <div class="hadis-card">
@@ -1694,24 +1691,24 @@
 
         <!-- Boşluk Doldur Modu -->
         <div class="bosluk-mode" id="boslukMode" style="display: none;">
-            <button class="back-btn" id="backFromBoslukBtn">
-                <i class="material-icons">west</i>
+            <button class="back-btn" id="backFromBoslukBtn" style="margin: 6px 8px 4px 8px; padding: 4px 8px; font-size: 0.75em;">
+                <i class="material-icons" style="font-size: 14px;">west</i>
                 Geri
             </button>
             
             <!-- İstatistikler -->
-            <div class="stats">
-                <div class="stat">
-                    <div class="stat-label">Puan</div>
-                    <div class="stat-value" id="boslukScore">0</div>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin: 4px;">
+                <div class="flutter-stat-card" style="padding: 4px 1px; min-height: auto;">
+                    <div class="flutter-stat-value" id="boslukScore" style="font-size: 0.95em; margin-bottom: 1px;">0</div>
+                    <div class="flutter-stat-label" style="font-size: 0.5em; line-height: 1;">PUAN</div>
                 </div>
-                <div class="stat">
-                    <div class="stat-label">Doğru</div>
-                    <div class="stat-value" id="boslukCorrect">0</div>
+                <div class="flutter-stat-card" style="padding: 4px 1px; min-height: auto;">
+                    <div class="flutter-stat-value" id="boslukCorrect" style="font-size: 0.95em; margin-bottom: 1px;">0</div>
+                    <div class="flutter-stat-label" style="font-size: 0.5em; line-height: 1;">DOĞRU</div>
                 </div>
-                <div class="stat">
-                    <div class="stat-label">Yanlış</div>
-                    <div class="stat-value" id="boslukWrong">0</div>
+                <div class="flutter-stat-card" style="padding: 4px 1px; min-height: auto;">
+                    <div class="flutter-stat-value" id="boslukWrong" style="font-size: 0.95em; margin-bottom: 1px;">0</div>
+                    <div class="flutter-stat-label" style="font-size: 0.5em; line-height: 1;">YANLIŞ</div>
                 </div>
             </div>
 
@@ -1721,30 +1718,30 @@
                 <button class="audio-btn" id="boslukAudioBtn"></button>
                 <div class="options" id="boslukOptions"></div>
                 <div class="feedback" id="boslukFeedback"></div>
-                <button class="next-btn" id="boslukNextBtn">Sonraki Soru →</button>
+                <button class="flutter-btn flutter-btn-primary" id="boslukNextBtn" style="width: 100%; margin-top: 16px;">Sonraki Soru →</button>
             </div>
         </div>
 
         <!-- Dinle ve Bul Modu -->
         <div class="dinle-mode" id="dinleMode" style="display: none;">
-            <button class="back-btn" id="backFromDinleBtn">
-                <i class="material-icons">west</i>
+            <button class="back-btn" id="backFromDinleBtn" style="margin: 6px 8px 4px 8px; padding: 4px 8px; font-size: 0.75em;">
+                <i class="material-icons" style="font-size: 14px;">west</i>
                 Geri
             </button>
             
             <!-- İstatistikler -->
-            <div class="stats">
-                <div class="stat">
-                    <div class="stat-label">Puan</div>
-                    <div class="stat-value" id="dinleScore">0</div>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin: 4px;">
+                <div class="flutter-stat-card" style="padding: 4px 1px; min-height: auto;">
+                    <div class="flutter-stat-value" id="dinleScore" style="font-size: 0.95em; margin-bottom: 1px;">0</div>
+                    <div class="flutter-stat-label" style="font-size: 0.5em; line-height: 1;">PUAN</div>
                 </div>
-                <div class="stat">
-                    <div class="stat-label">Doğru</div>
-                    <div class="stat-value" id="dinleCorrect">0</div>
+                <div class="flutter-stat-card" style="padding: 4px 1px; min-height: auto;">
+                    <div class="flutter-stat-value" id="dinleCorrect" style="font-size: 0.95em; margin-bottom: 1px;">0</div>
+                    <div class="flutter-stat-label" style="font-size: 0.5em; line-height: 1;">DOĞRU</div>
                 </div>
-                <div class="stat">
-                    <div class="stat-label">Yanlış</div>
-                    <div class="stat-value" id="dinleWrong">0</div>
+                <div class="flutter-stat-card" style="padding: 4px 1px; min-height: auto;">
+                    <div class="flutter-stat-value" id="dinleWrong" style="font-size: 0.95em; margin-bottom: 1px;">0</div>
+                    <div class="flutter-stat-label" style="font-size: 0.5em; line-height: 1;">YANLIŞ</div>
                 </div>
             </div>
 
@@ -1752,43 +1749,39 @@
                 <div style="text-align: center; margin: 30px 0;">
                     <div style="font-size: 4em; color: #00CED1; text-shadow: 0 0 10px #00CED1;">🎧</div>
                 </div>
-                <div class="sure-info" id="dinleSureInfo">ID: 0</div>
+                <div class="sure-info" id="dinleSureInfo" style="text-align: center; color: var(--md-on-surface-variant); font-size: 12px; margin: 8px 0;">ID: 0</div>
                 <button class="audio-btn" id="dinleAudioBtn"></button>
                 <div class="options" id="dinleOptions"></div>
                 <div class="feedback" id="dinleFeedback"></div>
-                <button class="next-btn" id="dinleNextBtn">Sonraki Soru →</button>
+                <button class="flutter-btn flutter-btn-primary" id="dinleNextBtn" style="width: 100%; margin-top: 16px;">Sonraki Soru →</button>
             </div>
         </div>
 
         <!-- Oyun Ekranı -->
         <div class="game-screen" id="gameScreen" style="display: none;">
-        <!-- Flutter App Bar -->
-        <div class="flutter-app-bar">
-            <button class="back-btn" id="backFromGameBtn">
-                <i class="material-icons">west</i>
-                Geri
-            </button>
-            <h1>📚 Kelime Çevir</h1>
-            <div></div>
-        </div>
+        <!-- Geri Butonu -->
+        <button class="back-btn" id="backFromGameBtn" style="margin: 6px 8px 4px 8px; padding: 4px 8px; font-size: 0.75em;">
+            <i class="material-icons" style="font-size: 14px;">west</i>
+            Geri
+        </button>
 
         <!-- İstatistikler -->
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 20px;">
-            <div class="flutter-stat-card">
-                <div class="flutter-stat-value" id="score">0</div>
-                <div class="flutter-stat-label">Puan</div>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; margin: 4px;">
+            <div class="flutter-stat-card" style="padding: 4px 1px; min-height: auto;">
+                <div class="flutter-stat-value" id="score" style="font-size: 0.95em; margin-bottom: 1px;">0</div>
+                <div class="flutter-stat-label" style="font-size: 0.5em; line-height: 1;">PUAN</div>
             </div>
-            <div class="flutter-stat-card">
-                <div class="flutter-stat-value" id="level">1</div>
-                <div class="flutter-stat-label">Seviye</div>
+            <div class="flutter-stat-card" style="padding: 4px 1px; min-height: auto;">
+                <div class="flutter-stat-value" id="level" style="font-size: 0.95em; margin-bottom: 1px;">1</div>
+                <div class="flutter-stat-label" style="font-size: 0.5em; line-height: 1;">SEVİYE</div>
             </div>
-            <div class="flutter-stat-card">
-                <div class="flutter-stat-value" id="correct">0</div>
-                <div class="flutter-stat-label">Doğru</div>
+            <div class="flutter-stat-card" style="padding: 4px 1px; min-height: auto;">
+                <div class="flutter-stat-value" id="correct" style="font-size: 0.95em; margin-bottom: 1px;">0</div>
+                <div class="flutter-stat-label" style="font-size: 0.5em; line-height: 1;">DOĞRU</div>
             </div>
-            <div class="flutter-stat-card">
-                <div class="flutter-stat-value" id="wrong">0</div>
-                <div class="flutter-stat-label">Yanlış</div>
+            <div class="flutter-stat-card" style="padding: 4px 1px; min-height: auto;">
+                <div class="flutter-stat-value" id="wrong" style="font-size: 0.95em; margin-bottom: 1px;">0</div>
+                <div class="flutter-stat-label" style="font-size: 0.5em; line-height: 1;">YANLIŞ</div>
             </div>
         </div>
 
@@ -1824,11 +1817,11 @@
             <div class="sure-info" id="sureInfo" style="text-align: center; color: var(--md-on-surface-variant); font-size: 12px; margin: 8px 0;">ID: 0</div>
             
             <div style="display: flex; justify-content: center; gap: 16px; margin: 20px 0;">
-                <button class="flutter-fab" id="audioBtn">
-                    <i class="material-icons">volume_up</i>
+                <button class="flutter-fab" id="audioBtn" style="background: transparent; box-shadow: none; border: none;">
+                    <img src="hoparlor.png" alt="Ses" style="width: 50px; height: 50px;">
                 </button>
-                <button class="flutter-fab" id="hintBtn" style="display: none;">
-                    <i class="material-icons">help_outline</i>
+                <button class="flutter-fab" id="hintBtn" style="display: none; background: transparent; box-shadow: none; border: none;">
+                    <img src="clue.png" alt="İpucu" style="width: 50px; height: 50px;">
                 </button>
             </div>
             
@@ -6044,7 +6037,7 @@
 
             console.log(`🎨 UI güncelleniyor...`);
             // UI güncelle
-            elements.dinleSureInfo.textContent = `ID: ${currentDinleQuestion.id}`;
+            elements.dinleSureInfo.textContent = `ID: ${currentDinleQuestion.id} | Zorluk: ${currentDinleQuestion.difficulty} | Aralık: ${diffLevel.minDiff}-${diffLevel.maxDiff}`;
             console.log(`✅ Kelime ID: ${currentDinleQuestion.id}`);
 
             console.log(`🔀 Seçenekler oluşturuluyor... (4 Arapça kelime)`);
@@ -6744,6 +6737,183 @@
                 console.log('Star Points:', typeof starPoints !== 'undefined' ? starPoints : 'Henüz yüklenmedi');
                 console.log('Level:', typeof level !== 'undefined' ? level : 'Henüz yüklenmedi');
                 console.log('Session Score:', typeof sessionScore !== 'undefined' ? sessionScore : 'Henüz yüklenmedi');
+            };
+
+            // 🔍 SENKRONİZASYON TESTİ - Kapsamlı kontrol
+            window.testSenkronizasyon = function() {
+                console.log('\n═══════════════════════════════════════');
+                console.log('🔍 BAŞARI & PUAN SİSTEMİ SENKRONİZASYON TESTİ');
+                console.log('═══════════════════════════════════════\n');
+                
+                // 1. MEVCUT DURUM
+                console.log('📊 1. MEVCUT DURUM:');
+                console.log('   totalPoints:', totalPoints);
+                console.log('   sessionScore:', sessionScore);
+                console.log('   level:', level);
+                console.log('   starPoints:', starPoints);
+                console.log('   badges:', JSON.stringify(badges));
+                console.log('   comboCount:', comboCount);
+                
+                // 2. ROZET HESAPLAMA KONTROLÜ
+                console.log('\n🏅 2. ROZET SİSTEMİ KONTROLÜ:');
+                const expectedBadges = {
+                    bronze: Math.floor(totalPoints / 2000),
+                    silver: Math.floor(totalPoints / 8500),
+                    gold: Math.floor(totalPoints / 25500),
+                    diamond: Math.floor(totalPoints / 85000)
+                };
+                console.log('   Beklenen:', JSON.stringify(expectedBadges));
+                console.log('   Mevcut:', JSON.stringify(badges));
+                
+                const badgeMatch = JSON.stringify(expectedBadges) === JSON.stringify(badges);
+                console.log('   Senkronizasyon:', badgeMatch ? '✅ UYUMLU' : '❌ UYUMSUZ');
+                
+                if (!badgeMatch) {
+                    console.log('   ⚠️ Rozet sayıları tutarsız! updateBadgeSystem() çağrılıyor...');
+                    updateBadgeSystem();
+                    console.log('   Düzeltilmiş:', JSON.stringify(badges));
+                }
+                
+                // 3. BAŞARIM KONTROLÜ
+                console.log('\n🏆 3. BAŞARIM SİSTEMİ KONTROLÜ:');
+                const unlockedAch = JSON.parse(localStorage.getItem('unlockedAchievements')) || [];
+                console.log('   Açılan başarımlar:', unlockedAch.length, 'adet');
+                console.log('   Liste:', unlockedAch.join(', '));
+                
+                // XP tabanlı başarımları kontrol et
+                const xpAchievements = [
+                    { id: 'xp_500', threshold: 500, name: 'İlk Adım' },
+                    { id: 'xp_2000', threshold: 2000, name: 'Bronz Yolcu' },
+                    { id: 'xp_4000', threshold: 4000, name: 'Hızlı Başlangıç' },
+                    { id: 'xp_8500', threshold: 8500, name: 'Gümüş Master' },
+                    { id: 'xp_17000', threshold: 17000, name: 'Çift Gümüş' },
+                    { id: 'xp_25500', threshold: 25500, name: 'Altın Master' },
+                    { id: 'xp_51000', threshold: 51000, name: 'Çift Altın' },
+                    { id: 'xp_85000', threshold: 85000, name: 'Elmas Master' },
+                    { id: 'xp_170000', threshold: 170000, name: 'Efsane' }
+                ];
+                
+                let expectedAchievements = [];
+                xpAchievements.forEach(ach => {
+                    if (totalPoints >= ach.threshold) {
+                        expectedAchievements.push(ach.id);
+                        const hasAch = unlockedAch.includes(ach.id);
+                        console.log(`   ${hasAch ? '✅' : '❌'} ${ach.name} (${ach.threshold} XP): ${hasAch ? 'Açık' : 'KAPALI!'}`);
+                    }
+                });
+                
+                const missingAchievements = expectedAchievements.filter(id => !unlockedAch.includes(id));
+                if (missingAchievements.length > 0) {
+                    console.log('   ⚠️ Eksik başarımlar:', missingAchievements.join(', '));
+                    console.log('   💡 checkAchievements() çağrılıyor...');
+                    checkAchievements();
+                }
+                
+                // 4. VERİ KALICILIĞI KONTROLÜ
+                console.log('\n💾 4. VERİ KALICILIĞI KONTROLÜ:');
+                const lsPoints = localStorage.getItem('hasene_totalPoints');
+                const lsBadges = localStorage.getItem('hasene_badges');
+                console.log('   localStorage totalPoints:', lsPoints);
+                console.log('   localStorage badges:', lsBadges);
+                console.log('   Memory totalPoints:', totalPoints);
+                console.log('   Memory badges:', JSON.stringify(badges));
+                
+                const lsMatch = parseInt(lsPoints) === totalPoints;
+                console.log('   Points senkronizasyon:', lsMatch ? '✅ UYUMLU' : '❌ UYUMSUZ');
+                
+                if (!lsMatch) {
+                    console.log('   ⚠️ localStorage güncel değil! saveStats() çağrılıyor...');
+                    saveStats();
+                }
+                
+                // 5. GÜNLÜK GÖREV KONTROLÜ
+                console.log('\n📅 5. GÜNLÜK GÖREV KONTROLÜ:');
+                console.log('   Bugünkü toplam puan:', dailyTasks.todayStats.toplamPuan);
+                console.log('   Günlük hedef:', dailyTasks.hedefler.toplamPuan);
+                const dailyXP = parseInt(localStorage.getItem('dailyXP')) || 0;
+                const goalXP = parseInt(localStorage.getItem('dailyGoalXP')) || 2700;
+                console.log('   Daily XP:', dailyXP, '/', goalXP);
+                console.log('   Günlük hedef tamamlandı mı?', dailyXP >= goalXP ? '✅ EVET' : '❌ HAYIR');
+                
+                // 6. SEVIYE HESAPLAMA KONTROLÜ
+                console.log('\n⬆️ 6. SEVİYE SİSTEMİ KONTROLÜ:');
+                const calculatedLevel = calculateLevel(totalPoints);
+                console.log('   Hesaplanan seviye:', calculatedLevel);
+                console.log('   Mevcut seviye:', level);
+                console.log('   Seviye senkronizasyon:', calculatedLevel === level ? '✅ UYUMLU' : '❌ UYUMSUZ');
+                
+                if (calculatedLevel !== level) {
+                    console.log('   ⚠️ Seviye tutarsız! Düzeltiliyor...');
+                    level = calculatedLevel;
+                    updateStatsBar();
+                }
+                
+                // 7. ÖZET RAPOR
+                console.log('\n═══════════════════════════════════════');
+                console.log('📊 ÖZET RAPOR:');
+                console.log('═══════════════════════════════════════');
+                const allOK = badgeMatch && lsMatch && (calculatedLevel === level);
+                console.log('Genel Durum:', allOK ? '✅ TÜM SİSTEMLER SENKRONİZE' : '⚠️ BAZI SORUNLAR VAR');
+                console.log('Rozet Sistemi:', badgeMatch ? '✅' : '❌');
+                console.log('Veri Kalıcılığı:', lsMatch ? '✅' : '❌');
+                console.log('Seviye Sistemi:', (calculatedLevel === level) ? '✅' : '❌');
+                console.log('═══════════════════════════════════════\n');
+                
+                return allOK;
+            };
+            
+            // Test puan ekleme fonksiyonu
+            window.testAddPoints = function(points) {
+                console.log(`\n🎯 TEST: ${points} puan ekleniyor...`);
+                console.log('Önceki totalPoints:', totalPoints);
+                addSessionPoints(points);
+                console.log('Sonraki totalPoints:', totalPoints);
+                console.log('✅ Puan eklendi. testSenkronizasyon() çalıştırılıyor...\n');
+                setTimeout(() => testSenkronizasyon(), 500);
+            };
+            
+            // Hızlı test senaryoları
+            window.testSenaryo1 = function() {
+                console.log('\n🧪 SENARYO 1: Yeni kullanıcı (0 → 2500 XP)');
+                resetPoints();
+                testAddPoints(2500);
+            };
+            
+            window.testSenaryo2 = function() {
+                console.log('\n🧪 SENARYO 2: Combo bonusu (3x doğru cevap)');
+                resetPoints();
+                addSessionPoints(10);
+                addSessionPoints(10);
+                addSessionPoints(10); // 3. cevap combo bonusu tetikler
+                setTimeout(() => testSenkronizasyon(), 500);
+            };
+            
+            window.testSenaryo3 = function() {
+                console.log('\n🧪 SENARYO 3: Rozet seviye atlama (25000 → 26000 XP)');
+                totalPoints = 25000;
+                updateBadgeSystem();
+                saveStats();
+                testAddPoints(1000); // Altın rozet kazanılmalı
+            };
+            
+            window.testSenaryo4 = function() {
+                console.log('\n🧪 SENARYO 4: Sayfa yenileme simülasyonu');
+                console.log('1. Mevcut durum kaydediliyor...');
+                saveStats();
+                console.log('2. Veri değişkenleri sıfırlanıyor (sayfa yenileme sim.)...');
+                const savedPoints = totalPoints;
+                totalPoints = 0;
+                level = 1;
+                badges = { bronze: 0, silver: 0, gold: 0, diamond: 0 };
+                console.log('3. Veriler yeniden yükleniyor...');
+                loadStats().then(() => {
+                    console.log('4. Senkronizasyon kontrol ediliyor...');
+                    setTimeout(() => {
+                        console.log('Kaydedilen XP:', savedPoints);
+                        console.log('Yüklenen XP:', totalPoints);
+                        testSenkronizasyon();
+                    }, 500);
+                });
             };
 
             // Seviye geçiş test fonksiyonu - console'dan çağırılabilir
