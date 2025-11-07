@@ -216,16 +216,16 @@ html, body {
 /* ============ BOTTOM NAVIGATION ============ */
 .flutter-bottom-nav {
     position: fixed;
-    bottom: 0;
+    top: 0;
     left: 0;
     right: 0;
     background: #FFFFFF !important;
-    border-top: 2px solid #CCCCCC;
+    border-bottom: 2px solid #CCCCCC;
     padding: 12px 0;
     display: flex !important;
     justify-content: space-around;
     z-index: 1000;
-    box-shadow: 0 -2px 12px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.2);
     height: 70px;
 }
 
