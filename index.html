@@ -1904,7 +1904,7 @@
 
     <!-- Takvim Modal -->
     <div class="modal" id="calendarModal">
-        <div class="modal-content" style="max-width: 580px; max-height: 90vh; overflow-y: auto; padding: 25px; background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);">
+        <div class="modal-content" style="max-width: 580px; max-height: 90vh; overflow-y: auto; padding: 18px; background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);">
             
             <!-- Başlık -->
             <div style="text-align: center; margin-bottom: 20px;">
@@ -1921,9 +1921,9 @@
                 <!-- Başlık kaldırıldı -->
                 
                 <!-- Mini Takvim -->
-                <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 12px;">
+                <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 10px;">
                     <div style="text-align: center; font-weight: bold; margin-bottom: 12px; font-size: 1em; color: #ecf0f1;" id="calendarMonth">Kasım 2025</div>
-                    <div id="calendarGrid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; max-width: 100%;">
+                    <div id="calendarGrid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; text-align: center; max-width: 100%;">
                         <!-- Takvim günleri buraya eklenecek -->
                     </div>
                     
@@ -4513,7 +4513,7 @@
             // Haftanın günlerini ekle (daha kısa isimler + küçük font)
             const dayNames = ['Pz', 'Pt', 'Sl', 'Çr', 'Pr', 'Cm', 'Ct'];
             dayNames.forEach(day => {
-                html += `<div style="font-weight: 600; font-size: 0.65em; color: #95a5a6; padding: 3px; text-align: center; height: 20px; display: flex; align-items: center; justify-content: center;">${day}</div>`;
+                html += `<div style="font-weight: 600; font-size: 0.65em; color: #95a5a6; padding: 2px; text-align: center; min-height: 18px; display: flex; align-items: center; justify-content: center;">${day}</div>`;
             });
             
             // Ayın ilk gününün haftanın hangi günü olduğunu bul
