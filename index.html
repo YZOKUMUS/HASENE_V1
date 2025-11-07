@@ -30,13 +30,34 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
     
-    <!-- Material Icons -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Material Icons - Preload for better performance -->
+    <link rel="preload" href="https://fonts.gstatic.com/s/materialicons/v145/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2" as="font" type="font/woff2" crossorigin>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons&display=swap" rel="stylesheet">
     
     <!-- Flutter Modern CSS -->
     <link rel="stylesheet" href="flutter_modern.css">
     
     <style>
+        /* ============ MATERIAL ICONS FALLBACK ============ */
+        .material-icons {
+            font-family: 'Material Icons', 'Material Icons Fallback', Arial, sans-serif;
+            font-weight: normal;
+            font-style: normal;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+            /* Fallback text için bazı iconlar */
+        }
+        
+        /* Material Icons fallback sistem */
+        .material-icons:not(.loaded) {
+            visibility: hidden;
+        }
+        
         /* ============ TEMEL AYARLAR ============ */
         * {
             margin: 0;
@@ -1541,9 +1562,6 @@
                 </div>
                 <div style="text-align: center; margin-top: 8px; color: var(--text-secondary); font-weight: 500; font-size: 14px;" id="dailyGoalProgressText">0 / 2700 XP</div>
             </div>
-
-
-                    <span style="font-size: 1em;">�</span>
 
             
             <!-- XP Bilgi Butonu -->
@@ -5225,12 +5243,15 @@
                 comboCount = 0;
             }
             
-            elements.boslukMode.style.display = 'none';
-            elements.modeSelector.style.display = 'none';
-            elements.gameScreen.style.display = 'none';
-            elements.mainMenu.removeAttribute('style');
-            elements.mainMenu.style.display = 'block';
-            elements.settingsBtn.style.display = 'none';
+            // Güvenli element erişimi
+            if (elements.boslukMode) elements.boslukMode.style.display = 'none';
+            if (elements.modeSelector) elements.modeSelector.style.display = 'none';
+            if (elements.gameScreen) elements.gameScreen.style.display = 'none';
+            if (elements.mainMenu) {
+                elements.mainMenu.removeAttribute('style');
+                elements.mainMenu.style.display = 'block';
+            }
+            if (elements.settingsBtn) elements.settingsBtn.style.display = 'none';
         };
 
         elements.backFromDinleBtn.onclick = async () => {

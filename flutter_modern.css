@@ -219,13 +219,14 @@ html, body {
     bottom: 0;
     left: 0;
     right: 0;
-    background: var(--surface);
-    border-top: 1px solid #E5E5E7;
-    padding: 8px 0;
-    display: flex;
+    background: #FFFFFF !important;
+    border-top: 2px solid #CCCCCC;
+    padding: 12px 0;
+    display: flex !important;
     justify-content: space-around;
     z-index: 1000;
-    box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 -2px 12px rgba(0,0,0,0.2);
+    height: 70px;
 }
 
 .flutter-nav-item {
@@ -236,14 +237,14 @@ html, body {
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.3s ease;
-    color: var(--text-secondary);
+    color: #333333 !important;
     text-decoration: none;
     min-width: 60px;
 }
 
 .flutter-nav-item.active {
-    background: rgba(98, 0, 234, 0.1);
-    color: var(--primary);
+    background: rgba(98, 0, 234, 0.15);
+    color: #6200EA !important;
 }
 
 .flutter-nav-item:hover {
@@ -251,13 +252,19 @@ html, body {
 }
 
 .flutter-nav-item i {
-    font-size: 20px;
-    margin-bottom: 2px;
+    font-size: 24px;
+    margin-bottom: 4px;
+    color: inherit !important;
+    opacity: 1 !important;
+    visibility: visible !important;
 }
 
 .flutter-nav-item span {
-    font-size: 11px;
-    font-weight: 500;
+    font-size: 12px;
+    font-weight: 600;
+    color: inherit !important;
+    opacity: 1 !important;
+    visibility: visible !important;
 }
 
 /* ============ ARABIC TEXT ============ */
