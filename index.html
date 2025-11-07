@@ -1521,20 +1521,6 @@
                     </div>
                 </div>
                 
-                <!-- Top Badge Display -->
-                <div style="display: flex; justify-content: center; margin-top: 12px;">
-                    <div style="background: linear-gradient(135deg, #FFD700, #FFA500); border-radius: 16px; padding: 8px 16px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 8px rgba(255,215,0,0.3);">
-                        <span id="topBadgeIcon" style="font-size: 20px;">🥉</span>
-                        <div>
-                            <div style="color: white; font-weight: 700; font-size: 14px;" id="topBadgeCount">0</div>
-                            <div style="color: rgba(255,255,255,0.8); font-size: 10px; font-weight: 500;">Rozet</div>
-                        </div>
-                        <button id="badgesBtn" style="background: none; border: none; color: white; padding: 4px; cursor: pointer;">
-                            <i class="material-icons" style="font-size: 18px;">keyboard_arrow_right</i>
-                        </button>
-                    </div>
-                </div>
-                
                 <!-- Günlük Hedef -->
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                     <div style="display: flex; align-items: center; gap: 12px;">
@@ -2988,7 +2974,6 @@
             
             // Modal butonlarına event listener ekle
             const dailyTasksBtn = document.getElementById('dailyTasksBtn');
-            const badgesBtn = document.getElementById('badgesBtn');
             const statsBtn = document.getElementById('statsBtn');
             const calendarBtn = document.getElementById('calendarBtn');
             const xpInfoBtn = document.getElementById('xpInfoBtn');
@@ -4149,37 +4134,6 @@
             badges.silver = newSilver;
             badges.gold = newGold;
             badges.diamond = newDiamond;
-            
-            // En yüksek rozeti göster
-            updateTopBadgeDisplay();
-        }
-
-        function updateTopBadgeDisplay() {
-            const topBadgeIcon = document.getElementById('topBadgeIcon');
-            const topBadgeCount = document.getElementById('topBadgeCount');
-            
-            // Null check - eğer elementler yoksa fonksiyonu sonlandır
-            if (!topBadgeIcon || !topBadgeCount) {
-                log.warn('⚠️ UYARI: Top badge elementleri bulunamadı, atlanıyor...');
-                return;
-            }
-            
-            if (badges.diamond > 0) {
-                topBadgeIcon.textContent = '💎';
-                topBadgeCount.textContent = badges.diamond;
-            } else if (badges.gold > 0) {
-                topBadgeIcon.textContent = '🥇';
-                topBadgeCount.textContent = badges.gold;
-            } else if (badges.silver > 0) {
-                topBadgeIcon.textContent = '🥈';
-                topBadgeCount.textContent = badges.silver;
-            } else if (badges.bronze > 0) {
-                topBadgeIcon.textContent = '🥉';
-                topBadgeCount.textContent = badges.bronze;
-            } else {
-                topBadgeIcon.textContent = '🥉';
-                topBadgeCount.textContent = '0';
-            }
         }
 
         function showBadgeUpModal(badgeType, badgeName) {
@@ -4957,7 +4911,11 @@
             updateDifficultyUI();
             
             document.getElementById('mainDiffKolay').onclick = () => {
-                console.log('🎯 Zorluk seçildi: KOLAY');
+                console.log("===== ZORLUK DEĞİŞTİ =====");
+                console.log("YENİ ZORLUK: KOLAY");
+                console.log("Aralık: 5-9");
+                console.log("Çarpan: 2x");
+                console.log("=======================");
                 currentDifficulty = 'kolay';
                 saveStats(); // Zorluk değiştiğinde kaydet!
                 // Kolay yeşil seçili, diğerleri kendi border renkleri ile beyaz
@@ -4970,7 +4928,11 @@
             };
             
             document.getElementById('mainDiffOrta').onclick = () => {
-                console.log('🎯 Zorluk seçildi: ORTA');
+                console.log("===== ZORLUK DEĞİŞTİ =====");
+                console.log("YENİ ZORLUK: ORTA");
+                console.log("Aralık: 10-11");
+                console.log("Çarpan: 2x");
+                console.log("=======================");
                 currentDifficulty = 'orta';
                 saveStats(); // Zorluk değiştiğinde kaydet!
                 // Orta turuncu seçili, diğerleri kendi border renkleri ile beyaz
@@ -4983,7 +4945,11 @@
             };
             
             document.getElementById('mainDiffZor').onclick = () => {
-                console.log('🎯 Zorluk seçildi: ZOR');
+                console.log("===== ZORLUK DEĞİŞTİ =====");
+                console.log("YENİ ZORLUK: ZOR");
+                console.log("Aralık: 12-21");
+                console.log("Çarpan: 2x");
+                console.log("=======================");
                 currentDifficulty = 'zor';
                 saveStats(); // Zorluk değiştiğinde kaydet!
                 // Zor kırmızı seçili, diğerleri kendi border renkleri ile beyaz
@@ -5456,10 +5422,21 @@
             // AKILLI KELİME SEÇİMİ - Zorlanılan kelimeleri daha sık göster
             console.log('🧠 Akıllı kelime seçimi başlıyor...');
             currentQuestion = selectIntelligentWord(filteredData);
+            
+            // SEÇİLEN KELİME DETAYLARI
+            console.log("===== SEÇİLEN KELİME =====");
+            console.log("Kelime:", currentQuestion.kelime);
+            console.log("Anlam:", currentQuestion.anlam);
+            console.log("Zorluk:", currentQuestion.difficulty);
+            console.log("ID:", currentQuestion.id);
+            console.log("Zorluk aralığı:", diffLevel.minDiff + "-" + diffLevel.maxDiff);
+            const isInRange = currentQuestion.difficulty >= diffLevel.minDiff && currentQuestion.difficulty <= diffLevel.maxDiff;
+            console.log("Aralıkta mı:", isInRange ? "EVET" : "HAYIR");
+            console.log("========================");
 
             // UI güncelle
             elements.arabicWord.textContent = currentQuestion.kelime;
-            elements.sureInfo.textContent = `ID: ${currentQuestion.id}`;
+            elements.sureInfo.textContent = `ID: ${currentQuestion.id} | Zorluk: ${currentQuestion.difficulty} | Aralık: ${diffLevel.minDiff}-${diffLevel.maxDiff}`;
 
             // Seçenekler oluştur
             const wrongAnswers = getWrongAnswers(3);
@@ -5851,14 +5828,18 @@
 
             console.log(`🧠 Akıllı kelime seçimi (Dinle Modu) başlıyor...`);
             currentDinleQuestion = selectIntelligentWord(filteredData);
-            console.log(`✅ Seçilen kelime: ${currentDinleQuestion.kelime}`);
             
-            console.log(`📝 === SORU #${dinleQuestionCount + 1} ===`);
-            console.log(`🔤 Kelime: "${currentDinleQuestion.kelime}"`);
-            console.log(`💭 Anlam: "${currentDinleQuestion.anlam}"`);
-            console.log(`📊 Soru zorluğu: ${currentDinleQuestion.difficulty}`);
-            console.log(`📊 Seçili zorluk: ${currentDifficulty} (${diffLevel.minDiff}-${diffLevel.maxDiff})`);
-            console.log(`🎯 Puan hesaplama: ${currentDinleQuestion.difficulty} × 2 = ${currentDinleQuestion.difficulty * 2} puan`);
+            // 🔍 SEÇİLEN KELİME DETAYLARI (DİNLE MODU)
+            console.log("===== DINLE MODU KELİME =====");
+            console.log(`� Kelime: ${currentDinleQuestion.kelime}`);
+            console.log("Anlam:", currentDinleQuestion.anlam);
+            console.log("Zorluk:", currentDinleQuestion.difficulty);
+            console.log("ID:", currentDinleQuestion.id);
+            console.log("Zorluk aralığı:", diffLevel.minDiff + "-" + diffLevel.maxDiff);
+            const isInRange = currentDinleQuestion.difficulty >= diffLevel.minDiff && currentDinleQuestion.difficulty <= diffLevel.maxDiff;
+            console.log("Aralıkta mı:", isInRange ? "EVET" : "HAYIR");
+            console.log("Puan:", currentDinleQuestion.difficulty * 2);
+            console.log("==========================");
 
             console.log(`🎨 UI güncelleniyor...`);
             // UI güncelle
@@ -6637,7 +6618,6 @@
             
             // ============ MODAL BUTONLARINA EVENT LISTENER EKLE ============
             if (dailyTasksBtn) dailyTasksBtn.onclick = showDailyTasksModal;
-            if (badgesBtn) badgesBtn.onclick = showBadgesModal;
             if (statsBtn) statsBtn.onclick = showStatsModal;
             if (calendarBtn) calendarBtn.onclick = showCalendarModal;
             if (xpInfoBtn) xpInfoBtn.onclick = showXPInfoModal;
