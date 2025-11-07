@@ -2929,6 +2929,11 @@
             
             // console.log('✅ Kelime listesi gösteriliyor, toplam:', filteredStats.length, 'kelime');
             listContainer.innerHTML = filteredStats.slice(0, 50).map(item => { // En fazla 50 kelime göster
+                // Kelime verisi yoksa veya geçersizse bu kartı gösterme
+                if (!item.wordData || !item.wordData.kelime || item.wordData.kelime.includes('undefined') || item.wordData.kelime.includes('bosluk')) {
+                    return ''; // Boş string döndür
+                }
+                
                 const masteryColor = item.masteryLevel >= 3 ? '#27ae60' : item.masteryLevel >= 1.5 ? '#f39c12' : '#e74c3c';
                 const masteryText = item.masteryLevel >= 3 ? 'Öğrenildi' : item.masteryLevel >= 1.5 ? 'Öğreniliyor' : 'Zorlanıyor';
                 const successPercent = Math.round(item.successRate * 100);
@@ -6327,10 +6332,8 @@
             console.log(`📊 Önce - session: score=${sessionScore}, correct=${sessionCorrect}, wrong=${sessionWrong}`);
             console.log(`📊 Önce - boşluk: score=${boslukScore}, correct=${boslukCorrect}, wrong=${boslukWrong}`);
             
-            // KELİME İSTATİSTİKLERİNİ GÜNCELLE (Boşluk - eksik kelime için)
-            const missingWordId = `bosluk_${missingWord.toLowerCase().replace(/[^a-zA-Z0-9ğüşiöçĞÜŞİÖÇ]/g, '_')}`;
-            console.log(`📊 Boşluk kelime istatistiği güncelleniyor: "${missingWord}" (ID: ${missingWordId})`);
-            updateWordStats(missingWordId, isCorrect);
+            // KELİME İSTATİSTİKLERİ SADECE KELİME ÇEVİR OYUNUNDA KAYIT EDİLİYOR
+            // Boşluk Doldur oyunu için istatistik kaydedilmiyor
             
             const allBtns = elements.boslukOptions.querySelectorAll('.option');
             console.log(`🔒 ${allBtns.length} buton devre dışı bırakılıyor...`);
