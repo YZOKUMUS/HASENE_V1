@@ -4067,7 +4067,10 @@
             localStorage.removeItem('hasene_currentMode');
             localStorage.removeItem('hasene_currentDifficulty');
             localStorage.removeItem('hasene_wordStats'); // KELİME PANELİ İSTATİSTİKLERİ TEMİZLE!
-            console.log('🗑️ localStorage tamamen temizlendi (kelime paneli dahil)');
+            localStorage.removeItem('dailyXP'); // GÜNLÜK XP'Yİ SIFIRLA!
+            localStorage.removeItem('dailyGoalLevel'); // GÜNLÜK HEDEF SEVİYESİNİ SIFIRLA!
+            localStorage.removeItem('lastDailyXPReset'); // GÜNLÜK XP RESET TARİHİNİ TEMİZLE!
+            console.log('🗑️ localStorage tamamen temizlendi (kelime paneli + günlük XP dahil)');
             
             // 3. URL geçmişini temizle (mümkünse)
             try {
@@ -4085,9 +4088,10 @@
             // Ekranı güncelle
             updateStatsBar();
             updateUI();
+            updateDailyGoalUI(); // GÜNLÜK HEDEF UI'INI SIFIRLA!
             
-            console.log('✅ TÜM 3 SİSTEM TEMİZLENDİ! IndexedDB + localStorage + URL');
-            showCustomAlert('Tüm veriler TAMAMEN sıfırlandı! IndexedDB, localStorage ve URL geçmişi temizlendi.', 'success', 'Veriler Sıfırlandı');
+            console.log('✅ TÜM 3 SİSTEM TEMİZLENDİ! IndexedDB + localStorage + URL + Günlük XP');
+            showCustomAlert('Tüm veriler TAMAMEN sıfırlandı! IndexedDB, localStorage, URL geçmişi ve Günlük XP temizlendi.', 'success', 'Veriler Sıfırlandı');
         }
 
         function updateStatsBar() {
@@ -4457,7 +4461,7 @@
         }
         
         function confirmResetStats() {
-            const confirmed = confirm('🚨 DİKKAT!\n\nTüm oyun verilerini sıfırlamak istediğinden emin misin?\n\n• Tüm puanlar (0\'a döner)\n• Tüm rozetler (silinir)\n• Tüm streak verileri (sıfırlanır)\n• Tüm günlük görevler (yenilenir)\n• Tüm istatistikler (temizlenir)\n• KELİME PANELİ istatistikleri (sıfırlanır)\n\nBu işlem GERİ ALINMAZ!\n\nDevam etmek istiyor musun?');
+            const confirmed = confirm('🚨 DİKKAT!\n\nTüm oyun verilerini sıfırlamak istediğinden emin misin?\n\n• Tüm puanlar (0\'a döner)\n• Tüm rozetler (silinir)\n• Tüm streak verileri (sıfırlanır)\n• Tüm günlük görevler (yenilenir)\n• Tüm istatistikler (temizlenir)\n• KELİME PANELİ istatistikleri (sıfırlanır)\n• GÜNLÜK HEDEF XP (0\'a döner)\n\nBu işlem GERİ ALINMAZ!\n\nDevam etmek istiyor musun?');
             
             if (confirmed) {
                 // İkinci onay
