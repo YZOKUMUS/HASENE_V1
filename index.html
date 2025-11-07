@@ -674,12 +674,12 @@
         /* ============ OYUN ALANI ============ */
         .game-box {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 249, 250, 0.9) 100%);
-            padding: 15px 15px;
+            padding: 15px 8px;
             border-radius: 15px;
             margin-bottom: 10px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
+            border: none;
         }
 
         .sure-info {
@@ -784,29 +784,28 @@
         .options {
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 8px;
             margin: 10px 0;
         }
 
         .option {
-            background: white;
-            border: 2px solid rgba(0, 0, 0, 0.08);
-            padding: 14px 16px;
-            border-radius: 8px;
+            background: linear-gradient(90deg, rgba(130, 219, 216, 0.3) 0%, rgba(255, 182, 193, 0.3) 100%);
+            border: none;
+            padding: 16px 12px;
+            border-radius: 12px;
             font-size: 16px;
             cursor: pointer;
-            text-align: left;
+            text-align: center;
             transition: all 0.3s ease;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
             font-weight: 500;
             color: #1c1c1c;
-            line-height: 1.3;
+            line-height: 1.4;
         }
 
         .option:hover {
-            transform: translateX(3px);
-            border-color: #8B4513;
-            box-shadow: 0 2px 8px rgba(139, 69, 19, 0.12);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         .option:active {
@@ -1509,7 +1508,7 @@
             <!-- Günlük Hedef Progress Bar -->
             <div class="daily-goal-section">
                 <!-- Kompakt Panel -->
-                <div style="background: linear-gradient(135deg, rgba(102,126,234,0.08), rgba(118,75,162,0.08)); border-radius: 10px; padding: 12px; margin-bottom: 16px; position: relative;">
+                <div style="background: linear-gradient(135deg, rgba(102,126,234,0.08), rgba(118,75,162,0.08)); border-radius: 0; padding: 12px; margin: 0; position: relative;">
                     <!-- Hedef Butonu -->
                     <button onclick="showDailyGoalSettings()" style="position: absolute; top: 8px; right: 8px; background: #667eea; border: none; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
                         <span style="font-size: 16px;">🎯</span>
@@ -1793,9 +1792,9 @@
         </div>
 
         <!-- Oyun Alanı -->
-        <div class="flutter-card" style="margin: 16px;">
+        <div class="game-box">
             <div class="arabic-text arabic-large" id="arabicWord">رَكَّبَكَ</div>
-            <div class="sure-info" id="sureInfo" style="text-align: center; color: var(--md-on-surface-variant); font-size: 12px; margin: 8px 0;">ID: 0</div>
+            <div class="sure-info" id="sureInfo">ID: 0</div>
             
             <div style="display: flex; justify-content: center; gap: 16px; margin: 20px 0;">
                 <button class="flutter-fab" id="audioBtn" style="background: transparent; box-shadow: none; border: none;">

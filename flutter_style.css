@@ -62,7 +62,7 @@
     box-shadow: var(--elevation-2);
     padding: 16px;
     margin: 8px;
-    border: 1px solid var(--md-surface-variant);
+    border: none;
     transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
