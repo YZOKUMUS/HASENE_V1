@@ -1,7 +1,7 @@
 {
   "name": "HASENE İslami Öğrenme",
   "short_name": "HASENE",
-  "start_url": "index.html",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#1a7f3f",
   "theme_color": "#1a7f3f",
