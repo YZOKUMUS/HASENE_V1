@@ -6422,54 +6422,54 @@
         // ============ ANA MENÜ NAVİGASYONU ============
         // Kelime Çevir modu - oyun modları seçici ile başlar
         elements.kelimeCevirBtn.onclick = () => {
-            console.log('📚 === KELİME ÇEVİR OYUNU BAŞLATILIYOR ===');
-            console.log('📋 1. Veri kontrol ediliyor...');
+            log.game('📚 === KELİME ÇEVİR OYUNU BAŞLATILIYOR ===');
+            log.game('📋 1. Veri kontrol ediliyor...');
             
             if (kelimeBulData.length === 0) {
-                console.log('❌ Kelime verileri yüklenemedi!');
+                log.warn('❌ Kelime verileri yüklenemedi!');
                 showCustomAlert('Kelime verileri yüklenemedi! Lütfen sayfayı yenileyin.', 'error');
                 return;
             }
-            console.log(`✅ Kelime verileri OK: ${kelimeBulData.length} kelime mevcut`);
-            console.log(`🎯 Mevcut zorluk: ${currentDifficulty}`);
+            log.game(`✅ Kelime verileri OK: ${kelimeBulData.length} kelime mevcut`);
+            log.game(`🎯 Mevcut zorluk: ${currentDifficulty}`);
             
-            console.log('📋 2. Mode Selector açılıyor...');
+            log.game('📋 2. Mode Selector açılıyor...');
             hideAllModes();
             if (elements.modeSelector) elements.modeSelector.style.display = 'block';
             if (elements.settingsBtn) elements.settingsBtn.style.display = 'block';
-            console.log('✅ Mode Selector açıldı!');
+            log.game('✅ Mode Selector açıldı!');
         };
 
         // Dinle ve Bul modu - Doğrudan başlat
         elements.dinleBulBtn.onclick = () => {
-            console.log('🔥 === DINLE VE BUL OYUNU BAŞLATILIYOR ===');
-            console.log('📋 1. Veri kontrol ediliyor...');
+            log.game('🔥 === DINLE VE BUL OYUNU BAŞLATILIYOR ===');
+            log.game('📋 1. Veri kontrol ediliyor...');
             
             if (kelimeBulData.length === 0) {
-                console.log('❌ Kelime verileri yüklenemedi!');
+                log.warn('❌ Kelime verileri yüklenemedi!');
                 showCustomAlert('Kelime verileri yüklenemedi! Lütfen sayfayı yenileyin.', 'error');
                 return;
             }
-            console.log(`✅ Kelime verileri OK: ${kelimeBulData.length} kelime mevcut`);
+            log.game(`✅ Kelime verileri OK: ${kelimeBulData.length} kelime mevcut`);
             
-            console.log('📋 2. Zorluk seviyesi kontrol ediliyor...');
-            console.log(`🎯 Mevcut zorluk: ${currentDifficulty}`);
-            console.log(`🎯 Zorluk config:`, CONFIG.difficultyLevels[currentDifficulty]);
+            log.game('📋 2. Zorluk seviyesi kontrol ediliyor...');
+            log.game(`🎯 Mevcut zorluk: ${currentDifficulty}`);
+            log.game(`🎯 Zorluk config:`, CONFIG.difficultyLevels[currentDifficulty]);
             
-            console.log('📋 3. UI değiştiriliyor...');
+            log.game('📋 3. UI değiştiriliyor...');
             hideAllModes();
             if (elements.dinleMode) elements.dinleMode.style.display = 'block';
-            console.log('✅ UI değişikliği tamamlandı');
+            log.game('✅ UI değişikliği tamamlandı');
             
-            console.log('📋 4. Oyun değişkenleri sıfırlanıyor...');
-            console.log(`🔄 Önceki değerler: score=${dinleScore}, correct=${dinleCorrect}, wrong=${dinleWrong}, questionCount=${dinleQuestionCount}`);
+            log.game('📋 4. Oyun değişkenleri sıfırlanıyor...');
+            log.game(`🔄 Önceki değerler: score=${dinleScore}, correct=${dinleCorrect}, wrong=${dinleWrong}, questionCount=${dinleQuestionCount}`);
             // Dinle modunu başlat
             dinleScore = 0;
             dinleCorrect = 0;
             dinleWrong = 0;
             dinleQuestionCount = 0;
-            console.log(`✅ Yeni değerler: score=${dinleScore}, correct=${dinleCorrect}, wrong=${dinleWrong}, questionCount=${dinleQuestionCount}`);
-            console.log(`📊 Session değerler: sessionScore=${sessionScore}, sessionCorrect=${sessionCorrect}, sessionWrong=${sessionWrong}`);
+            log.game(`✅ Yeni değerler: score=${dinleScore}, correct=${dinleCorrect}, wrong=${dinleWrong}, questionCount=${dinleQuestionCount}`);
+            log.game(`📊 Session değerler: sessionScore=${sessionScore}, sessionCorrect=${sessionCorrect}, sessionWrong=${sessionWrong}`);
             
             // Audio butonu event handler
             elements.dinleAudioBtn.onclick = () => {
