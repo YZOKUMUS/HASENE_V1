@@ -4528,8 +4528,8 @@
         let currentMode = CONFIG.defaultMode;
         let currentDifficulty = CONFIG.defaultDifficulty;
         
-        console.log('Session değişkenleri başlatıldı:', {sessionScore, sessionCorrect, sessionWrong});
-        console.log(`🏁 Varsayılan zorluk seviyesi: ${currentDifficulty}`);
+    log.debug('Session değişkenleri başlatıldı:', {sessionScore, sessionCorrect, sessionWrong});
+    log.debug(`🏁 Varsayılan zorluk seviyesi: ${currentDifficulty}`);
         let lives = 0;
         let timer = null;
         let timeLeft = 0;
@@ -4663,7 +4663,7 @@
         // ============ SES DURDURMA FONKSİYONU ============
         function stopCurrentAudio() {
             if (currentAudio) {
-                console.log('⏹️ Mevcut ses durduruluyor:', {
+                log.audio('⏹️ Mevcut ses durduruluyor:', {
                     paused: currentAudio.paused,
                     currentTime: currentAudio.currentTime,
                     duration: currentAudio.duration,
@@ -4672,19 +4672,19 @@
                 
                 if (!currentAudio.paused) {
                     currentAudio.pause();
-                    console.log('⏸️ Ses durduruldu');
+                    log.audio('⏸️ Ses durduruldu');
                 }
                 
                 // Event listener'ları comprehensive cleanup
                 cleanupAudioListeners();
-                console.log('🧹 Event listenerlar temizlendi');
+                log.audio('🧹 Event listenerlar temizlendi');
                 
                 currentAudio.currentTime = 0;
-                console.log('🔄 Ses başa sarıldı');
+                log.audio('🔄 Ses başa sarıldı');
                 currentAudio = null;
-                console.log('🗑️ Audio object temizlendi');
+                log.audio('🗑️ Audio object temizlendi');
             } else {
-                console.log('ℹ️ Durduracak ses yok');
+                log.audio('ℹ️ Durduracak ses yok');
             }
         }
 
@@ -4775,7 +4775,7 @@
                     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                     return await response.json();
                 } catch (error) {
-                    console.log(`📡 Fetch attempt ${i + 1}/${retries} failed for ${url}`);
+                    log.debug(`📡 Fetch attempt ${i + 1}/${retries} failed for ${url}`);
                     if (i === retries - 1) {
                         // Son deneme de başarısız
                         throw new Error(`Failed to load ${url} after ${retries} attempts: ${error.message}`);
@@ -4857,7 +4857,7 @@
                 const transaction = db.transaction(['gameData'], 'readwrite');
                 const store = transaction.objectStore('gameData');
                 store.put(value, key);
-            } catch(e) { console.log('IndexedDB save failed:', e); }
+            } catch(e) { log.error('IndexedDB save failed:', e); }
         }
         
         function loadFromIndexedDB(key) {
