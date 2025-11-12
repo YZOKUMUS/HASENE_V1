@@ -5937,8 +5937,8 @@
 
         // 🔍 STREAK ANALİZ SİSTEMİ - DEBUG TOOLS
         function analyzeStreakSystem() {
-            console.log('🔍 STREAK SİSTEMİ ANALİZ RAPORU');
-            console.log('=====================================');
+            log.stats('🔍 STREAK SİSTEMİ ANALİZ RAPORU');
+            log.stats('=====================================');
             
             const today = new Date().toISOString().split('T')[0];
             const yesterday = new Date();
@@ -5946,61 +5946,61 @@
             const yesterdayStr = yesterday.toISOString().split('T')[0];
             
             // Mevcut streak verilerini analiz et
-            console.log('📊 Mevcut Veriler:');
-            console.log(`├── Bugün: ${today}`);
-            console.log(`├── Dün: ${yesterdayStr}`);
-            console.log(`├── Son oyun tarihi: ${streakData.lastPlayDate}`);
-            console.log(`├── Mevcut streak: ${streakData.currentStreak} gün`);
-            console.log(`├── En iyi streak: ${streakData.bestStreak} gün`);
-            console.log(`├── Bugünkü ilerleme: ${streakData.todayProgress}/${streakData.dailyGoal}`);
-            console.log(`├── Toplam oyun günü: ${streakData.totalPlayDays}`);
-            console.log(`└── Oyun tarihleri: [${streakData.playDates.join(', ')}]`);
+            log.stats('📊 Mevcut Veriler:');
+            log.stats(`├── Bugün: ${today}`);
+            log.stats(`├── Dün: ${yesterdayStr}`);
+            log.stats(`├── Son oyun tarihi: ${streakData.lastPlayDate}`);
+            log.stats(`├── Mevcut streak: ${streakData.currentStreak} gün`);
+            log.stats(`├── En iyi streak: ${streakData.bestStreak} gün`);
+            log.stats(`├── Bugünkü ilerleme: ${streakData.todayProgress}/${streakData.dailyGoal}`);
+            log.stats(`├── Toplam oyun günü: ${streakData.totalPlayDays}`);
+            log.stats(`└── Oyun tarihleri: [${streakData.playDates.join(', ')}]`);
             
             // Streak mantık kontrolü
-            console.log('\n🧠 Streak Mantık Kontrolü:');
+            log.stats('\n🧠 Streak Mantık Kontrolü:');
             const streakShouldBreak = streakData.lastPlayDate !== yesterdayStr && 
                                      streakData.lastPlayDate !== today && 
                                      streakData.lastPlayDate !== '';
             
-            console.log(`├── Streak kırılmalı mı? ${streakShouldBreak ? '✅ EVET' : '❌ HAYIR'}`);
-            console.log(`├── Bugün oynanmış mı? ${streakData.playDates.includes(today) ? '✅ EVET' : '❌ HAYIR'}`);
-            console.log(`├── Dün oynanmış mı? ${streakData.playDates.includes(yesterdayStr) ? '✅ EVET' : '❌ HAYIR'}`);
+            log.stats(`├── Streak kırılmalı mı? ${streakShouldBreak ? '✅ EVET' : '❌ HAYIR'}`);
+            log.stats(`├── Bugün oynanmış mı? ${streakData.playDates.includes(today) ? '✅ EVET' : '❌ HAYIR'}`);
+            log.stats(`├── Dün oynanmış mı? ${streakData.playDates.includes(yesterdayStr) ? '✅ EVET' : '❌ HAYIR'}`);
             
             // Ardışık gün analizi (gelişmiş)
-            console.log('\n📅 Ardışık Gün Analizi:');
+            log.stats('\n📅 Ardışık Gün Analizi:');
             const validation = validateCurrentStreak(today);
-            console.log(`├── Hesaplanan ardışık gün: ${validation.correctStreak}`);
-            console.log(`├── Kayıtlı streak: ${streakData.currentStreak}`);
-            console.log(`├── Tutarlılık: ${validation.isValid ? '✅ DOĞRU' : '❌ YANLIŞ'}`);
-            console.log(`└── Açıklama: ${validation.reason}`);
+            log.stats(`├── Hesaplanan ardışık gün: ${validation.correctStreak}`);
+            log.stats(`├── Kayıtlı streak: ${streakData.currentStreak}`);
+            log.stats(`├── Tutarlılık: ${validation.isValid ? '✅ DOĞRU' : '❌ YANLIŞ'}`);
+            log.stats(`└── Açıklama: ${validation.reason}`);
             
             // Takvim görünümü kontrolü
-            console.log('\n📆 Takvim Görünümü Test:');
+            log.stats('\n📆 Takvim Görünümü Test:');
             const currentStreakDates = calculateCurrentStreakDates();
-            console.log(`├── Streak tarih aralığı: [${currentStreakDates.join(', ')}]`);
-            console.log(`├── Takvimde 🔥 gösterilecek günler: ${currentStreakDates.length}`);
+            log.stats(`├── Streak tarih aralığı: [${currentStreakDates.join(', ')}]`);
+            log.stats(`├── Takvimde 🔥 gösterilecek günler: ${currentStreakDates.length}`);
             
             // Öneriler
-            console.log('\n💡 Öneriler:');
+            log.stats('\n💡 Öneriler:');
             if (consecutiveDays !== streakData.currentStreak) {
-                console.log('├── ⚠️ Streak hesaplaması düzeltilmeli');
-                console.log(`├── 🔧 Doğru değer: ${consecutiveDays} olmalı`);
+                log.stats('├── ⚠️ Streak hesaplaması düzeltilmeli');
+                log.stats(`├── 🔧 Doğru değer: ${consecutiveDays} olmalı`);
             } else {
-                console.log('├── ✅ Streak hesaplaması doğru');
+                log.stats('├── ✅ Streak hesaplaması doğru');
             }
             
             if (streakData.playDates.includes(today) && streakData.todayProgress < streakData.dailyGoal) {
-                console.log('├── ⚠️ Bugün oynanmış ama hedef tamamlanmamış - veri tutarsızlığı');
+                log.stats('├── ⚠️ Bugün oynanmış ama hedef tamamlanmamış - veri tutarsızlığı');
             }
             
-            console.log('\n=====================================');
-            console.log('🔍 Analiz tamamlandı!');
+            log.stats('\n=====================================');
+            log.stats('🔍 Analiz tamamlandı!');
         }
 
         // Test fonksiyonları
         function testStreakScenarios() {
-            console.log('🧪 STREAK TEST SENARYOLARİ');
-            console.log('=============================');
+            log.stats('🧪 STREAK TEST SENARYOLARİ');
+            log.stats('=============================');
             
             // Backup mevcut veri
             const backup = {
@@ -6012,20 +6012,20 @@
                 playDates: [...streakData.playDates]
             };
             
-            console.log('Test 1: Streak kırılması simülasyonu');
+            log.stats('Test 1: Streak kırılması simülasyonu');
             streakData.lastPlayDate = '2025-11-08'; // 2 gün önce
             checkDailyProgress();
-            console.log(`├── Streak kırıldı mı? ${streakData.currentStreak === 0 ? '✅ EVET' : '❌ HAYIR'}`);
+            log.stats(`├── Streak kırıldı mı? ${streakData.currentStreak === 0 ? '✅ EVET' : '❌ HAYIR'}`);
             
-            console.log('\nTest 2: Hedef tamamlama simülasyonu');
+            log.stats('\nTest 2: Hedef tamamlama simülasyonu');
             streakData.todayProgress = 0;
             updateDailyProgress(5); // 5 doğru cevap ekle
-            console.log(`├── Hedef tamamlandı mı? ${streakData.todayProgress >= streakData.dailyGoal ? '✅ EVET' : '❌ HAYIR'}`);
+            log.stats(`├── Hedef tamamlandı mı? ${streakData.todayProgress >= streakData.dailyGoal ? '✅ EVET' : '❌ HAYIR'}`);
             
             // Restore backup
             Object.assign(streakData, backup);
-            console.log('\n🔄 Veriler geri yüklendi');
-            console.log('=============================');
+            log.stats('\n🔄 Veriler geri yüklendi');
+            log.stats('=============================');
         }
 
         // Geliştirici araçları - console'da çağırılabilir
