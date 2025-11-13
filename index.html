@@ -50,23 +50,27 @@
   h4 { font-size: 1em; margin: 8px 0; }
   button {
     width: 100%;
-    padding: 12px;
-    margin: 6px 0;
-    font-size: 0.95em;
+    padding: 18px 0;
+    margin: 10px 0;
+    font-size: 1.15em;
     border: none;
-    border-radius: 12px;
+    border-radius: 18px;
     cursor: pointer;
     color: white;
-    background: #6a11cb;
-    background: linear-gradient(45deg, #6a11cb, #2575fc);
-    transition: 0.3s;
-    font-weight: 500;
+    font-weight: 600;
+    box-shadow: 0 4px 16px rgba(50,50,100,0.10);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
   }
   button:hover {
-    transform: scale(1.03);
+    transform: scale(1.04);
+    box-shadow: 0 8px 24px rgba(50,50,100,0.18);
   }
   button:active {
-    transform: scale(0.98);
+    transform: scale(0.97);
   }
   #topBar {
     display: flex;
@@ -209,12 +213,12 @@
       </div>
     </div>
     
-    <button onclick="showDifficultyModal('kelimeBul')">📘 Kelime Bul (Anlam Bul)</button>
-    <button onclick="showDifficultyModal('dinleBul')">🎧 Dinle ve Bul</button>
-    <button onclick="startGame('boslukDoldur')">🧩 Boşluk Doldur</button>
-    <button onclick="startGame('ayetOku')">📖 Ayet Oku</button>
-    <button onclick="startGame('duaEt')">🙏 Dua Et</button>
-    <button onclick="startGame('hadisOku')">📜 Hadis Oku</button>
+    <button onclick="showDifficultyModal('kelimeBul')" style="background: linear-gradient(90deg,#2193b0,#6dd5ed);"><span style='font-size:1.5em;'>📘</span> Kelime Bul (Anlam Bul)</button>
+    <button onclick="showDifficultyModal('dinleBul')" style="background: linear-gradient(90deg,#4e54c8,#8f94fb);"><span style='font-size:1.5em;'>🎧</span> Dinle ve Bul</button>
+    <button onclick="startGame('boslukDoldur')" style="background: linear-gradient(90deg,#43cea2,#185a9d);"><span style='font-size:1.5em;'>🧩</span> Boşluk Doldur</button>
+    <button onclick="startGame('ayetOku')" style="background: linear-gradient(90deg,#cc2b5e,#753a88);"><span style='font-size:1.5em;'>📖</span> Ayet Oku</button>
+      <button onclick="startGame('duaEt')" style="background: linear-gradient(90deg,#f7971e,#ffd200);"><span style='font-size:1.5em;'>👐</span> Dua Et</button>
+    <button onclick="startGame('hadisOku')" style="background: linear-gradient(90deg,#fc5c7d,#6a82fb);"><span style='font-size:1.5em;'>📜</span> Hadis Oku</button>
   </div>
 
   <!-- Mertebe Seçinim Modal -->
@@ -1663,6 +1667,12 @@ async function showKelimeBul() {
         try {
           currentAudio = new Audio(q.ses_dosyasi);
           await currentAudio.play();
+            // Update statistics for ayetOku mode when audio is played
+            recordResult(true, 'ayetOku', 1);
+            // Update statistics for duaEt mode when audio is played
+            recordResult(true, 'duaEt', 1);
+            // Update statistics for hadisOku mode when audio is played
+            recordResult(true, 'hadisOku', 1);
           currentAudio.onended = () => {
             btn.disabled = false;
             btn.style.opacity = '1';
@@ -1927,12 +1937,13 @@ function showAyetOku() {
       try {
         currentAudio = new Audio(audioSrc);
         await currentAudio.play();
+          // Update statistics and daily task for ayetOku when audio is played
+          recordResult(true, 'ayetOku', 1);
+          updateDailyTask('ayet');
         currentAudio.onended = () => {
           btn.disabled = false;
           btn.style.opacity = '1';
           currentAudio = null;
-          // Dua Öğren görev ilerlemesini artır
-          updateDailyTask('dua');
         };
       } catch(e) {
         alert('Ses çalma hatası');
@@ -1948,6 +1959,7 @@ function showAyetOku() {
   `;
   document.getElementById('nextAyetBtn').onclick = function() {
     showAyetOku();
+    recordResult(true, 'ayetOku', 1);
     updateDailyTask('ayet');
   };
 }
@@ -1969,6 +1981,9 @@ function showDuaEt() {
       try {
         currentAudio = new Audio(audioSrc);
         await currentAudio.play();
+          // Update statistics and daily task for duaEt when audio is played
+          recordResult(true, 'duaEt', 1);
+          updateDailyTask('dua');
         currentAudio.onended = () => {
           btn.disabled = false;
           btn.style.opacity = '1';
@@ -1988,6 +2003,7 @@ function showDuaEt() {
   `;
   document.getElementById('nextDuaBtn').onclick = function() {
     showDuaEt();
+    recordResult(true, 'duaEt', 1);
     updateDailyTask('dua');
   };
 }
@@ -2004,6 +2020,7 @@ function showHadisOku() {
   `;
   document.getElementById('nextHadisBtn').onclick = function() {
     showHadisOku();
+    recordResult(true, 'hadisOku', 1);
     updateDailyTask('hadis');
   };
 }
