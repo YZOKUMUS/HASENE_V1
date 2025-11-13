@@ -1,0 +1,21 @@
+{
+  "name": "HASENE İslami Öğrenme",
+  "short_name": "HASENE",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a7f3f",
+  "theme_color": "#1a7f3f",
+  "description": "İslami bilgi, kelime ve ibadet takibi uygulaması.",
+  "icons": [
+    {
+      "src": "icon-192-v4-RED-MUSHAF.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512-v4-RED-MUSHAF.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

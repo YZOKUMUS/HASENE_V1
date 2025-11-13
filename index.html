@@ -1,0 +1,2034 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kelimeler ve Görevler Oyunu</title>
+<link rel="manifest" href="manifest.json">
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('sw.js');
+    });
+  }
+</script>
+<style>
+  @font-face {
+    font-family: 'KFGQPC Uthmanic';
+    src: url('KFGQPC Uthmanic Script HAFS Regular.otf') format('opentype');
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(135deg, #2b5876, #4e4376);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 8px;
+  }
+  .arabic-text {
+    font-family: 'KFGQPC Uthmanic', serif;
+    font-size: 1.2em;
+    letter-spacing: 0.05em;
+    font-weight: normal;
+  }
+  #app {
+    width: 100%;
+    max-width: 480px;
+    padding: 12px;
+    text-align: center;
+  }
+  h1 {
+    font-size: 1.5em;
+    margin-bottom: 12px;
+    margin-top: 0;
+  }
+  h3 { font-size: 1.2em; margin: 8px 0; }
+  h4 { font-size: 1em; margin: 8px 0; }
+  button {
+    width: 100%;
+    padding: 18px 0;
+    margin: 10px 0;
+    font-size: 1.15em;
+    border: none;
+    border-radius: 18px;
+    cursor: pointer;
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 4px 16px rgba(50,50,100,0.10);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+  }
+  button:hover {
+    transform: scale(1.04);
+    box-shadow: 0 8px 24px rgba(50,50,100,0.18);
+  }
+  button:active {
+    transform: scale(0.97);
+  }
+  #topBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  #scoreDisplay {
+    font-size: 0.9em;
+    padding: 6px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 8px;
+  }
+  #topBar > div:last-child {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  #topBar button {
+    width: auto;
+    padding: 8px 10px;
+    margin: 0;
+    font-size: 0.8em;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+  }
+  #topBar button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+    filter: brightness(1.1);
+  }
+  #gameContainer {
+    display: none;
+  }
+  .choices {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .choice {
+    background: #fff;
+    color: #222;
+    border-radius: 10px;
+    padding: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 0.9em;
+    word-wrap: break-word;
+  }
+  .choice.correct { background: #28a745; color: white; }
+  .choice.wrong { background: #dc3545; color: white; }
+  .choice.disabled { opacity: 0.6; pointer-events: none; }
+  #loading { margin-top: 8px; padding: 6px; background: rgba(255,255,255,0.06); border-radius: 8px; font-size: 0.9em; }
+  .hidden { display: none !important; }
+  .modal { position: fixed; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; padding: 12px; }
+  .modal > div {
+    background: white;
+    color: #222;
+    padding: 14px;
+    border-radius: 12px;
+    max-width: 420px;
+    width: 100%;
+    text-align: left;
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+  .backBtn {
+    background: #444;
+    margin-top: 12px;
+  }
+  audio { margin-top: 8px; width: 100%; max-width: 300px; }
+  #questionArea { margin: 12px 0; }
+  #questionArea h2 { font-size: 1.6em; margin: 8px 0; word-wrap: break-word; }
+  #questionArea h3 { font-size: 1.1em; margin: 8px 0; line-height: 1.4; }
+  #questionArea p { font-size: 0.95em; margin: 6px 0; line-height: 1.5; }
+  
+  /* Mobile-specific */
+  @media (max-width: 480px) {
+    #app { padding: 8px; }
+    h1 { font-size: 1.2em; margin-bottom: 8px; }
+    button { padding: 10px; font-size: 0.9em; }
+    #topBar { gap: 4px; }
+    #topBar button { padding: 6px 8px; font-size: 0.7em; }
+    .choice { padding: 8px; font-size: 0.85em; }
+    .modal > div { padding: 12px; }
+    .arabic-text { font-size: 1.4em !important; }
+  }
+  
+  @media (max-width: 360px) {
+    h1 { font-size: 1.1em; }
+    button { padding: 8px; font-size: 0.8em; }
+    #topBar button { padding: 4px 6px; font-size: 0.65em; }
+    .choice { padding: 6px; font-size: 0.8em; }
+    #questionArea h2 { font-size: 1.3em; }
+    .arabic-text { font-size: 1.2em !important; }
+  }
+  #topBar button:hover {
+    background: rgba(255,255,255,0.25) !important;
+    transform: translateY(-1px);
+  }
+</style>
+</head>
+<body>
+<div id="app">
+    <div id="topBar" style="background:linear-gradient(90deg,#1a7f3f 0%,#2d5a4a 100%);padding:8px 12px;display:flex;justify-content:flex-end;align-items:center;gap:6px;box-shadow:0 4px 12px rgba(26,127,63,0.3);border-radius:0 0 8px 8px;">
+      <button onclick="showStatsModal()" style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:8px;cursor:pointer;transition:0.3s;width:36px;height:36px;display:flex;align-items:center;justify-content:center;" title="İstatistikler"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="12" width="4" height="9"/><rect x="10" y="3" width="4" height="18"/><rect x="17" y="7" width="4" height="14"/></svg></button><button onclick="showCalendarModal()" style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:8px;cursor:pointer;transition:0.3s;width:36px;height:36px;display:flex;align-items:center;justify-content:center;" title="İbadete Devam"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></button><button onclick="showWordsModal()" style="background:rgba(150,200,255,0.25);border:1px solid rgba(150,200,255,0.5);border-radius:6px;padding:8px;cursor:pointer;transition:0.3s;width:36px;height:36px;display:flex;align-items:center;justify-content:center;" title="Kelimeler"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#87CEEB;"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 4.5h16M4 4.5h16v12H6.5A2.5 2.5 0 0 1 4 14v-9.5z"/></svg></button><button onclick="showDailyTasksModal()" style="background:rgba(255,160,122,0.25);border:1px solid rgba(255,160,122,0.5);border-radius:6px;padding:8px;cursor:pointer;transition:0.3s;width:36px;height:36px;display:flex;align-items:center;justify-content:center;" title="Günlük Görevler"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></button><button onclick="showBadgesModal()" style="background:rgba(212,175,55,0.25);border:1px solid rgba(212,175,55,0.5);border-radius:6px;padding:8px;cursor:pointer;transition:0.3s;width:36px;height:36px;display:flex;align-items:center;justify-content:center;" title="Şeref Nişanları"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1" style="color:#FFD700;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></button><button onclick="resetAllStats()" style="background:rgba(220,53,69,0.3);border:1px solid rgba(220,53,69,0.6);border-radius:6px;padding:8px;cursor:pointer;transition:0.3s;width:36px;height:36px;display:flex;align-items:center;justify-content:center;" title="İstatistikleri sıfırla (Test)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#ff6b6b;"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="12" r="8"/><path d="M12 4v1m0 10v1m8-8h-1m-10 0h-1"/></svg></button>
+    </div>
+  <div id="menu">
+    <!-- MERTEBE/SEVIYE PANELİ -->
+    <div id="mertebePanel" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);padding:20px;border-radius:16px;margin-bottom:20px;color:white;box-shadow:0 8px 24px rgba(102,126,234,0.3);">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px;text-align:center;">
+        <div style="padding:10px;background:rgba(255,255,255,0.1);border-radius:8px;">
+          <div style="font-size:2em;font-weight:bold;margin-bottom:4px;" id="mertebeLevel">1</div>
+          <div style="font-size:0.85em;opacity:0.9;">Mertebe</div>
+        </div>
+        <div style="padding:10px;background:rgba(255,255,255,0.1);border-radius:8px;">
+          <div style="font-size:2em;font-weight:bold;margin-bottom:4px;color:#D4AF37;" id="mertebeScore">0</div>
+          <div style="font-size:0.85em;opacity:0.9;">Hasene (Ana Sevap)</div>
+        </div>
+        <div style="padding:10px;background:rgba(255,255,255,0.1);border-radius:8px;">
+          <div style="font-size:2em;font-weight:bold;margin-bottom:4px;color:#FFD700;" id="mertebeStars">0</div>
+          <div style="font-size:0.85em;opacity:0.9;">⭐ Yıldız (100 Hasene)</div>
+        </div>
+      </div>
+      
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-size:0.9em;">
+        <span id="mertebeLevel1Name">Mertebe 1</span>
+        <span id="mertebeLevel2Name">Mertebe 2</span>
+      </div>
+      
+      <div style="height:12px;background:rgba(255,255,255,0.2);border-radius:6px;overflow:hidden;margin-bottom:12px;">
+        <div id="mertebeProgressBar" style="height:100%;background:linear-gradient(90deg,#D4AF37,#FFD700);width:0%;transition:width 0.3s ease;border-radius:6px;"></div>
+      </div>
+      
+      <div style="text-align:center;font-size:0.85em;opacity:0.9;">
+        <span id="mertebeRemaining">1,000</span> hasene daha
+      </div>
+    </div>
+    
+    <button onclick="showDifficultyModal('kelimeBul')" style="background: linear-gradient(90deg,#2193b0,#6dd5ed);"><span style='font-size:1.5em;'>📘</span> Kelime Bul (Anlam Bul)</button>
+    <button onclick="showDifficultyModal('dinleBul')" style="background: linear-gradient(90deg,#4e54c8,#8f94fb);"><span style='font-size:1.5em;'>🎧</span> Dinle ve Bul</button>
+    <button onclick="startGame('boslukDoldur')" style="background: linear-gradient(90deg,#43cea2,#185a9d);"><span style='font-size:1.5em;'>🧩</span> Boşluk Doldur</button>
+    <button onclick="startGame('ayetOku')" style="background: linear-gradient(90deg,#cc2b5e,#753a88);"><span style='font-size:1.5em;'>📖</span> Ayet Oku</button>
+      <button onclick="startGame('duaEt')" style="background: linear-gradient(90deg,#f7971e,#ffd200);"><span style='font-size:1.5em;'>👐</span> Dua Et</button>
+    <button onclick="startGame('hadisOku')" style="background: linear-gradient(90deg,#fc5c7d,#6a82fb);"><span style='font-size:1.5em;'>📜</span> Hadis Oku</button>
+  </div>
+
+  <!-- Mertebe Seçinim Modal -->
+  <div id="difficultyModal" class="hidden modal" style="display:none;" onclick="hideDifficultyModal()">
+    <div onclick="event.stopPropagation()" style="background:white;color:#222;padding:24px;border-radius:12px;max-width:300px;width:90%;text-align:center;">
+      <h3>Mertebe Seçin</h3>
+      <button onclick="selectDifficulty('kolay')" style="width:100%;padding:12px;margin:8px 0;background:#4CAF50;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:bold;">🟢 Kolay (1-7)</button>
+      <button onclick="selectDifficulty('orta')" style="width:100%;padding:12px;margin:8px 0;background:#FF9800;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:bold;">🟡 Orta (8-15)</button>
+      <button onclick="selectDifficulty('zor')" style="width:100%;padding:12px;margin:8px 0;background:#F44336;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:bold;">🔴 Zor (16-22)</button>
+      <button onclick="hideDifficultyModal()" style="width:100%;padding:12px;margin:12px 0;background:#999;color:white;border:none;border-radius:8px;cursor:pointer;">İptal</button>
+    </div>
+  </div>
+
+  <div id="gameContainer">
+    <h1 id="gameTitle" style="display:none;"></h1>
+    <div id="questionArea"></div>
+    <div class="choices" id="choices"></div>
+    <button class="backBtn" onclick="goBack()">⬅️ Ana Menü</button>
+  </div>
+</div>
+
+<!-- Modals / Overlays -->
+<div id="statsModal" class="hidden modal" onclick="hideStatsModal()" style="display:none;">
+  <div onclick="event.stopPropagation()" style="background:white;color:#222;padding:24px;border-radius:16px;max-width:450px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.2);">
+    <h2 style="color:#2c3e50;margin-top:0;border-bottom:3px solid #1a7f3f;padding-bottom:12px;">📊 İstatistikler</h2>
+    <div id="statsContent" style="margin:20px 0;font-size:1em;"></div>
+  </div>
+</div>
+
+<div id="calendarModal" class="hidden modal" onclick="hideCalendarModal()" style="display:none;">
+  <div onclick="event.stopPropagation()" style="background:white;color:#222;padding:24px;border-radius:16px;max-width:500px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.2);">
+    <h2 style="color:#2c3e50;margin-top:0;border-bottom:3px solid #FF9800;padding-bottom:12px;">📅 Takvim - Günlük Görevler</h2>
+    <div id="calendarContent" style="margin:20px 0;font-size:1em;"></div>
+    <button onclick="hideCalendarModal()" style="width:100%;padding:12px;margin-top:20px;background:#FF9800;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:bold;font-size:1em;">Kapat</button>
+  </div>
+</div>
+
+<div id="badgesModal" class="hidden modal" onclick="hideBadgesModal()" style="display:none;">
+  <div onclick="event.stopPropagation()" style="background:white;color:#222;padding:24px;border-radius:16px;max-width:450px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.2);">
+    <h2 style="color:#2c3e50;margin-top:0;border-bottom:3px solid #F44336;padding-bottom:12px;">🏅 Şeref Nişanları</h2>
+    <div id="badgesContent" style="margin:20px 0;font-size:1em;"></div>
+    <button onclick="hideBadgesModal()" style="width:100%;padding:12px;margin-top:20px;background:#F44336;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:bold;font-size:1em;">Kapat</button>
+  </div>
+</div>
+
+<!-- Kelimeler Modal -->
+<div id="wordsModal" class="hidden modal" onclick="hideWordsModal()" style="display:none;">
+  <div onclick="event.stopPropagation()" style="background:white;color:#222;padding:20px;border-radius:16px;max-width:600px;width:95%;max-height:80vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.2);">
+    <h2 style="color:#2c3e50;margin-top:0;border-bottom:3px solid #667eea;padding-bottom:12px;">📚 Öğrenme İstatistikleri</h2>
+    
+    <!-- Tab Buttons -->
+    <div style="display:flex;gap:8px;margin:16px 0;flex-wrap:wrap;">
+      <button onclick="switchWordsTab('kelimeGoruldu')" id="tabKelimeGoruldu" style="flex:1;min-width:100px;padding:10px;background:#4169E1;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:bold;transition:0.3s;">📖 Kelime Görüldü</button>
+      <button onclick="switchWordsTab('ogrendi')" id="tabOgrendi" style="flex:1;min-width:100px;padding:10px;background:#ccc;color:#333;border:none;border-radius:8px;cursor:pointer;font-weight:bold;transition:0.3s;">✅ Öğrendi</button>
+      <button onclick="switchWordsTab('yanlis')" id="tabYanlis" style="flex:1;min-width:100px;padding:10px;background:#ccc;color:#333;border:none;border-radius:8px;cursor:pointer;font-weight:bold;transition:0.3s;">❌ Yanlış</button>
+    </div>
+
+    <!-- Stats Summary -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:16px 0;">
+      <div style="background:#e8f4f8;padding:12px;border-radius:8px;text-align:center;">
+        <div style="font-size:1.5em;font-weight:bold;color:#2980b9;" id="statsGoruldu">0</div>
+        <div style="font-size:0.85em;color:#555;">Kelime Görüldü</div>
+      </div>
+      <div style="background:#e8f8e8;padding:12px;border-radius:8px;text-align:center;">
+        <div style="font-size:1.5em;font-weight:bold;color:#27ae60;" id="statsOgrendi">0</div>
+        <div style="font-size:0.85em;color:#555;">Öğrendi</div>
+      </div>
+      <div style="background:#f8e8e8;padding:12px;border-radius:8px;text-align:center;">
+        <div style="font-size:1.5em;font-weight:bold;color:#e74c3c;" id="statsYanlis">0</div>
+        <div style="font-size:0.85em;color:#555;">Yanlış</div>
+      </div>
+    </div>
+
+    <!-- Öğrenme İlerlemesi -->
+    <div style="background:#f5f5f5;padding:16px;border-radius:8px;margin:16px 0;">
+      <div style="font-weight:bold;margin-bottom:12px;color:#333;">📊 Öğrenme İlerlemesi</div>
+      
+      <!-- Progress Bar -->
+      <div style="margin-bottom:16px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.85em;">
+          <span style="color:#555;">Tamamlama Oranı</span>
+          <span style="color:#2c3e50;font-weight:bold;" id="progressPercent">0%</span>
+        </div>
+        <div style="height:12px;background:#ddd;border-radius:6px;overflow:hidden;">
+          <div id="progressBar" style="height:100%;background:linear-gradient(90deg,#667eea,#764ba2);width:0%;transition:width 0.3s ease;"></div>
+        </div>
+      </div>
+
+      <!-- Mini Kategori Grafiği -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:0.85em;">
+        <div style="background:white;padding:10px;border-radius:6px;border-left:4px solid #27ae60;">
+          <div style="color:#27ae60;font-weight:bold;margin-bottom:4px;">Başarı Oranı</div>
+          <div style="font-size:1.3em;font-weight:bold;color:#2c3e50;" id="successRate">0%</div>
+        </div>
+        <div style="background:white;padding:10px;border-radius:6px;border-left:4px solid #f39c12;">
+          <div style="color:#f39c12;font-weight:bold;margin-bottom:4px;">Ortalama Doğru</div>
+          <div style="font-size:1.3em;font-weight:bold;color:#2c3e50;" id="avgCorrect">0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Words List -->
+    <div id="wordsContent" style="margin:16px 0;font-size:0.95em;"></div>
+
+    <!-- Info Box -->
+    <div style="background:#fff3e0;border-left:4px solid #FF9800;padding:12px;border-radius:6px;margin:16px 0;font-size:0.9em;">
+      <div style="font-weight:bold;margin-bottom:6px;">💡 Öğrenme İpuçları</div>
+      <ul style="margin:6px 0;padding-left:20px;">
+        <li>Zorlanan kelimeleri otomatik olarak daha sık sorarız</li>
+        <li>8 peş peşe doğru cevap verilen kelimeler "Öğrendi" kategorisine geçer</li>
+        <li>Yanlış cevap verilen kelimeler tekrar edilir</li>
+      </ul>
+    </div>
+
+    <button onclick="hideWordsModal()" style="width:100%;padding:12px;margin-top:16px;background:#667eea;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:bold;font-size:1em;">Kapat</button>
+  </div>
+</div>
+
+<div id="dailyTasksModal" class="modal" style="display:none;" onclick="hideDailyTasksModal()">
+  <div onclick="event.stopPropagation()" style="background:white;color:#222;padding:24px;border-radius:16px;max-width:500px;width:90%;max-height:75vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.2);">
+    <h2 style="color:#2c3e50;margin-top:0;border-bottom:3px solid #FF9800;padding-bottom:12px;">⚡ Günlük Görevler</h2>
+    <div style="background:#f0f8ff;padding:12px;border-radius:8px;margin:15px 0;text-align:center;color:#1a7f3f;font-weight:bold;">
+      <span id="tasksProgress">0/8 Görev Tamamlandı</span>
+    </div>
+    <div id="dailyTasksList" style="margin:20px 0;font-size:0.95em;"></div>
+    <button onclick="hideDailyTasksModal()" style="width:100%;padding:12px;margin-top:20px;background:#FF9800;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:bold;font-size:1em;">Kapat</button>
+  </div>
+</div>
+
+<div id="completionModal" class="modal" style="display:none;" onclick="hideCompletionModal()">
+  <div onclick="event.stopPropagation()" style="background:linear-gradient(135deg,#1a7f3f,#D4AF37);color:white;padding:40px 30px;border-radius:20px;max-width:400px;width:90%;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.3);">
+    <div style="font-size:80px;margin-bottom:20px;animation:bounce 1s infinite;">�</div>
+    <h2 style="margin:20px 0;font-size:1.8em;">Tebrikler!</h2>
+    <p id="completionContent" style="font-size:1.1em;margin:15px 0;line-height:1.5;"></p>
+    <button onclick="hideCompletionModal();goBack();" style="width:100%;padding:14px;margin-top:25px;background:white;color:#1a7f3f;font-weight:bold;font-size:1em;border:none;border-radius:10px;cursor:pointer;transition:0.3s;">Ana Menüye Dön</button>
+  </div>
+</div>
+
+<style>
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+</style>
+
+<script>
+let currentMode = "";
+let data = [];
+let currentTimeout = null;
+let isChoiceDisabled = false;
+const API_BASE = 'http://localhost:3001';
+const QUESTIONS_PER_ROUND = 10;
+let currentQuestionNumber = 0;
+let roundCorrect = 0;
+let roundWrong = 0;
+let roundPointsEarned = 0;
+let currentAudio = null;
+let selectedDifficulty = null;
+let dailyTasks = {}; // Günlük görev takibi
+const DAILY_TASKS_KEY = 'HASENE_DAILY_TASKS';
+// Global error catcher to surface JS errors and ensure menu remains visible
+window.addEventListener('error', function (ev) {
+  try {
+    const msg = ev.message + ' at ' + ev.filename + ':' + ev.lineno + ':' + ev.colno;
+    console.error('Global error:', msg);
+    let errBox = document.getElementById('jsErrorBox');
+    if (!errBox) {
+      errBox = document.createElement('div');
+      errBox.id = 'jsErrorBox';
+      errBox.style.position = 'fixed';
+      errBox.style.left = '8px';
+      errBox.style.bottom = '8px';
+      errBox.style.padding = '10px';
+      errBox.style.background = '#ffdddd';
+      errBox.style.color = '#600';
+      errBox.style.border = '2px solid #900';
+      errBox.style.zIndex = 99999;
+      document.body.appendChild(errBox);
+    }
+    errBox.innerText = 'JS Hatası: ' + msg;
+  } catch(e) { console.error(e); }
+  // ensure menu visible so user can continue
+  try { const m = document.getElementById('menu'); if (m) m.style.display='block'; } catch(e){}
+});
+// Close modals with Escape key
+window.addEventListener('keydown', function(e){ if (e.key === 'Escape') { hideStatsModal(); hideCalendarModal(); hideBadgesModal(); hideWordsModal(); } });
+const STATS_KEY = 'hasene_stats_v1';
+const BADGES_KEY = 'hasene_badges_v1';
+const WORDS_KEY = 'hasene_words_v1'; // Kelimeler istatistikleri
+let stats = null;
+let badges = null;
+let wordsData = null; // {wordId: {word, dogruSayisi, yanlisSayisi, ogrendi, zorlandi}}
+
+function todayKey() {
+  const d = new Date();
+  // Yerel saati kullan, UTC değil
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`; // YYYY-MM-DD (yerel saat)
+}
+
+function loadStats() {
+  try {
+    stats = JSON.parse(localStorage.getItem(STATS_KEY) || '{}');
+  } catch(e) { stats = {}; }
+  if (!stats.total) stats.total = 0;
+  if (!stats.modes) stats.modes = {};
+  if (!stats.daily) stats.daily = {}; // date -> {played, correct}
+}
+
+function saveStats() {
+  localStorage.setItem(STATS_KEY, JSON.stringify(stats));
+}
+
+function loadBadges() {
+  try { badges = JSON.parse(localStorage.getItem(BADGES_KEY) || '{}'); } catch(e) { badges = {}; }
+  if (!badges.earned) badges.earned = {};
+}
+
+function saveBadges() { localStorage.setItem(BADGES_KEY, JSON.stringify(badges)); }
+
+function recordResult(correct, mode, difficulty = 1) {
+  if (!stats) loadStats();
+  if (!badges) loadBadges();
+  if (!wordsData) loadWordsData();
+  stats.total = (stats.total||0) + 1;
+  const m = mode || currentMode || 'unknown';
+  if (!stats.modes[m]) stats.modes[m] = {played:0,correct:0};
+  stats.modes[m].played++;
+  if (correct) stats.modes[m].correct++;
+  const day = todayKey();
+  if (!stats.daily[day]) stats.daily[day] = {played:0,correct:0,modes:{}};
+  stats.daily[day].played++;
+  if (correct) stats.daily[day].correct++;
+  // Oyun türüne göre günlük takip
+  if (!stats.daily[day].modes) stats.daily[day].modes = {};
+  if (!stats.daily[day].modes[m]) stats.daily[day].modes[m] = {played:0,correct:0};
+  stats.daily[day].modes[m].played++;
+  if (correct) stats.daily[day].modes[m].correct++;
+  // score system: difficulty for correct, -2 for wrong (min 0)
+  const points = correct ? difficulty : -2;
+  stats.score = stats.score || 0;
+  stats.score = Math.max(0, stats.score + points);
+  // Track round results
+  if (correct) {
+    roundCorrect++;
+    roundPointsEarned += difficulty;
+  } else {
+    roundWrong++;
+    roundPointsEarned -= 2;
+  }
+  saveStats();
+  updateScoreUI();
+  evaluateBadges();
+  
+  // KELIMELER TAKIBI (1. ve 2. oyun için)
+  if (currentQuestionNumber - 1 >= 0 && currentQuestionNumber - 1 < data.length) {
+    const currentQuestion = data[currentQuestionNumber - 1];
+    if (currentQuestion) {
+      const wordId = currentQuestion.id || currentQuestion.word || JSON.stringify(currentQuestion);
+      const word = currentQuestion.word || currentQuestion.text || 'Unknown';
+      // Sadece 1. ve 2. oyunda kelime takibi yap
+      if (m === 'kelimeBul' || m === 'dinleBul') {
+        trackWord(wordId, word, correct);
+      }
+    }
+  }
+  
+  // Update daily tasks
+  initializeDailyTasks();
+  
+  // Track mode completions
+  if (m === 'kelimeBul') updateDailyTask('kelime');
+  else if (m === 'ayetOku') updateDailyTask('ayet');
+  else if (m === 'duaEt') updateDailyTask('dua');
+  else if (m === 'hadisOku') updateDailyTask('hadis');
+  else if (m === 'dinleBul') updateDailyTask('dinle');
+  
+  // Track correct answers
+  if (correct) {
+    updateDailyTask('sahih');
+    // Track HASENE points for puan task
+    const pointsEarned = difficulty;
+    if (!dailyTasks.puanTracked) dailyTasks.puanTracked = 0;
+    dailyTasks.puanTracked = (dailyTasks.puanTracked || 0) + pointsEarned;
+    if (dailyTasks.puanTracked >= 100) {
+      updateDailyTask('puan');
+      dailyTasks.puanTracked = 0;
+    }
+    saveDailyTasks();
+  }
+  
+  // Track mertebe diversity
+  if (difficulty && difficulty > 1) {
+    if (!dailyTasks.mertebeCount) dailyTasks.mertebeCount = {};
+    dailyTasks.mertebeCount[difficulty] = (dailyTasks.mertebeCount[difficulty] || 0) + 1;
+    const uniqueMertebeler = Object.keys(dailyTasks.mertebeCount).length;
+    if (uniqueMertebeler >= 3) {
+      updateDailyTask('mertebe');
+    }
+    saveDailyTasks();
+  }
+}
+
+function updateScoreUI() {
+  if (!stats) loadStats();
+  updateMertebePanel();
+}
+
+function updateMertebePanel() {
+  if (!stats) loadStats();
+  
+  const score = stats.score || 0;
+  const stars = Math.floor(score / 100);
+  
+  // Mertebe seviyeleri: Her 1000 puana 1 mertebe
+  const mertebe = Math.floor(score / 1000) + 1;
+  const nextMertebeThreshold = mertebe * 1000;
+  const currentMertebeProgress = score % 1000;
+  const remaining = nextMertebeThreshold - score;
+  
+  // Progress bar yüzdesi
+  const progressPercent = (currentMertebeProgress / 1000) * 100;
+  
+  // DOM güncellemeleri
+  document.getElementById('mertebeLevel').innerText = mertebe;
+  document.getElementById('mertebeScore').innerText = score;
+  document.getElementById('mertebeStars').innerText = stars;
+  document.getElementById('mertebeProgressBar').style.width = progressPercent + '%';
+  document.getElementById('mertebeRemaining').innerText = remaining.toLocaleString('tr-TR');
+  
+  // Mertebe adları
+  const mertebeNames = [
+    { 1: "Mertebe 1", 2: "Mertebe 2" },
+    { 1: "Talip", 2: "Halit" },
+    { 1: "Muhzır", 2: "Şehadet" },
+    { 1: "Zikr", 2: "Salih" },
+    { 1: "Halit", 2: "Latif" }
+  ];
+  
+  const nameIndex = Math.min(Math.floor((mertebe - 1) / 2), mertebeNames.length - 1);
+  const currentNames = mertebeNames[nameIndex];
+  
+  document.getElementById('mertebeLevel1Name').innerText = currentNames[1];
+  document.getElementById('mertebeLevel2Name').innerText = currentNames[2];
+}
+
+function evaluateBadges() {
+  // Rozet kazanım kuralları
+  const totalCorrect = Object.values(stats.modes||{}).reduce((s,m)=>s+(m.correct||0),0);
+  const totalPlayed = Object.values(stats.modes||{}).reduce((s,m)=>s+(m.played||0),0);
+  
+  console.log(`🏆 Rozet Kontrolü: ${totalCorrect} doğru, ${totalPlayed} toplam`);
+  
+  // sahih yanıt rozetleri
+  const correctThresholds = [
+    {id:'correct_10',name:'📖 Kur\'an\'a İlk Adım',desc:'10 sahih yanıt - "En iyi insanlar en iyi öğrenenleridir"',threshold:10},
+    {id:'correct_50',name:'📚 Bilgi Toplayıcı',desc:'50 sahih yanıt - İlim yolunda ilerleme',threshold:50},
+    {id:'correct_100',name:'� Ayet Bilgini',desc:'100 sahih yanıt - "İlim, Cennet\'in anahtarıdır"',threshold:100},
+    {id:'correct_250',name:'🏆 Kur\'an Şampiyonu',desc:'250 sahih yanıt - Azim ve Kararlılık ile başarı',threshold:250}
+  ];
+  correctThresholds.forEach(badge=>{
+    if (totalCorrect >= badge.threshold) {
+      if (!badges.earned[badge.id]) {
+        console.log(`✅ ROZET AÇILDI: ${badge.name} (${badge.threshold} doğru cevap)`);
+        badges.earned[badge.id] = {name: badge.name, desc: badge.desc, unlockedAt: new Date().toISOString()};
+      }
+    }
+  });
+  
+  // İbadet sayısı rozetleri
+  const playThresholds = [
+    {id:'play_5',name:'🌱 Başlangıçlı Mürid',desc:'5 ibadet - İlk adımlar atmak',threshold:5},
+    {id:'play_25',name:'💪 Kararlı Talip',desc:'25 ibadet - Tutarlılık gösterme',threshold:25},
+    {id:'play_100',name:'⚡ İbadet Dervişi',desc:'100 ibadet - Azimle devam etme',threshold:100}
+  ];
+  playThresholds.forEach(badge=>{
+    if (totalPlayed >= badge.threshold) {
+      if (!badges.earned[badge.id]) {
+        badges.earned[badge.id] = {name: badge.name, desc: badge.desc, unlockedAt: new Date().toISOString()};
+      }
+    }
+  });
+  
+  // Mod-spesifik rozetler
+  const modeBadges = [
+    {mode:'kelimeBul',id:'kelime_master',name:'� Kelime Bilgesi',desc:'30 Kelime Bul oyunu - Vocabulary ustası',threshold:30},
+    {mode:'dinleBul',id:'dinle_master',name:'👂 İşitme Müsavviri',desc:'20 Dinle ve Bul oyunu - Kulaklarımız İbadeti Dinler',threshold:20},
+    {mode:'boslukDoldur',id:'boslek_expert',name:'🧩 Ezber Mükemmeli',desc:'20 Boşluk Doldur oyunu - Hafız Yolunda',threshold:20},
+    {mode:'ayetOku',id:'ayet_reader',name:'📖 Ayet Kişi',desc:'20 Ayet Oku - Kur\'anı Kerim\'i İnceleme',threshold:20},
+    {mode:'duaEt',id:'dua_devotee',name:'🙏 Dua Edenler',desc:'15 Dua Et - Duanın Gücüne İnananlara',threshold:15}
+  ];
+  modeBadges.forEach(badge=>{
+    if (stats.modes[badge.mode] && stats.modes[badge.mode].played >= badge.threshold) {
+      if (!badges.earned[badge.id]) {
+        badges.earned[badge.id] = {name: badge.name, desc: badge.desc, unlockedAt: new Date().toISOString()};
+      }
+    }
+  });
+  
+  // Devamlılık rozetleri (3 gün art arda)
+  const currentDevamliliq = calculateDevamliliq();
+  if (currentDevamliliq >= 3 && !badges.earned['devamliliq_3']) {
+    badges.earned['devamliliq_3'] = {name:'🤲 Üç Günlük İbadet',desc:'3 gün art arda ibadet - Niyetiniz saf mı?',unlockedAt:new Date().toISOString()};
+  }
+  if (currentDevamliliq >= 7 && !badges.earned['devamliliq_7']) {
+    badges.earned['devamliliq_7'] = {name:'✨ Haftalık Sebat',desc:'7 gün art arda ibadet - "Sabreden Allah\'ın yanında pahalı olandır"',unlockedAt:new Date().toISOString()};
+  }
+  
+  saveBadges();
+}
+
+function calculateDevamliliq() {
+  if (!stats || !stats.daily) return 0;
+  let devamliliq = 0;
+  const today = new Date();
+  for (let i = 0; i < 365; i++) {
+    const d = new Date(today);
+    d.setDate(d.getDate() - i);
+    // Yerel saati kullan, UTC değil
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const date = String(d.getDate()).padStart(2, '0');
+    const k = `${year}-${month}-${date}`;
+    const dayStats = stats.daily[k];
+    if (dayStats && dayStats.played > 0) {
+      devamliliq++;
+    } else if (i > 0) {
+      break;
+    }
+  }
+  return devamliliq;
+}
+
+function showStatsModal() {
+  if (!stats) loadStats();
+  
+  // Hesaplamalar
+  const totalPlayed = stats.total || 0;
+  const totalCorrect = Object.values(stats.modes||{}).reduce((s,m)=>s+(m.correct||0),0);
+  const successRate = totalPlayed > 0 ? Math.round((totalCorrect / totalPlayed) * 100) : 0;
+  
+  const today = stats.daily[todayKey()] || {played:0,correct:0};
+  const todayRate = today.played > 0 ? Math.round((today.correct / today.played) * 100) : 0;
+  
+  const currentDevamliliq = calculateDevamliliq();
+  
+  // En iyi devamlılığı bul
+  const allDays = Object.keys(stats.daily || {}).sort();
+  let bestDevamliliq = currentDevamliliq;
+  
+  if (allDays.length > 0) {
+    // Her gün başlangıç noktası olarak deneyelim
+    for (let startIdx = 0; startIdx < allDays.length; startIdx++) {
+      let consecutiveDays = 1;
+      
+      for (let j = startIdx; j < allDays.length - 1; j++) {
+        const currentDateStr = allDays[j];
+        const nextDateStr = allDays[j + 1];
+        
+        // Sonraki günün tarihini hesapla
+        const d = new Date(currentDateStr + 'T00:00:00');
+        const nextD = new Date(d);
+        nextD.setDate(nextD.getDate() + 1);
+        
+        // Hesaplanan sonraki tarih ile gerçek sonraki gün karşılaştır
+        const expectedNextDate = `${nextD.getFullYear()}-${String(nextD.getMonth() + 1).padStart(2, '0')}-${String(nextD.getDate()).padStart(2, '0')}`;
+        
+        if (nextDateStr === expectedNextDate) {
+          consecutiveDays++;
+        } else {
+          break;
+        }
+      }
+      
+      bestDevamliliq = Math.max(bestDevamliliq, consecutiveDays);
+    }
+  }
+  
+  const totalDays = Object.keys(stats.daily || {}).length;
+  
+  // Toplam İstatistikler Hesaplaması
+  let totalModeStats = {kelimeBul:0, dinleBul:0, boslukDoldur:0, ayetOku:0, duaEt:0, hadisOku:0};
+  let totalModeCorrect = {kelimeBul:0, dinleBul:0, boslukDoldur:0, ayetOku:0, duaEt:0, hadisOku:0};
+  Object.values(stats.daily || {}).forEach(dayStats => {
+    Object.entries(dayStats.modes || {}).forEach(([mode, modeData]) => {
+      if (totalModeStats.hasOwnProperty(mode)) {
+        totalModeStats[mode] += modeData.played || 0;
+        totalModeCorrect[mode] += modeData.correct || 0;
+      }
+    });
+  });
+  const totalAllModes = Object.values(totalModeStats).reduce((a,b)=>a+b, 0);
+  
+  let html = `
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      
+      <!-- TOPLAM İSTATİSTİKLER -->
+      <div style="background:linear-gradient(135deg,#8B0000 0%,#DC143C 100%);padding:12px;border-radius:12px;color:white;">
+        <h3 style="margin:0 0 8px 0;font-size:0.95em;">📈 Toplam İstatistikler</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div style="text-align:center;">
+            <div style="font-size:1.6em;font-weight:bold;color:#FFD700;">${totalAllModes}</div>
+            <div style="font-size:0.8em;color:#fff;margin-top:2px;">Toplam Amel</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:1.6em;font-weight:bold;color:#FFD700;">${totalCorrect}</div>
+            <div style="font-size:0.8em;color:#fff;margin-top:2px;">Toplam Hasene</div>
+          </div>
+          <div style="text-align:center;grid-column:1/-1;">
+            <div style="font-size:1.5em;font-weight:bold;color:#FFD700;">${totalAllModes > 0 ? Math.round((totalCorrect / totalAllModes) * 100) : 0}%</div>
+            <div style="font-size:0.8em;color:#fff;margin-top:2px;">Genel Başarı</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- BAŞARI ANALİZİ -->
+      <div style="background:linear-gradient(135deg,#1a7f3f 0%,#2d9d5f 100%);padding:12px;border-radius:12px;color:white;">
+        <h3 style="margin:0 0 8px 0;font-size:0.95em;">📊 Başarı Analizi</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div style="text-align:center;">
+            <div style="font-size:1.6em;font-weight:bold;color:#D4AF37;">${successRate}%</div>
+            <div style="font-size:0.8em;color:#fff;margin-top:2px;">Başarı Oranı</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:1.6em;font-weight:bold;color:#D4AF37;">${totalCorrect}</div>
+            <div style="font-size:0.8em;color:#fff;margin-top:2px;">Günlük Ort.</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- DEVAMLILLIK İSTATİSTİKLERİ -->
+      <div style="background:linear-gradient(135deg,#FF9800 0%,#F57C00 100%);padding:12px;border-radius:12px;color:white;">
+        <h3 style="margin:0 0 8px 0;font-size:0.95em;">🔥 Devamlılık</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div style="text-align:center;">
+            <div style="font-size:1.6em;font-weight:bold;">${currentDevamliliq}</div>
+            <div style="font-size:0.8em;color:#fff;margin-top:2px;">Mevcut</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:1.6em;font-weight:bold;">${bestDevamliliq}</div>
+            <div style="font-size:0.8em;color:#fff;margin-top:2px;">En İyi</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- OYUN TÜRÜ İSTATİSTİKLERİ (BUGÜN) -->
+      <div style="background:#fff9e6;padding:12px;border-radius:12px;border-left:4px solid #FF9800;">
+        <h3 style="margin:0 0 8px 0;font-size:0.9em;color:#333;">🎮 Bugün</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:0.85em;">
+          <div><strong style="color:#333;font-size:0.9em;">📘 Kelime:</strong> <span style="color:#FF9800;font-weight:bold;">${(stats.modes?.kelimeBul?.played || 0)}</span></div>
+          <div><strong style="color:#333;font-size:0.9em;">🧩 Boşluk:</strong> <span style="color:#FF9800;font-weight:bold;">${(stats.modes?.boslukDoldur?.played || 0)}</span></div>
+          <div><strong style="color:#333;font-size:0.9em;">🎧 Dinle:</strong> <span style="color:#FF9800;font-weight:bold;">${(stats.modes?.dinleBul?.played || 0)}</span></div>
+          <div><strong style="color:#333;font-size:0.9em;">📖 Ayet:</strong> <span style="color:#FF9800;font-weight:bold;">${(stats.modes?.ayetOku?.played || 0)}</span></div>
+          <div><strong style="color:#333;font-size:0.9em;">🙏 Dua:</strong> <span style="color:#FF9800;font-weight:bold;">${(stats.modes?.duaEt?.played || 0)}</span></div>
+          <div><strong style="color:#333;font-size:0.9em;">📜 Hadis:</strong> <span style="color:#FF9800;font-weight:bold;">${(stats.modes?.hadisOku?.played || 0)}</span></div>
+        </div>
+      </div>
+      
+      <!-- TOPLAM OYUN TÜRÜ DAĞILIMI -->
+      <div style="background:#e8f5e9;padding:12px;border-radius:12px;border-left:4px solid #1a7f3f;">
+        <h3 style="margin:0 0 8px 0;font-size:0.9em;color:#333;">📊 Toplam</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:0.85em;">
+          <div><strong style="color:#333;font-size:0.9em;">📘 Kelime:</strong> <span style="color:#1a7f3f;font-weight:bold;">${totalModeStats.kelimeBul}</span></div>
+          <div><strong style="color:#333;font-size:0.9em;">🧩 Boşluk:</strong> <span style="color:#1a7f3f;font-weight:bold;">${totalModeStats.boslukDoldur}</span></div>
+          <div><strong style="color:#333;font-size:0.9em;">🎧 Dinle:</strong> <span style="color:#1a7f3f;font-weight:bold;">${totalModeStats.dinleBul}</span></div>
+          <div><strong style="color:#333;font-size:0.9em;">📖 Ayet:</strong> <span style="color:#1a7f3f;font-weight:bold;">${totalModeStats.ayetOku}</span></div>
+          <div><strong style="color:#333;font-size:0.9em;">🙏 Dua:</strong> <span style="color:#1a7f3f;font-weight:bold;">${totalModeStats.duaEt}</span></div>
+          <div><strong style="color:#333;font-size:0.9em;">📜 Hadis:</strong> <span style="color:#1a7f3f;font-weight:bold;">${totalModeStats.hadisOku}</span></div>
+        </div>
+      </div>
+      
+      <!-- GÜNLÜK PERFORMANS -->
+      <div style="background:#f0f8ff;padding:12px;border-radius:12px;border-left:4px solid #1a7f3f;">
+        <h3 style="margin:0 0 8px 0;font-size:0.9em;color:#333;">⚡ Bugün</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:0.85em;">
+          <div style="background:white;padding:8px;border-radius:8px;text-align:center;border:1px solid #1a7f3f;">
+            <div style="font-size:1.4em;font-weight:bold;color:#1a7f3f;">${today.correct}</div>
+            <div style="font-size:0.75em;color:#333;margin-top:2px;">Sahih</div>
+          </div>
+          <div style="background:white;padding:8px;border-radius:8px;text-align:center;border:1px solid #D4AF37;">
+            <div style="font-size:1.4em;font-weight:bold;color:#D4AF37;">${todayRate}%</div>
+            <div style="font-size:0.75em;color:#333;margin-top:2px;">Oran</div>
+          </div>
+        </div>
+        <div style="margin-top:8px;padding:6px;background:white;border-radius:6px;text-align:center;font-size:0.8em;border:1px solid #1a7f3f;">
+          <strong style="color:#333;">Amel Günü: </strong><span style="color:#1a7f3f;font-weight:bold;">${totalDays}/365</span>
+        </div>
+      </div>
+      
+    </div>
+    <div style="display:flex;gap:8px;margin-top:16px;">
+      <button onclick="resetAllStats()" style="flex:1;padding:10px;background:#dc3545;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:bold;font-size:0.95em;transition:0.3s;" title="Tüm istatistikleri sıfırla">🔄 Sıfırla</button>
+      <button onclick="hideStatsModal()" style="flex:1;padding:10px;background:#1a7f3f;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:bold;font-size:0.95em;transition:0.3s;">Kapat</button>
+    </div>
+  `;
+  
+  document.getElementById('statsContent').innerHTML = html;
+  document.getElementById('statsModal').style.display = 'flex';
+  document.getElementById('statsModal').classList.remove('hidden');
+}
+
+function resetAllStats(){
+  if (!confirm('⚠️ Tüm istatistikler kalıcı olarak silinecek. Emin misiniz?')) return;
+  
+  // Tüm verileri sıfırla
+  localStorage.removeItem(STATS_KEY);
+  localStorage.removeItem(BADGES_KEY);
+  localStorage.removeItem(WORDS_KEY);
+  localStorage.removeItem(DAILY_TASKS_KEY);
+  
+  // Global değişkenleri sıfırla
+  stats = null;
+  badges = null;
+  wordsData = null;
+  dailyTasks = {};
+  
+  // Yeniden yükle ve paneli güncelle
+  loadStats();
+  loadBadges();
+  loadWordsData();
+  initializeDailyTasks();
+  updateScoreUI();
+  showStatsModal(); // Paneli yenile
+  alert('✅ Tüm istatistikler sıfırlandı!');
+}
+
+function hideStatsModal(){ 
+  document.getElementById('statsModal').style.display = 'none';
+  document.getElementById('statsModal').classList.add('hidden');
+}
+
+function showCalendarModal() {
+  if (!stats) loadStats();
+  
+  // Devamlılığı hesapla
+  const currentDevamliliq = calculateDevamliliq();
+  
+  // Duolingo tarzı takvim (son 13 gün)
+  const days = 13;
+  const today = new Date();
+  let calendarHtml = '<div style="padding:10px;background:linear-gradient(135deg,#1a7f3f,#D4AF37);border-radius:8px;margin-bottom:16px;text-align:center;color:white;">';
+  calendarHtml += '<div style="font-size:1.3em;margin-bottom:8px;">🤲 <strong>' + currentDevamliliq + '</strong> Gün İbadet!</div>';
+  calendarHtml += '<div style="font-size:0.9em;">Art arda ibadete devam etme silsileniz. Allah rızası için devam edin.</div>';
+  calendarHtml += '</div>';
+  
+  // Grid layout (hafta satırları)
+  calendarHtml += '<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:16px;">';
+  
+  for (let i = days - 1; i >= 0; i--) {
+    const d = new Date(today);
+    d.setDate(d.getDate() - i);
+    // Yerel saati kullan, UTC değil
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const date = String(d.getDate()).padStart(2, '0');
+    const k = `${year}-${month}-${date}`;
+    const dayData = stats.daily[k] || {played: 0, correct: 0};
+    
+    const dayName = ['Paz', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt'][d.getDay()];
+    const dayNum = d.getDate();
+    
+    let color = '#e0e0e0';
+    let opacity = '0.3';
+    if (dayData.played > 0) {
+      // sahih yanıt oranına göre renk (İslami temalar)
+      const ratio = dayData.correct / dayData.played;
+      if (ratio >= 0.8) {
+        color = '#1a7f3f'; // İslam yeşili
+        opacity = '1';
+      } else if (ratio >= 0.6) {
+        color = '#D4AF37'; // Kur'an altını
+        opacity = '1';
+      } else {
+        color = '#FF9800'; // Uyarı rengi
+        opacity = '1';
+      }
+    }
+    
+    const isToday = (k === todayKey());
+    const boxStyle = `width:100%;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+      background:${color};opacity:${opacity};border-radius:6px;cursor:default;
+      font-weight:bold;${isToday ? 'border:3px solid #1a7f3f;' : 'border:2px solid transparent;'}
+      transition:all 0.3s;`;
+    
+    calendarHtml += `<div style="${boxStyle}" title="${k}: ${dayData.played} ibadet, ${dayData.correct} sahih">
+      <div style="font-size:0.7em;color:#666;">${dayName}</div>
+      <div style="font-size:0.9em;">${dayNum}</div>
+    </div>`;
+  }
+  
+  calendarHtml += '</div>';
+  
+  // İstatistik özeti
+  calendarHtml += '<div style="background:#f9f9f9;padding:12px;border-radius:8px;border-left:4px solid #1a7f3f;">';
+  calendarHtml += '<h4 style="color:#1a7f3f;margin:0 0 8px 0;">📖 Son 2 Hafta İbadet Özeti</h4>';
+  let totalQuestions = 0, totalCorrect = 0;
+  for (let i = 13; i >= 0; i--) {
+    const d = new Date(today);
+    d.setDate(d.getDate() - i);
+    // Yerel saati kullan, UTC değil
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const date = String(d.getDate()).padStart(2, '0');
+    const k = `${year}-${month}-${date}`;
+    const dayData = stats.daily[k] || {played: 0, correct: 0};
+    totalQuestions += dayData.played; // Her cevaplanan soru
+    totalCorrect += dayData.correct;
+  }
+  const avgRatio = totalQuestions > 0 ? ((totalCorrect / totalQuestions) * 100).toFixed(1) : 0;
+  calendarHtml += `<p style="margin:4px 0;"><strong>İbadatlar:</strong> ${totalQuestions} | <strong>Sahihleri:</strong> ${totalCorrect} | <strong>Başarı Oranı:</strong> %${avgRatio}</p>`;
+  calendarHtml += '</div>';
+  
+  document.getElementById('calendarContent').innerHTML = calendarHtml;
+  document.getElementById('calendarModal').style.display = 'flex';
+  document.getElementById('calendarModal').classList.remove('hidden');
+}
+
+function hideCalendarModal(){ 
+  document.getElementById('calendarModal').style.display = 'none';
+  document.getElementById('calendarModal').classList.add('hidden');
+}
+
+function showBadgesModal(){ 
+  if (!stats) loadStats();
+  if (!badges) loadBadges();
+  evaluateBadges(); // Güncel nişanları kontrol et
+  
+  console.log(`📊 Nişanlar Modal Açıldı`);
+  
+  // Tüm mevcut nişanları tanımla
+  const allBadges = [
+    {id:'correct_10',name:'📖 Kur\'an\'a İlk Adım',desc:'10 sahih yanıt - "En iyi insanlar en iyi öğrenenleridir"'},
+    {id:'correct_50',name:'📚 Bilgi Toplayıcı',desc:'50 sahih yanıt - İlim yolunda ilerleme'},
+    {id:'correct_100',name:'🌟 Ayet Bilgini',desc:'100 sahih yanıt - "İlim, Cennet\'in anahtarıdır"'},
+    {id:'correct_250',name:'🏆 Kur\'an Şampiyonu',desc:'250 sahih yanıt - Azim ve Kararlılık ile başarı'},
+    {id:'play_5',name:'🌱 Başlangıçlı Mürid',desc:'5 ibadet - İlk adımlar atmak'},
+    {id:'play_25',name:'💪 Kararlı Talip',desc:'25 ibadet - Tutarlılık gösterme'},
+    {id:'play_100',name:'⚡ İbadet Dervişi',desc:'100 ibadet - Azimle devam etme'},
+    {id:'kelime_master',name:'🎓 Kelime Bilgesi',desc:'30 Kelime Bul oyunu - Vocabulary ustası'},
+    {id:'dinle_master',name:'👂 İşitme Müsavviri',desc:'20 Dinle ve Bul oyunu - Kulaklarımız İbadeti Dinler'},
+    {id:'boslek_expert',name:'🧩 Ezber Mükemmeli',desc:'20 Boşluk Doldur oyunu - Hafız Yolunda'},
+    {id:'ayet_reader',name:'📖 Ayet Takiçi',desc:'Ayet Oku\'dan 20 sayfa oku'},
+    {id:'dua_devotee',name:'🙏 Dua Merakçısı',desc:'Dua Et\'de 15 dua oku'},
+    {id:'devamliliq_3',name:'🤲 Üç Günlük İbadet',desc:'3 gün art arda ibadet - Niyetiniz saf mı?'},
+    {id:'devamliliq_7',name:'✨ Haftalık Sebat',desc:'7 gün art arda ibadet - "Sabreden Allah\'ın yanında pahalı olandır"'}
+  ];
+  
+  let html = '<div style="display:flex;flex-direction:column;gap:10px;">';
+  
+  const earned = badges.earned || {};
+  const earnedCount = Object.keys(earned).length;
+  
+  html += `<div style="background:linear-gradient(135deg,#1a7f3f,#D4AF37);color:white;padding:12px;border-radius:8px;text-align:center;">
+    <div style="font-size:1.4em;margin-bottom:4px;">🏆 ${earnedCount}/${allBadges.length}</div>
+    <div style="font-size:0.9em;">Şeref Nişanı Kazanıldı</div>
+  </div>`;
+  
+  // Kategoriye göre nişanları göster
+  const categories = {
+    '📖 İlim Nişanları (Sahih Yanıt)': allBadges.slice(0, 4),
+    '🙏 Cariye Nişanları (İbadet Sayısı)': allBadges.slice(4, 7),
+    '⭐ Hilal Nişanları (Mod Ustalığı)': allBadges.slice(7, 12),
+    '✨ Vesam Nişanları (İbadet Devamlılığı)': allBadges.slice(12, 14)
+  };
+  
+  for (const [category, badgeList] of Object.entries(categories)) {
+    html += `<div style="margin-top:12px;"><h4 style="color:#1a7f3f;margin:0 0 8px 0;">${category}</h4>`;
+    badgeList.forEach(badge => {
+      const isEarned = earned[badge.id];
+      const opacity = isEarned ? '1' : '0.4';
+      const bgColor = isEarned ? '#fff8f0' : '#f5f5f5';
+      const borderColor = isEarned ? '#D4AF37' : '#ddd';
+      
+      html += `<div style="padding:10px;background:${bgColor};border-left:4px solid ${borderColor};border-radius:4px;opacity:${opacity};margin-bottom:6px;">
+        <div style="font-size:1.2em;font-weight:bold;margin-bottom:2px;">${badge.name}</div>
+        <div style="color:#666;font-size:0.9em;">${badge.desc}</div>
+        ${isEarned ? `<div style="color:#1a7f3f;font-size:0.85em;margin-top:4px;font-weight:bold;">✓ Kazanıldı: ${isEarned.unlockedAt.split('T')[0]}</div>` : '<div style="color:#999;font-size:0.85em;margin-top:4px;">🔒 Kilitli</div>'}
+      </div>`;
+    });
+    html += '</div>';
+  }
+  
+  html += '</div>';
+  document.getElementById('badgesContent').innerHTML = html;
+  document.getElementById('badgesModal').style.display = 'flex';
+  document.getElementById('badgesModal').classList.remove('hidden');
+}
+
+function hideBadgesModal(){ 
+  document.getElementById('badgesModal').style.display = 'none';
+  document.getElementById('badgesModal').classList.add('hidden');
+}
+
+// ===== KELIMELER MODAL FUNCTIONS =====
+function loadWordsData() {
+  try {
+    wordsData = JSON.parse(localStorage.getItem(WORDS_KEY) || '{}');
+  } catch(e) { wordsData = {}; }
+  return wordsData;
+}
+
+function saveWordsData() {
+  localStorage.setItem(WORDS_KEY, JSON.stringify(wordsData));
+}
+
+function trackWord(wordId, word, isCorrect) {
+  if (!wordsData) loadWordsData();
+  if (!wordsData[wordId]) {
+    wordsData[wordId] = {
+      word: word,
+      dogruSayisi: 0,
+      yanlisSayisi: 0,
+      ogrendi: false,
+      zorlandi: false,
+      lastAttempt: new Date().toISOString()
+    };
+  }
+  
+  const entry = wordsData[wordId];
+  if (isCorrect) {
+    entry.dogruSayisi++;
+    if (entry.dogruSayisi >= 8) {
+      entry.ogrendi = true;
+    }
+  } else {
+    entry.yanlisSayisi++;
+    entry.zorlandi = true;
+    entry.dogruSayisi = 0; // Yanlış olunca sıfırla
+  }
+  
+  entry.lastAttempt = new Date().toISOString();
+  saveWordsData();
+}
+
+// ===== SRS (SPACED REPETITION SYSTEM) =====
+function getWordCategory(wordEntry) {
+  // Kelimeyi kategoriye ayıkla
+  if (wordEntry.ogrendi) return 'ogrendi';
+  
+  const dogruOrani = (wordEntry.dogruSayisi / (wordEntry.dogruSayisi + wordEntry.yanlisSayisi || 1)) * 100;
+  
+  if (wordEntry.yanlisSayisi > 0 && dogruOrani < 50) {
+    return 'zorlaniyor'; // Yanlış çok
+  } else if (wordEntry.dogruSayisi >= 5 && dogruOrani >= 60) {
+    return 'iyiGidiyor'; // İyi ilerleme
+  } else if (wordEntry.dogruSayisi === 0) {
+    return 'yeni'; // Hiç sorulan değil
+  } else {
+    return 'zorlaniyor'; // Başında
+  }
+}
+
+function getDaysSinceLastAttempt(lastAttemptIso) {
+  if (!lastAttemptIso) return 999;
+  const last = new Date(lastAttemptIso);
+  const now = new Date();
+  // Yerel saatte gün farkı hesapla (saat dilimi farkı yok)
+  const lastDate = new Date(last.getFullYear(), last.getMonth(), last.getDate());
+  const nowDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const diffMs = nowDate - lastDate;
+  const diffDays = diffMs / (1000 * 60 * 60 * 24);
+  return diffDays;
+}
+
+function selectWordBySRS(allWords) {
+  // Ağırlıklı rastgele seçim (SRS)
+  const weights = {
+    ogrendi: 5,
+    iyiGidiyor: 15,
+    zorlaniyor: 45,
+    yeni: 25,
+    unuttugu: 10
+  };
+  
+  // Kategorize et
+  const categorized = {
+    ogrendi: [],
+    iyiGidiyor: [],
+    zorlaniyor: [],
+    yeni: [],
+    unuttugu: []
+  };
+  
+  for (const word of allWords) {
+    const category = getWordCategory(word);
+    const daysSince = getDaysSinceLastAttempt(word.lastAttempt);
+    
+    // Eğer 2+ gün görmedi ise "unuttugu" kategorisine al
+    if (daysSince >= 2 && category !== 'ogrendi') {
+      categorized.unuttugu.push(word);
+    } else {
+      categorized[category].push(word);
+    }
+  }
+  
+  // Ağırlıklı seçim yap
+  let totalWeight = 0;
+  const candidates = [];
+  
+  for (const category in categorized) {
+    const words = categorized[category];
+    if (words.length > 0) {
+      const weight = weights[category];
+      for (let i = 0; i < weight; i++) {
+        candidates.push(...words);
+      }
+      totalWeight += weight * words.length;
+    }
+  }
+  
+  if (candidates.length === 0) return null;
+  return candidates[Math.floor(Math.random() * candidates.length)];
+}
+
+function showWordsModal() {
+  if (!wordsData) loadWordsData();
+  document.getElementById('wordsModal').style.display = 'flex';
+  document.getElementById('wordsModal').classList.remove('hidden');
+  
+  // İlk tab'ı göster
+  switchWordsTab('kelimeGoruldu');
+}
+
+function hideWordsModal() {
+  document.getElementById('wordsModal').style.display = 'none';
+  document.getElementById('wordsModal').classList.add('hidden');
+}
+
+function switchWordsTab(tab) {
+  if (!wordsData) loadWordsData();
+  
+  // Tab butonlarını güncelle
+  document.getElementById('tabKelimeGoruldu').style.background = '#ccc';
+  document.getElementById('tabKelimeGoruldu').style.color = '#333';
+  document.getElementById('tabOgrendi').style.background = '#ccc';
+  document.getElementById('tabOgrendi').style.color = '#333';
+  document.getElementById('tabYanlis').style.background = '#ccc';
+  document.getElementById('tabYanlis').style.color = '#333';
+  
+  let words = [];
+  let content = '<div style="display:grid;gap:8px;">';
+  let stats = {goruldu: 0, ogrendi: 0, yanlis: 0};
+  
+  for (const wordId in wordsData) {
+    const w = wordsData[wordId];
+    stats.goruldu++;
+    if (w.ogrendi) stats.ogrendi++;
+    if (w.yanlisSayisi > 0) stats.yanlis++;
+  }
+  
+  // İlerleme hesapla
+  const progressPercent = stats.goruldu > 0 ? Math.round((stats.ogrendi / stats.goruldu) * 100) : 0;
+  const successRate = stats.goruldu > 0 
+    ? Math.round((stats.ogrendi / stats.goruldu) * 100) 
+    : 0;
+  
+  let totalDogruSayisi = 0;
+  let totalKelime = 0;
+  for (const wordId in wordsData) {
+    const w = wordsData[wordId];
+    totalDogruSayisi += w.dogruSayisi;
+    totalKelime++;
+  }
+  const avgCorrect = totalKelime > 0 ? (totalDogruSayisi / totalKelime).toFixed(1) : 0;
+  
+  // Progress UI'ını güncelle
+  document.getElementById('statsGoruldu').innerText = stats.goruldu;
+  document.getElementById('statsOgrendi').innerText = stats.ogrendi;
+  document.getElementById('statsYanlis').innerText = stats.yanlis;
+  document.getElementById('progressBar').style.width = progressPercent + '%';
+  document.getElementById('progressPercent').innerText = progressPercent + '%';
+  document.getElementById('successRate').innerText = successRate + '%';
+  document.getElementById('avgCorrect').innerText = avgCorrect;
+  
+  if (tab === 'kelimeGoruldu') {
+    document.getElementById('tabKelimeGoruldu').style.background = '#4169E1';
+    document.getElementById('tabKelimeGoruldu').style.color = 'white';
+    for (const wordId in wordsData) {
+      words.push(wordsData[wordId]);
+    }
+  } else if (tab === 'ogrendi') {
+    document.getElementById('tabOgrendi').style.background = '#27ae60';
+    document.getElementById('tabOgrendi').style.color = 'white';
+    for (const wordId in wordsData) {
+      if (wordsData[wordId].ogrendi) words.push(wordsData[wordId]);
+    }
+  } else if (tab === 'yanlis') {
+    document.getElementById('tabYanlis').style.background = '#e74c3c';
+    document.getElementById('tabYanlis').style.color = 'white';
+    for (const wordId in wordsData) {
+      if (wordsData[wordId].yanlisSayisi > 0) words.push(wordsData[wordId]);
+    }
+  }
+  
+  if (words.length === 0) {
+    content += '<div style="text-align:center;padding:20px;color:#999;">Kelime yok</div>';
+  } else {
+    words.forEach(w => {
+      const statusColor = w.ogrendi ? '#27ae60' : (w.zorlandi ? '#f39c12' : '#2980b9');
+      const statusText = w.ogrendi ? '✅ Öğrendi' : (w.zorlandi ? '⚠️ Zorlaniyor' : '📖 Görüldü');
+      content += `<div style="background:#f8f9fa;padding:12px;border-radius:8px;border-left:4px solid ${statusColor};">
+        <div style="font-weight:bold;color:#333;margin-bottom:6px;">${w.word}</div>
+        <div style="font-size:0.9em;color:#666;">
+          ✅ Doğru: <strong>${w.dogruSayisi}</strong> | 
+          ❌ Yanlış: <strong>${w.yanlisSayisi}</strong> | 
+          <span style="color:${statusColor};font-weight:bold;">${statusText}</span>
+        </div>
+      </div>`;
+    });
+  }
+  content += '</div>';
+  
+  document.getElementById('wordsContent').innerHTML = content;
+}
+
+function showCompletionModal(mode) {
+  const modeNames = {
+    kelimeBul: '📘 Kelime Bul',
+    dinleBul: '🎧 Dinle ve Bul',
+    boslukDoldur: '🧩 Boşluk Doldur',
+    ayetOku: '📖 Ayet Oku',
+    duaEt: '🙏 Dua Et',
+    hadisOku: '📜 Hadis Oku'
+  };
+  
+  const hadiths = [
+    '"Her kim Kur\'an okusa, onun her harfinden bir sevap alır." - Tirmizi',
+    '"İlim, Cennet\'in anahtarıdır." - Hadis',
+    '"Sabreden, Allah\'ın yanında pahalı olandır." - Kur\'an',
+    '"En iyi insanlar, en iyi öğrenenleridir." - Hadis',
+    '"Dua, ibadatin özüdür." - Tirmizi',
+    '"Bilgi talep et, beraber otur." - Hadis'
+  ];
+  
+  const randomHadith = hadiths[Math.floor(Math.random() * hadiths.length)];
+  
+  const finalPoints = Math.max(0, roundPointsEarned);
+  const html = `
+    <div style="margin:15px 0;">
+      <p style="font-size:0.95em;margin:8px 0;">✅ Sahih: <strong style="color:#1a7f3f;">${roundCorrect}</strong></p>
+      <p style="font-size:0.95em;margin:8px 0;">❌ Hatalı: <strong style="color:#f87171;">${roundWrong}</strong></p>
+      <p style="font-size:1.1em;margin:12px 0;padding:10px;background:rgba(212,175,55,0.1);border-radius:8px;border-left:4px solid #D4AF37;"><strong>${modeNames[mode] || mode}</strong> ibadatından kazandığın HASENE: <strong style="color:#D4AF37;">${finalPoints} ح</strong> �</p>
+      <p style="font-size:0.9em;margin:12px 0;padding:10px;background:#f9f9f9;border-radius:8px;border-left:4px solid #1a7f3f;font-style:italic;color:#555;">${randomHadith}</p>
+    </div>
+  `;
+  document.getElementById('completionContent').innerHTML = html;
+  document.getElementById('completionModal').style.display = 'flex';
+}
+
+function hideCompletionModal(){ document.getElementById('completionModal').style.display = 'none'; }
+
+// Günlük Görevler Sistemi
+const DAILY_TASK_DEFINITIONS = {
+  kelime: { name: 'Kelime Çevir', target: 5, stars: 1, icon: '📘' },
+  ayet: { name: 'Ayet Oku', target: 3, stars: 1, icon: '📖' },
+  dua: { name: 'Dua Öğren', target: 2, stars: 1, icon: '🙏' },
+  hadis: { name: 'Hadis Oku', target: 1, stars: 1, icon: '📜' },
+  sahih: { name: 'Sahih Cevaplar', target: 10, stars: 1, icon: '✅' },
+  puan: { name: 'HASENE Topla', target: 100, stars: 1, icon: '⭐' },
+  dinle: { name: 'Dinle & Bul', target: 3, stars: 2, icon: '🎧' },
+  mertebe: { name: 'Mertebe Çeşitliliği', target: 3, stars: 2, icon: '📊' }
+};
+
+function initializeDailyTasks() {
+  const stored = localStorage.getItem(DAILY_TASKS_KEY);
+  const today = new Date().toDateString();
+  
+  if (stored) {
+    const parsed = JSON.parse(stored);
+    if (parsed.lastReset !== today) {
+      // Reset all tasks for new day
+        dailyTasks = {};
+        for (let key in DAILY_TASK_DEFINITIONS) {
+          dailyTasks[key] = { current: 0, earned_stars: 0 };
+        }
+        // Özel alanları da sıfırla
+        dailyTasks.puanTracked = 0;
+        dailyTasks.mertebeCount = {};
+        dailyTasks.lastReset = today;
+        saveDailyTasks();
+    } else {
+      dailyTasks = parsed;
+    }
+  } else {
+    // First time - initialize all tasks
+      dailyTasks = {};
+      for (let key in DAILY_TASK_DEFINITIONS) {
+        dailyTasks[key] = { current: 0, earned_stars: 0 };
+      }
+      dailyTasks.puanTracked = 0;
+      dailyTasks.mertebeCount = {};
+      dailyTasks.lastReset = today;
+      saveDailyTasks();
+  }
+}
+
+function saveDailyTasks() {
+  localStorage.setItem(DAILY_TASKS_KEY, JSON.stringify(dailyTasks));
+}
+
+function updateDailyTask(taskId, increment = 1) {
+  if (!dailyTasks[taskId]) {
+    dailyTasks[taskId] = { current: 0, earned_stars: 0 };
+  }
+  const def = DAILY_TASK_DEFINITIONS[taskId];
+  if (!def) return;
+  
+  dailyTasks[taskId].current = Math.min(dailyTasks[taskId].current + increment, def.target);
+  
+  // Check if task completed
+  if (dailyTasks[taskId].current >= def.target && dailyTasks[taskId].earned_stars === 0) {
+    dailyTasks[taskId].earned_stars = def.stars;
+  }
+  
+  saveDailyTasks();
+
+  // Eğer günlük görevler paneli açıksa otomatik güncelle
+  const dailyTasksModal = document.getElementById('dailyTasksModal');
+  if (dailyTasksModal && dailyTasksModal.style.display === 'flex') {
+    showDailyTasksModal();
+  }
+}
+
+function getCompletedTasksCount() {
+  let count = 0;
+  for (let key in DAILY_TASK_DEFINITIONS) {
+    if (dailyTasks[key] && dailyTasks[key].earned_stars > 0) {
+      count++;
+    }
+  }
+  return count;
+}
+
+function getTotalEarnedStars() {
+  let total = 0;
+  for (let key in DAILY_TASK_DEFINITIONS) {
+    if (dailyTasks[key]) {
+      total += dailyTasks[key].earned_stars || 0;
+    }
+  }
+  return total;
+}
+
+function showDailyTasksModal() {
+  if (currentAudio) currentAudio.pause();
+  
+  initializeDailyTasks();
+  let html = '';
+  
+  for (let key in DAILY_TASK_DEFINITIONS) {
+    const def = DAILY_TASK_DEFINITIONS[key];
+    const progress = dailyTasks[key] || { current: 0, earned_stars: 0 };
+    const percentage = Math.round((progress.current / def.target) * 100);
+    const isComplete = progress.earned_stars > 0;
+    
+    const starDisplay = '⭐'.repeat(progress.earned_stars) + '☆'.repeat(def.stars - progress.earned_stars);
+    
+    html += `
+      <div style="margin:12px 0;padding:12px;background:${isComplete ? '#e8f5e9' : '#f5f5f5'};border-radius:8px;border-left:4px solid ${isComplete ? '#1a7f3f' : '#999'};">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <span style="font-weight:bold;color:${isComplete ? '#1a7f3f' : '#333'};">
+            ${def.icon} ${def.name}
+          </span>
+          <span style="color:#FF9800;font-weight:bold;">${starDisplay}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <span style="color:#666;font-size:0.9em;flex-grow:1;">İlerleme: ${progress.current}/${def.target}</span>
+          <span style="color:#FF9800;font-weight:bold;font-size:1.1em;">${percentage}%</span>
+        </div>
+        <div style="width:100%;height:8px;background:#ddd;border-radius:4px;overflow:hidden;">
+          <div style="height:100%;background:linear-gradient(90deg,#FF9800,#D4AF37);width:${percentage}%;transition:width 0.3s;"></div>
+        </div>
+      </div>
+    `;
+  }
+  
+  const completedCount = getCompletedTasksCount();
+  document.getElementById('tasksProgress').innerHTML = `${completedCount}/8 Görev Tamamlandı`;
+  document.getElementById('dailyTasksList').innerHTML = html;
+  document.getElementById('dailyTasksModal').style.display = 'flex';
+}
+
+function hideDailyTasksModal() {
+  document.getElementById('dailyTasksModal').style.display = 'none';
+}
+
+// initialize
+loadStats(); loadBadges(); initializeDailyTasks(); updateScoreUI();
+// Ensure menu is visible and modals hidden on page load
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('menu').style.display = 'block';
+  document.getElementById('gameContainer').style.display = 'none';
+  document.getElementById('topBar').style.display = 'flex';
+  document.getElementById('statsModal').style.display = 'none';
+  document.getElementById('calendarModal').style.display = 'none';
+  document.getElementById('badgesModal').style.display = 'none';
+  document.getElementById('dailyTasksModal').style.display = 'none';
+  document.getElementById('completionModal').style.display = 'none';
+  console.log('Page initialized: menu visible, all modals hidden.');
+});
+
+function setLoading(show, text = "Yükleniyor...") {
+  let loading = document.getElementById('loading');
+  if (!loading) {
+    loading = document.createElement('div');
+    loading.id = 'loading';
+    document.getElementById('gameContainer').insertBefore(loading, document.getElementById('questionArea'));
+  }
+  loading.style.display = show ? 'block' : 'none';
+  loading.innerText = text;
+}
+
+function clearPending() {
+  if (currentTimeout) {
+    clearTimeout(currentTimeout);
+    currentTimeout = null;
+  }
+  isChoiceDisabled = false;
+}
+
+// Ana menüye dön
+function goBack() {
+  // Stop any playing audio
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    currentAudio = null;
+  }
+  
+  currentMode = "";
+  clearPending();
+  document.getElementById("menu").style.display = "block";
+  document.getElementById("gameContainer").style.display = "none";
+  document.getElementById("choices").innerHTML = "";
+  document.getElementById("questionArea").innerHTML = "";
+  setLoading(false);
+}
+
+// Helper: attempt to fetch a single random kelime from server, fallback to local file
+async function fetchRandomKelime() {
+  // Try API first
+  try {
+    // SRS: Spaced Repetition System ile kelime seç
+    if (!wordsData) loadWordsData();
+    
+    // Tüm API kelimelerini getir
+    const first = await fetch(API_BASE + '/api/kelimebul?limit=100');
+    if (first.ok) {
+      const j = await first.json();
+      if (j.items && j.items.length > 0) {
+        // Öğrenilenleri filtrele (ogrendi = true olanları dış bırak)
+        const notLearned = j.items.filter(item => {
+          const wordId = item.id || item.word;
+          const learned = wordsData[wordId]?.ogrendi || false;
+          return !learned;
+        });
+        
+        if (notLearned.length > 0) {
+          // SRS algoritması ile seç
+          const srsSelected = selectWordBySRS(notLearned);
+          if (srsSelected) return srsSelected;
+        }
+        
+        // SRS yoksa normal seç
+        return j.items[Math.floor(Math.random() * j.items.length)];
+      }
+    }
+  } catch (e) {
+    console.warn('API kelime fetch failed, falling back to local', e);
+  }
+
+  // Fallback: load local kelimeler.json
+  try {
+    const res = await fetch('kelimeler.json');
+    const arr = await res.json();
+    return arr[Math.floor(Math.random() * arr.length)];
+  } catch (e) {
+    throw new Error('Veri alınamadı: ' + e.message);
+  }
+}
+
+// Zorluk seviyesine göre kelime getir
+async function fetchRandomKelimeByDifficulty(difficulty) {
+  // Try API first
+  try {
+    // SRS: Spaced Repetition System ile kelime seç
+    if (!wordsData) loadWordsData();
+    
+    const first = await fetch(API_BASE + '/api/kelimebul?limit=100');
+    if (first.ok) {
+      const j = await first.json();
+      if (j.items && j.items.length > 0) {
+        // Zorluk ve öğrenme durumuna göre filtrele
+        let filtered = [];
+        if (difficulty === 'kolay') {
+          filtered = j.items.filter(k => k.difficulty >= 1 && k.difficulty <= 7);
+        } else if (difficulty === 'orta') {
+          filtered = j.items.filter(k => k.difficulty >= 8 && k.difficulty <= 15);
+        } else if (difficulty === 'zor') {
+          filtered = j.items.filter(k => k.difficulty >= 16 && k.difficulty <= 22);
+        }
+        
+        // Öğrenmesi bitenleri dış bırak
+        const notLearned = filtered.filter(item => {
+          const wordId = item.id || item.word;
+          const learned = wordsData[wordId]?.ogrendi || false;
+          return !learned;
+        });
+        
+        if (notLearned.length > 0) {
+          // SRS algoritması ile seç
+          const srsSelected = selectWordBySRS(notLearned);
+          if (srsSelected) return srsSelected;
+          
+          // SRS yoksa normal seç
+          return notLearned[Math.floor(Math.random() * notLearned.length)];
+        }
+      }
+    }
+  } catch (e) {
+    console.warn('API filter fetch failed, falling back to local', e);
+  }
+
+  // Fallback: load local kelimeler.json and filter
+  try {
+    const res = await fetch('kelimeler.json');
+    const arr = await res.json();
+    let filtered = [];
+    if (difficulty === 'kolay') {
+      filtered = arr.filter(k => k.difficulty >= 1 && k.difficulty <= 7);
+    } else if (difficulty === 'orta') {
+      filtered = arr.filter(k => k.difficulty >= 8 && k.difficulty <= 15);
+    } else if (difficulty === 'zor') {
+      filtered = arr.filter(k => k.difficulty >= 16 && k.difficulty <= 22);
+    }
+    if (filtered.length > 0) {
+      return filtered[Math.floor(Math.random() * filtered.length)];
+    }
+    return arr[Math.floor(Math.random() * arr.length)];
+  } catch (e) {
+    throw new Error('Veri alınamadı: ' + e.message);
+  }
+}
+
+// Zorluk modal fonksiyonları
+function showDifficultyModal(mode) {
+  currentMode = mode;
+  document.getElementById('difficultyModal').style.display = 'flex';
+  document.getElementById('difficultyModal').classList.remove('hidden');
+}
+
+function hideDifficultyModal() {
+  document.getElementById('difficultyModal').style.display = 'none';
+  document.getElementById('difficultyModal').classList.add('hidden');
+}
+
+function selectDifficulty(difficulty) {
+  selectedDifficulty = difficulty;
+  hideDifficultyModal();
+  startGame(currentMode);
+}
+
+// Oyun başlat
+async function startGame(mode) {
+  // Stop any playing audio
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    currentAudio = null;
+  }
+  
+  // Reset difficulty selection for non-difficulty modes
+  if (mode !== 'kelimeBul' && mode !== 'dinleBul') {
+    selectedDifficulty = null;
+  }
+  
+  currentMode = mode;
+  currentQuestionNumber = 0;
+  roundCorrect = 0;
+  roundWrong = 0;
+  roundPointsEarned = 0;
+  clearPending();
+  document.getElementById("menu").style.display = "none";
+  document.getElementById("gameContainer").style.display = "block";
+
+  const titleMap = {
+    kelimeBul: "📘 Kelime Bul (Anlam Bul)",
+    dinleBul: "🎧 Dinle ve Bul",
+    boslukDoldur: "🧩 Boşluk Doldur",
+    ayetOku: "📖 Ayet Oku",
+    duaEt: "🙏 Dua Et",
+    hadisOku: "📜 Hadis Oku"
+  };
+  document.getElementById("gameTitle").innerText = titleMap[mode];
+
+  setLoading(true);
+  try {
+    if (mode === 'kelimeBul') {
+      setLoading(true, 'Kelime getiriliyor...');
+      await showKelimeBul();
+    } else if (mode === 'dinleBul') {
+      setLoading(true, 'Sesli kelime getiriliyor...');
+      await showDinleBul();
+    } else if (mode === 'boslukDoldur') {
+      const res = await fetch('ayetoku.json');
+      data = await res.json();
+      showBoslukDoldur();
+    } else if (mode === 'ayetOku') {
+      const res = await fetch('ayetoku.json');
+      data = await res.json();
+      showAyetOku();
+    } else if (mode === 'duaEt') {
+      const res = await fetch('duaet.json');
+      data = await res.json();
+      showDuaEt();
+    } else if (mode === 'hadisOku') {
+      const res = await fetch('hadisoku.json');
+      data = await res.json();
+      showHadisOku();
+    }
+  } catch (e) {
+    document.getElementById('questionArea').innerHTML = '<p>Veri alınırken bir hata oluştu. Lütfen internet bağlantınızı veya sunucu ayarlarını kontrol edin.</p>';
+    document.getElementById('choices').innerHTML = '<button class="backBtn" onclick="startGame(\'' + mode + '\')">Tekrar dene</button>';
+    console.error(e);
+  } finally {
+    setLoading(false);
+  }
+}
+
+// 🎯 1. Kelime Bul
+async function showKelimeBul() {
+  currentQuestionNumber++;
+  setLoading(true, `Kelime seçiliyor... (${currentQuestionNumber}/${QUESTIONS_PER_ROUND})`);
+  try {
+    const q = selectedDifficulty ? await fetchRandomKelimeByDifficulty(selectedDifficulty) : await fetchRandomKelime();
+    if (!q) throw new Error('Kelime verisi boş');
+    const choicesDiv = document.getElementById("choices");
+    const questionDiv = document.getElementById("questionArea");
+    // Display word with optional sound icon
+    let wordDisplay = `<h2 style="font-size:2em" class="arabic-text">${q.kelime}</h2><p style="font-size:0.7em;color:#999;">Soru ${currentQuestionNumber}/${QUESTIONS_PER_ROUND}</p>`;
+    if (q.ses_dosyasi) {
+      const soundId = 'sound-' + Math.random().toString(36).slice(2,9);
+      wordDisplay += `<button id="${soundId}" style="width:auto;padding:8px 12px;margin-top:6px;font-size:0.9em;background:none;border:none;cursor:pointer;"><img src="hoparlor.png" style="width:40px;height:40px;"></button>`;
+      questionDiv.innerHTML = wordDisplay;
+      document.getElementById(soundId).onclick = async () => {
+        const btn = document.getElementById(soundId);
+        btn.disabled = true;
+        btn.style.opacity = '0.5';
+        try {
+          currentAudio = new Audio(q.ses_dosyasi);
+          await currentAudio.play();
+          currentAudio.onended = () => {
+            btn.disabled = false;
+            btn.style.opacity = '1';
+            currentAudio = null;
+          };
+        } catch(e) {
+          alert('Ses çalma hatası');
+          btn.disabled = false;
+          btn.style.opacity = '1';
+          currentAudio = null;
+        }
+      };
+    } else {
+      questionDiv.innerHTML = wordDisplay;
+    }
+    let options = [q.anlam];
+    // try to fill options using API fallback: attempt to fetch 3 random items quickly
+    const extra = [];
+    try {
+      // Attempt to get 3 extra different meanings from API in small batch
+  const batch = await fetch(API_BASE + '/api/kelimebul?limit=4');
+      if (batch.ok) {
+        const jb = await batch.json();
+        if (jb.items) jb.items.forEach(it => { if (it.anlam && it.anlam !== q.anlam) extra.push(it.anlam); });
+      }
+    } catch (e) { /* ignore */ }
+    while (options.length < 4) {
+      if (extra.length) options.push(extra.shift());
+      else {
+        // fallback: try local quick fetch
+        try {
+          const res = await fetch('kelimeler.json');
+          const arr = await res.json();
+          const r = arr[Math.floor(Math.random() * arr.length)].anlam;
+          if (!options.includes(r)) options.push(r);
+        } catch (e) { break; }
+      }
+    }
+    options = options.filter(Boolean).slice(0,4);
+    options.sort(() => Math.random() - 0.5);
+    choicesDiv.innerHTML = "";
+    setLoading(false);
+    isChoiceDisabled = false;
+    options.forEach(opt => {
+      const btn = document.createElement("div");
+      btn.className = "choice";
+      btn.innerHTML = `<span class="arabic-text">${opt}</span>`;
+      btn.onclick = () => {
+        if (isChoiceDisabled) return;
+        isChoiceDisabled = true;
+        choicesDiv.querySelectorAll('.choice').forEach(c => c.classList.add('disabled'));
+        if (opt === q.anlam) {
+          btn.classList.remove('disabled'); btn.classList.add("correct");
+          recordResult(true,'kelimeBul', q.difficulty || 1);
+        } else {
+          btn.classList.remove('disabled'); btn.classList.add("wrong");
+          const correct = document.createElement("div");
+          correct.style.marginTop = "10px";
+          correct.innerHTML = `✅ sahihsu: <b class="arabic-text">${q.anlam}</b>`;
+          questionDiv.appendChild(correct);
+          recordResult(false,'kelimeBul', q.difficulty || 1);
+        }
+        clearPending();
+        if (currentQuestionNumber >= QUESTIONS_PER_ROUND) {
+          currentTimeout = setTimeout(() => { showCompletionModal('kelimeBul'); }, 1500);
+        } else {
+          currentTimeout = setTimeout(() => { if (currentMode === 'kelimeBul') showKelimeBul(); }, 1500);
+        }
+      };
+      choicesDiv.appendChild(btn);
+    });
+  } catch (e) {
+    setLoading(false);
+    document.getElementById('questionArea').innerHTML = '<p>Kelime yüklenemedi: ' + (e.message || '') + '</p>';
+    document.getElementById('choices').innerHTML = '<button class="backBtn" onclick="startGame(\'kelimeBul\')">Tekrar dene</button>';
+    console.error(e);
+  }
+}
+
+// 🎧 2. Dinle ve Bul
+async function showDinleBul() {
+  currentQuestionNumber++;
+  setLoading(true, `Sesli kelime seçiliyor... (${currentQuestionNumber}/${QUESTIONS_PER_ROUND})`);
+  try {
+    const q = selectedDifficulty ? await fetchRandomKelimeByDifficulty(selectedDifficulty) : await fetchRandomKelime();
+    if (!q) throw new Error('Kelime verisi boş');
+    const questionDiv = document.getElementById("questionArea");
+    // create an accessible play button
+    const playBtnId = 'play-' + Math.random().toString(36).slice(2,9);
+    questionDiv.innerHTML = `<button id="${playBtnId}" style="width:auto;padding:8px 12px;background:none;border:none;cursor:pointer;"><img src="hoparlor.png" style="width:40px;height:40px;"></button><p style="font-size:0.7em;color:#999;margin-top:8px;">Soru ${currentQuestionNumber}/${QUESTIONS_PER_ROUND}</p>`;
+    const playBtn = document.getElementById(playBtnId);
+    playBtn.onclick = async () => {
+      playBtn.disabled = true;
+      playBtn.style.opacity = '0.5';
+      try {
+        currentAudio = new Audio(q.ses_dosyasi || q.ses_url || q.ayet_ses_dosyasi || '');
+        await currentAudio.play();
+        currentAudio.onended = () => {
+          playBtn.disabled = false;
+          playBtn.style.opacity = '1';
+          currentAudio = null;
+        };
+      } catch (e) {
+        alert('Ses çalma hatası: ' + (e.message || ''));
+        playBtn.disabled = false;
+        playBtn.style.opacity = '1';
+        currentAudio = null;
+      }
+    };
+    const choicesDiv = document.getElementById("choices");
+    let options = [q.kelime];
+    // try to fill quickly
+      try {
+        const batch = await fetch(API_BASE + '/api/kelimebul?limit=4');
+      if (batch.ok) {
+        const jb = await batch.json();
+        if (jb.items) jb.items.forEach(it => { if (it.kelime && it.kelime !== q.kelime) options.push(it.kelime); });
+      }
+    } catch (e) { }
+    while (options.length < 4) {
+      try {
+        const res = await fetch('kelimeler.json');
+        const arr = await res.json();
+        const r = arr[Math.floor(Math.random() * arr.length)].kelime;
+        if (!options.includes(r)) options.push(r);
+      } catch (e) { break; }
+    }
+    options = options.filter(Boolean).slice(0,4);
+    options.sort(() => Math.random() - 0.5);
+    choicesDiv.innerHTML = "";
+    choicesDiv.className = "choices";
+    setLoading(false);
+    isChoiceDisabled = false;
+    options.forEach(opt => {
+      const btn = document.createElement("div");
+      btn.className = "choice";
+      btn.innerHTML = `<span class="arabic-text" style="font-size:2em;">${opt}</span>`;
+      btn.onclick = () => {
+        if (isChoiceDisabled) return;
+        isChoiceDisabled = true;
+        choicesDiv.querySelectorAll('.choice').forEach(c => c.classList.add('disabled'));
+        if (opt === q.kelime) { btn.classList.add("correct"); recordResult(true,'dinleBul', q.difficulty || 1); }
+        else {
+          btn.classList.add("wrong");
+          const correct = document.createElement("div");
+          correct.style.marginTop = "10px";
+          correct.innerHTML = `✅ sahihsu: <b class="arabic-text" style="font-size:2em;">${q.kelime}</b>`;
+          questionDiv.appendChild(correct);
+          recordResult(false,'dinleBul', q.difficulty || 1);
+        }
+        clearPending();
+        if (currentQuestionNumber >= QUESTIONS_PER_ROUND) {
+          currentTimeout = setTimeout(() => { showCompletionModal('dinleBul'); }, 1500);
+        } else {
+          currentTimeout = setTimeout(() => { if (currentMode === 'dinleBul') showDinleBul(); }, 1500);
+        }
+      };
+      choicesDiv.appendChild(btn);
+    });
+  } catch (e) {
+    setLoading(false);
+    document.getElementById('questionArea').innerHTML = '<p>Sesli kelime yüklenemedi: ' + (e.message || '') + '</p>';
+    document.getElementById('choices').innerHTML = '<button class="backBtn" onclick="startGame(\'dinleBul\')">Tekrar dene</button>';
+    console.error(e);
+  }
+}
+
+// 🧩 3. Boşluk Doldur
+function showBoslukDoldur() {
+  currentQuestionNumber++;
+  if (!data || !data.length) {
+    document.getElementById('questionArea').innerHTML = '<p>Veri bulunamadı.</p>';
+    return;
+  }
+  clearPending();
+  const q = data[Math.floor(Math.random() * data.length)];
+  const words = (q.ayet_metni || '').split(/\s+/).filter(Boolean);
+  const missing = words[Math.floor(Math.random() * words.length)] || '';
+  const ayetWithBlank = (q.ayet_metni || '').replace(missing, '____');
+  const questionDiv = document.getElementById("questionArea");
+  // Display ayet with optional sound icon
+  let display = `<h3 class="arabic-text" style="font-size:2em;">${ayetWithBlank}</h3><p style="font-size:0.7em;color:#999;">Soru ${currentQuestionNumber}/${QUESTIONS_PER_ROUND}</p>`;
+  if (q.ayet_ses_dosyasi) {
+    const soundId = 'sound-' + Math.random().toString(36).slice(2,9);
+    display += `<button id="${soundId}" style="width:auto;padding:8px 12px;margin-top:6px;background:none;border:none;cursor:pointer;"><img src="hoparlor.png" style="width:40px;height:40px;"></button>`;
+    questionDiv.innerHTML = display;
+    const btn = document.getElementById(soundId);
+    btn.onclick = async () => {
+      btn.disabled = true;
+      btn.style.opacity = '0.5';
+      try {
+        currentAudio = new Audio(q.ayet_ses_dosyasi);
+        await currentAudio.play();
+        currentAudio.onended = () => {
+          btn.disabled = false;
+          btn.style.opacity = '1';
+          currentAudio = null;
+          // Dua Öğren görev ilerlemesini artır
+          updateDailyTask('dua');
+        };
+      } catch(e) {
+        alert('Ses çalma hatası');
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        currentAudio = null;
+      }
+    };
+  } else {
+    questionDiv.innerHTML = display;
+  }
+  const choicesDiv = document.getElementById("choices");
+  let options = [missing];
+  while (options.length < 4) {
+    let r = (data[Math.floor(Math.random() * data.length)].ayet_metni || '').split(/\s+/)[0];
+    if (r && !options.includes(r)) options.push(r);
+  }
+  options.sort(() => Math.random() - 0.5);
+  choicesDiv.innerHTML = "";
+  isChoiceDisabled = false;
+  options.forEach(opt => {
+    const btn = document.createElement("div");
+    btn.className = "choice";
+    btn.innerHTML = `<span class="arabic-text" style="font-size:2em;">${opt}</span>`;
+    btn.onclick = () => {
+      if (isChoiceDisabled) return;
+      isChoiceDisabled = true;
+      choicesDiv.querySelectorAll('.choice').forEach(c => c.classList.add('disabled'));
+      if (opt === missing) { btn.classList.add("correct"); recordResult(true,'boslukDoldur'); }
+      else {
+        btn.classList.add("wrong");
+        const correct = document.createElement("div");
+        correct.style.marginTop = "10px";
+        correct.innerHTML = `✅ sahih Kelime: <b class="arabic-text" style="font-size:2em;">${missing}</b>`;
+        questionDiv.appendChild(correct);
+        recordResult(false,'boslukDoldur');
+      }
+      clearPending();
+      if (currentQuestionNumber >= QUESTIONS_PER_ROUND) {
+        currentTimeout = setTimeout(() => { showCompletionModal('boslukDoldur'); }, 2000);
+      } else {
+        currentTimeout = setTimeout(() => { if (currentMode === 'boslukDoldur') showBoslukDoldur(); }, 2000);
+      }
+    };
+    choicesDiv.appendChild(btn);
+  });
+}
+
+// 📖 4. Ayet Oku
+function showAyetOku() {
+  if (!data || !data.length) { document.getElementById('questionArea').innerHTML = '<p>Veri bulunamadı.</p>'; return; }
+  const q = data[Math.floor(Math.random() * data.length)];
+  const audioSrc = q.ayet_ses_dosyasi || q.ses_url || '';
+  document.getElementById("questionArea").innerHTML =
+    `<h3>${q.sure_adı || ''}</h3><p class="arabic-text">${q.ayet_metni || ''}</p><p>${q.meal || ''}</p>`;
+  if (audioSrc) {
+    const playId = 'play-' + Math.random().toString(36).slice(2,9);
+    document.getElementById("questionArea").innerHTML += `<button id="${playId}" style="width:auto;padding:8px 12px;margin-top:6px;background:none;border:none;cursor:pointer;"><img src="hoparlor.png" style="width:40px;height:40px;"></button>`;
+    const btn = document.getElementById(playId);
+    btn.onclick = async () => {
+      btn.disabled = true;
+      btn.style.opacity = '0.5';
+      try {
+        currentAudio = new Audio(audioSrc);
+        await currentAudio.play();
+        currentAudio.onended = () => {
+          btn.disabled = false;
+          btn.style.opacity = '1';
+          currentAudio = null;
+        };
+      } catch(e) {
+        alert('Ses çalma hatası');
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        currentAudio = null;
+      }
+    };
+  }
+  document.getElementById("choices").innerHTML = `
+    <button id="nextAyetBtn" style="width:100%;padding:12px;margin-top:16px;background:#FF9800;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:bold;font-size:1em;">Sonraki Ayet</button>
+    <p style="margin-top:12px;">Bugünlük görevin tamamlandı ✅</p>
+  `;
+  document.getElementById('nextAyetBtn').onclick = function() {
+    showAyetOku();
+    recordResult(true, 'ayetOku', 1);
+    updateDailyTask('ayet');
+  };
+}
+
+// 🙏 5. Dua Et
+function showDuaEt() {
+  if (!data || !data.length) { document.getElementById('questionArea').innerHTML = '<p>Veri bulunamadı.</p>'; return; }
+  const q = data[Math.floor(Math.random() * data.length)];
+  const audioSrc = q.ses_url || q.ses_dosyasi || '';
+  document.getElementById("questionArea").innerHTML =
+    `<p class="arabic-text">${q.dua || ''}</p><p>${q.tercume || ''}</p>`;
+  if (audioSrc) {
+    const playId = 'play-' + Math.random().toString(36).slice(2,9);
+    document.getElementById("questionArea").innerHTML += `<button id="${playId}" style="width:auto;padding:8px 12px;margin-top:6px;background:none;border:none;cursor:pointer;"><img src="hoparlor.png" style="width:40px;height:40px;"></button>`;
+    const btn = document.getElementById(playId);
+    btn.onclick = async () => {
+      btn.disabled = true;
+      btn.style.opacity = '0.5';
+      try {
+        currentAudio = new Audio(audioSrc);
+        await currentAudio.play();
+        currentAudio.onended = () => {
+          btn.disabled = false;
+          btn.style.opacity = '1';
+          currentAudio = null;
+        };
+      } catch(e) {
+        alert('Ses çalma hatası');
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        currentAudio = null;
+      }
+    };
+  }
+  document.getElementById("choices").innerHTML = `
+    <button id="nextDuaBtn" style="width:100%;padding:12px;margin-top:16px;background:#FF9800;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:bold;font-size:1em;">Sonraki Dua</button>
+    <p style="margin-top:12px;">Bugünlük duanı ettin ✅</p>
+  `;
+  document.getElementById('nextDuaBtn').onclick = function() {
+    showDuaEt();
+    recordResult(true, 'duaEt', 1);
+    updateDailyTask('dua');
+  };
+}
+
+// 📜 6. Hadis Oku
+function showHadisOku() {
+  if (!data || !data.length) { document.getElementById('questionArea').innerHTML = '<p>Veri bulunamadı.</p>'; return; }
+  const q = data[Math.floor(Math.random() * data.length)];
+  document.getElementById("questionArea").innerHTML =
+    `<h4>${q.chapterName || ''}</h4><p class="arabic-text">${q.text || ''}</p><small>${q.refno || ''}</small>`;
+  document.getElementById("choices").innerHTML = `
+    <button id="nextHadisBtn" style="width:100%;padding:12px;margin-top:16px;background:#FF9800;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:bold;font-size:1em;">Sonraki Hadis</button>
+    <p style="margin-top:12px;">Bugünlük hadisini okudun ✅</p>
+  `;
+  document.getElementById('nextHadisBtn').onclick = function() {
+    showHadisOku();
+    recordResult(true, 'hadisOku', 1);
+    updateDailyTask('hadis');
+  };
+}
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

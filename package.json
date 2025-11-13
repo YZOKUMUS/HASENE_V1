@@ -1,0 +1,16 @@
+{
+  "name": "hasene",
+  "version": "1.0.0",
+  "description": "İslami Öğrenme Platformu",
+  "main": "index.html",
+  "scripts": {
+    "start": "node prototype/server.js",
+    "deploy": "gh-pages -d . -b gh-pages"
+  },
+  "keywords": ["islam", "quran", "learning"],
+  "author": "YZOKUMUS",
+  "license": "MIT",
+  "devDependencies": {
+    "gh-pages": "^6.1.0"
+  }
+}
