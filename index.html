@@ -1327,6 +1327,12 @@ function updateDailyTask(taskId, increment = 1) {
   }
   
   saveDailyTasks();
+
+  // Eğer günlük görevler paneli açıksa otomatik güncelle
+  const dailyTasksModal = document.getElementById('dailyTasksModal');
+  if (dailyTasksModal && dailyTasksModal.style.display === 'flex') {
+    showDailyTasksModal();
+  }
 }
 
 function getCompletedTasksCount() {
@@ -1854,6 +1860,8 @@ function showBoslukDoldur() {
           btn.disabled = false;
           btn.style.opacity = '1';
           currentAudio = null;
+          // Dua Öğren görev ilerlemesini artır
+          updateDailyTask('dua');
         };
       } catch(e) {
         alert('Ses çalma hatası');
@@ -1923,6 +1931,8 @@ function showAyetOku() {
           btn.disabled = false;
           btn.style.opacity = '1';
           currentAudio = null;
+          // Dua Öğren görev ilerlemesini artır
+          updateDailyTask('dua');
         };
       } catch(e) {
         alert('Ses çalma hatası');
@@ -1932,7 +1942,14 @@ function showAyetOku() {
       }
     };
   }
-  document.getElementById("choices").innerHTML = "<p>Bugünlük görevin tamamlandı ✅</p>";
+  document.getElementById("choices").innerHTML = `
+    <button id="nextAyetBtn" style="width:100%;padding:12px;margin-top:16px;background:#FF9800;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:bold;font-size:1em;">Sonraki Ayet</button>
+    <p style="margin-top:12px;">Bugünlük görevin tamamlandı ✅</p>
+  `;
+  document.getElementById('nextAyetBtn').onclick = function() {
+    showAyetOku();
+    updateDailyTask('ayet');
+  };
 }
 
 // 🙏 5. Dua Et
@@ -1965,7 +1982,14 @@ function showDuaEt() {
       }
     };
   }
-  document.getElementById("choices").innerHTML = "<p>Bugünlük duanı ettin ✅</p>";
+  document.getElementById("choices").innerHTML = `
+    <button id="nextDuaBtn" style="width:100%;padding:12px;margin-top:16px;background:#FF9800;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:bold;font-size:1em;">Sonraki Dua</button>
+    <p style="margin-top:12px;">Bugünlük duanı ettin ✅</p>
+  `;
+  document.getElementById('nextDuaBtn').onclick = function() {
+    showDuaEt();
+    updateDailyTask('dua');
+  };
 }
 
 // 📜 6. Hadis Oku
@@ -1974,7 +1998,14 @@ function showHadisOku() {
   const q = data[Math.floor(Math.random() * data.length)];
   document.getElementById("questionArea").innerHTML =
     `<h4>${q.chapterName || ''}</h4><p class="arabic-text">${q.text || ''}</p><small>${q.refno || ''}</small>`;
-  document.getElementById("choices").innerHTML = "<p>Bugünlük hadisini okudun ✅</p>";
+  document.getElementById("choices").innerHTML = `
+    <button id="nextHadisBtn" style="width:100%;padding:12px;margin-top:16px;background:#FF9800;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:bold;font-size:1em;">Sonraki Hadis</button>
+    <p style="margin-top:12px;">Bugünlük hadisini okudun ✅</p>
+  `;
+  document.getElementById('nextHadisBtn').onclick = function() {
+    showHadisOku();
+    updateDailyTask('hadis');
+  };
 }
 </script>
 </body>
