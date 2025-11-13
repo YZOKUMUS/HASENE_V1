@@ -6,15 +6,14 @@ self.addEventListener('activate', function(e) {
   self.clients.claim();
 });
 
-
 self.addEventListener('fetch', function(event) {
   const url = event.request.url;
   // Büyük JSON dosyalarını cache'le
   if (
-    url.endsWith('ayetoku.json') ||
-    url.endsWith('duaet.json') ||
-    url.endsWith('hadisoku.json') ||
-    url.endsWith('kelimeler.json')
+    url.includes('ayetoku.json') ||
+    url.includes('duaet.json') ||
+    url.includes('hadisoku.json') ||
+    url.includes('kelimeler.json')
   ) {
     event.respondWith(
       caches.open('hasene-json-cache-v1').then(function(cache) {
