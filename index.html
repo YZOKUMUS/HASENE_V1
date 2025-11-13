@@ -6,9 +6,16 @@
 <title>Kelimeler ve Görevler Oyunu</title>
 <link rel="manifest" href="manifest.json">
 <script>
+  // Servis Worker kaydı
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
-      navigator.serviceWorker.register('sw.js');
+      navigator.serviceWorker.register('/sw.js')
+        .then(function(registration) {
+          console.log('ServiceWorker kayıtlı:', registration.scope);
+        })
+        .catch(function(err) {
+          console.log('ServiceWorker kayıt hatası:', err);
+        });
     });
   }
 </script>

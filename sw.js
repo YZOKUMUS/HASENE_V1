@@ -1,5 +1,16 @@
+const cacheName = 'hasene-cache-v2';
+const filesToCache = [
+  '/',
+  '/index.html',
+  '/icon-192-v4-RED-MUSHAF.png',
+  '/icon-512-v4-RED-MUSHAF.png'
+];
+
 self.addEventListener('install', function(e) {
   self.skipWaiting();
+  e.waitUntil(
+    caches.open(cacheName).then(cache => cache.addAll(filesToCache))
+  );
 });
 
 self.addEventListener('activate', function(e) {
@@ -8,7 +19,8 @@ self.addEventListener('activate', function(e) {
 
 self.addEventListener('fetch', function(event) {
   const url = event.request.url;
-  // Büyük JSON dosyalarını cache'le
+
+  // JSON dosyalarını özel cache ile
   if (
     url.includes('ayetoku.json') ||
     url.includes('duaet.json') ||
@@ -18,12 +30,7 @@ self.addEventListener('fetch', function(event) {
     event.respondWith(
       caches.open('hasene-json-cache-v1').then(function(cache) {
         return cache.match(event.request).then(function(response) {
-          if (response) {
-            // Cache'den hızlıca sun
-            return response;
-          }
-          // İlk fetch ise ağdan alıp cache'e koy
-          return fetch(event.request).then(function(networkResponse) {
+          return response || fetch(event.request).then(function(networkResponse) {
             cache.put(event.request, networkResponse.clone());
             return networkResponse;
           });
@@ -31,7 +38,9 @@ self.addEventListener('fetch', function(event) {
       })
     );
   } else {
-    // Diğer dosyalar için normal fetch
-    event.respondWith(fetch(event.request));
+    // Diğer dosyaları genel cache’den ya da ağdan al
+    event.respondWith(
+      caches.match(event.request).then(response => response || fetch(event.request))
+    );
   }
 });
