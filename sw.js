@@ -1,4 +1,5 @@
 const cacheName = 'hasene-cache-v2';
+const jsonCacheName = 'hasene-json-cache-v1';
 const filesToCache = [
   '/',
   '/index.html',
@@ -6,21 +7,37 @@ const filesToCache = [
   '/icon-512-v4-RED-MUSHAF.png'
 ];
 
-self.addEventListener('install', function(e) {
+// Service Worker install event
+self.addEventListener('install', function(event) {
   self.skipWaiting();
-  e.waitUntil(
-    caches.open(cacheName).then(cache => cache.addAll(filesToCache))
+  event.waitUntil(
+    caches.open(cacheName).then(function(cache) {
+      return cache.addAll(filesToCache);
+    })
   );
 });
 
-self.addEventListener('activate', function(e) {
+// Service Worker activate event
+self.addEventListener('activate', function(event) {
   self.clients.claim();
+  event.waitUntil(
+    caches.keys().then(function(cacheNames) {
+      return Promise.all(
+        cacheNames.map(function(name) {
+          if (name !== cacheName && name !== jsonCacheName) {
+            return caches.delete(name);
+          }
+        })
+      );
+    })
+  );
 });
 
+// Service Worker fetch event
 self.addEventListener('fetch', function(event) {
   const url = event.request.url;
 
-  // JSON dosyalarını özel cache ile
+  // Handle JSON files with a separate cache
   if (
     url.includes('ayetoku.json') ||
     url.includes('duaet.json') ||
@@ -28,19 +45,35 @@ self.addEventListener('fetch', function(event) {
     url.includes('kelimeler.json')
   ) {
     event.respondWith(
-      caches.open('hasene-json-cache-v1').then(function(cache) {
+      caches.open(jsonCacheName).then(function(cache) {
         return cache.match(event.request).then(function(response) {
-          return response || fetch(event.request).then(function(networkResponse) {
-            cache.put(event.request, networkResponse.clone());
-            return networkResponse;
-          });
+          return (
+            response ||
+            fetch(event.request)
+              .then(function(networkResponse) {
+                cache.put(event.request, networkResponse.clone());
+                return networkResponse;
+              })
+              .catch(function(error) {
+                console.error('JSON fetch hatası:', error);
+                return new Response('JSON verisi alınamadı', { status: 503 });
+              })
+          );
         });
       })
     );
   } else {
-    // Diğer dosyaları genel cache’den ya da ağdan al
+    // Handle other files with the general cache
     event.respondWith(
-      caches.match(event.request).then(response => response || fetch(event.request))
+      caches.match(event.request).then(function(response) {
+        return (
+          response ||
+          fetch(event.request).catch(function(error) {
+            console.error('Fetch hatası:', error);
+            return new Response('Servis kullanılamıyor', { status: 503 });
+          })
+        );
+      })
     );
   }
 });

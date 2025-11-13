@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kelimeler ve Görevler Oyunu</title>
+<link rel="icon" href="data:,">
 <link rel="manifest" href="manifest.json">
 <script>
   // Servis Worker kaydı
@@ -1502,92 +1503,8 @@ function goBack() {
   setLoading(false);
 }
 
-// Helper: attempt to fetch a single random kelime from server, fallback to local file
-async function fetchRandomKelime() {
-  // Try API first
-  try {
-    // SRS: Spaced Repetition System ile kelime seç
-    if (!wordsData) loadWordsData();
-    
-    // Tüm API kelimelerini getir
-    const first = await fetch(API_BASE + '/api/kelimebul?limit=100');
-    if (first.ok) {
-      const j = await first.json();
-      if (j.items && j.items.length > 0) {
-        // Öğrenilenleri filtrele (ogrendi = true olanları dış bırak)
-        const notLearned = j.items.filter(item => {
-          const wordId = item.id || item.word;
-          const learned = wordsData[wordId]?.ogrendi || false;
-          return !learned;
-        });
-        
-        if (notLearned.length > 0) {
-          // SRS algoritması ile seç
-          const srsSelected = selectWordBySRS(notLearned);
-          if (srsSelected) return srsSelected;
-        }
-        
-        // SRS yoksa normal seç
-        return j.items[Math.floor(Math.random() * j.items.length)];
-      }
-    }
-  } catch (e) {
-    console.warn('API kelime fetch failed, falling back to local', e);
-  }
-
-  // Fallback: load local kelimeler.json
-  try {
-    const res = await fetch('kelimeler.json');
-    const arr = await res.json();
-    return arr[Math.floor(Math.random() * arr.length)];
-  } catch (e) {
-    throw new Error('Veri alınamadı: ' + e.message);
-  }
-}
-
-// Zorluk seviyesine göre kelime getir
+// Tamamen offline kelime getirme fonksiyonu
 async function fetchRandomKelimeByDifficulty(difficulty) {
-  // Try API first
-  try {
-    // SRS: Spaced Repetition System ile kelime seç
-    if (!wordsData) loadWordsData();
-    
-    const first = await fetch(API_BASE + '/api/kelimebul?limit=100');
-    if (first.ok) {
-      const j = await first.json();
-      if (j.items && j.items.length > 0) {
-        // Zorluk ve öğrenme durumuna göre filtrele
-        let filtered = [];
-        if (difficulty === 'kolay') {
-          filtered = j.items.filter(k => k.difficulty >= 1 && k.difficulty <= 7);
-        } else if (difficulty === 'orta') {
-          filtered = j.items.filter(k => k.difficulty >= 8 && k.difficulty <= 15);
-        } else if (difficulty === 'zor') {
-          filtered = j.items.filter(k => k.difficulty >= 16 && k.difficulty <= 22);
-        }
-        
-        // Öğrenmesi bitenleri dış bırak
-        const notLearned = filtered.filter(item => {
-          const wordId = item.id || item.word;
-          const learned = wordsData[wordId]?.ogrendi || false;
-          return !learned;
-        });
-        
-        if (notLearned.length > 0) {
-          // SRS algoritması ile seç
-          const srsSelected = selectWordBySRS(notLearned);
-          if (srsSelected) return srsSelected;
-          
-          // SRS yoksa normal seç
-          return notLearned[Math.floor(Math.random() * notLearned.length)];
-        }
-      }
-    }
-  } catch (e) {
-    console.warn('API filter fetch failed, falling back to local', e);
-  }
-
-  // Fallback: load local kelimeler.json and filter
   try {
     const res = await fetch('kelimeler.json');
     const arr = await res.json();
@@ -1731,27 +1648,14 @@ async function showKelimeBul() {
       questionDiv.innerHTML = wordDisplay;
     }
     let options = [q.anlam];
-    // try to fill options using API fallback: attempt to fetch 3 random items quickly
-    const extra = [];
-    try {
-      // Attempt to get 3 extra different meanings from API in small batch
-  const batch = await fetch(API_BASE + '/api/kelimebul?limit=4');
-      if (batch.ok) {
-        const jb = await batch.json();
-        if (jb.items) jb.items.forEach(it => { if (it.anlam && it.anlam !== q.anlam) extra.push(it.anlam); });
-      }
-    } catch (e) { /* ignore */ }
+    // Sadece yerel dosyadan doldur
     while (options.length < 4) {
-      if (extra.length) options.push(extra.shift());
-      else {
-        // fallback: try local quick fetch
-        try {
-          const res = await fetch('kelimeler.json');
-          const arr = await res.json();
-          const r = arr[Math.floor(Math.random() * arr.length)].anlam;
-          if (!options.includes(r)) options.push(r);
-        } catch (e) { break; }
-      }
+      try {
+        const res = await fetch('kelimeler.json');
+        const arr = await res.json();
+        const r = arr[Math.floor(Math.random() * arr.length)].anlam;
+        if (!options.includes(r)) options.push(r);
+      } catch (e) { break; }
     }
     options = options.filter(Boolean).slice(0,4);
     options.sort(() => Math.random() - 0.5);
@@ -1773,7 +1677,7 @@ async function showKelimeBul() {
           btn.classList.remove('disabled'); btn.classList.add("wrong");
           const correct = document.createElement("div");
           correct.style.marginTop = "10px";
-          correct.innerHTML = `✅ sahihsu: <b class="arabic-text">${q.anlam}</b>`;
+          correct.innerHTML = `✅ sahih: <b class="arabic-text">${q.anlam}</b>`;
           questionDiv.appendChild(correct);
           recordResult(false,'kelimeBul', q.difficulty || 1);
         }
@@ -1826,14 +1730,7 @@ async function showDinleBul() {
     };
     const choicesDiv = document.getElementById("choices");
     let options = [q.kelime];
-    // try to fill quickly
-      try {
-        const batch = await fetch(API_BASE + '/api/kelimebul?limit=4');
-      if (batch.ok) {
-        const jb = await batch.json();
-        if (jb.items) jb.items.forEach(it => { if (it.kelime && it.kelime !== q.kelime) options.push(it.kelime); });
-      }
-    } catch (e) { }
+    // Sadece yerel dosyadan doldur
     while (options.length < 4) {
       try {
         const res = await fetch('kelimeler.json');
@@ -1861,7 +1758,7 @@ async function showDinleBul() {
           btn.classList.add("wrong");
           const correct = document.createElement("div");
           correct.style.marginTop = "10px";
-          correct.innerHTML = `✅ sahihsu: <b class="arabic-text" style="font-size:2em;">${q.kelime}</b>`;
+          correct.innerHTML = `✅ sahih: <b class="arabic-text" style="font-size:2em;">${q.kelime}</b>`;
           questionDiv.appendChild(correct);
           recordResult(false,'dinleBul', q.difficulty || 1);
         }
@@ -2025,7 +1922,7 @@ function showDuaEt() {
           btn.style.opacity = '1';
           currentAudio = null;
         };
-      } catch(e) {
+      } catch (e) {
         alert('Ses çalma hatası');
         btn.disabled = false;
         btn.style.opacity = '1';
