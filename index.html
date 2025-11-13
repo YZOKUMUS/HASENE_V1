@@ -39,7 +39,7 @@
   }
   .arabic-text {
     font-family: 'KFGQPC Uthmanic', serif;
-    font-size: 1.2em;
+    font-size: 2.2em;
     letter-spacing: 0.05em;
     font-weight: normal;
   }
@@ -82,11 +82,14 @@
   }
   #topBar {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    margin-bottom: 8px;
-    flex-wrap: wrap;
-    gap: 6px;
+    flex-wrap: nowrap;
+    gap: 12px;
+    background: linear-gradient(90deg, #ffaf7b 0%, #d76d77 50%, #3a1c71 100%);
+    box-shadow: 0 4px 24px rgba(58,28,113,0.18), 0 1.5px 0 #FFD700 inset;
+    border-radius: 0 0 18px 18px;
+    padding: 14px 18px;
   }
   #scoreDisplay {
     font-size: 0.9em;
@@ -100,17 +103,23 @@
     flex-wrap: wrap;
   }
   #topBar button {
-    width: auto;
-    padding: 8px 10px;
-    margin: 0;
-    font-size: 0.8em;
-    white-space: nowrap;
-    transition: all 0.3s ease;
+    min-width: 36px;
+    max-width: 48px;
+    padding: 10px 0;
+    background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(33,147,176,0.12);
+    color: white;
+    font-size: 1em;
+    margin: 0 4px;
+    transition: 0.2s;
   }
   #topBar button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
-    filter: brightness(1.1);
+    background: linear-gradient(135deg, #ffaf7b 0%, #d76d77 100%);
+    box-shadow: 0 4px 16px rgba(58,28,113,0.18);
+    filter: brightness(1.15);
+    transform: scale(1.07);
   }
   #gameContainer {
     display: none;
@@ -167,7 +176,7 @@
     #topBar button { padding: 6px 8px; font-size: 0.7em; }
     .choice { padding: 8px; font-size: 0.85em; }
     .modal > div { padding: 12px; }
-    .arabic-text { font-size: 1.4em !important; }
+    .arabic-text { font-size: 2.6em !important; }
   }
   
   @media (max-width: 360px) {
@@ -176,7 +185,7 @@
     #topBar button { padding: 4px 6px; font-size: 0.65em; }
     .choice { padding: 6px; font-size: 0.8em; }
     #questionArea h2 { font-size: 1.3em; }
-    .arabic-text { font-size: 1.2em !important; }
+    .arabic-text { font-size: 2.2em !important; }
   }
   #topBar button:hover {
     background: rgba(255,255,255,0.25) !important;
@@ -222,8 +231,13 @@
 </head>
 <body>
 <div id="app">
-    <div id="topBar" style="background:linear-gradient(90deg,#1a7f3f 0%,#2d5a4a 100%);padding:8px 12px;display:flex;justify-content:flex-end;align-items:center;gap:6px;box-shadow:0 4px 12px rgba(26,127,63,0.3);border-radius:0 0 8px 8px;">
-      <button onclick="showStatsModal()" style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:8px;cursor:pointer;transition:0.3s;width:36px;height:36px;display:flex;align-items:center;justify-content:center;" title="İstatistikler"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="12" width="4" height="9"/><rect x="10" y="3" width="4" height="18"/><rect x="17" y="7" width="4" height="14"/></svg></button><button onclick="showCalendarModal()" style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:8px;cursor:pointer;transition:0.3s;width:36px;height:36px;display:flex;align-items:center;justify-content:center;" title="İbadete Devam"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></button><button onclick="showWordsModal()" style="background:rgba(150,200,255,0.25);border:1px solid rgba(150,200,255,0.5);border-radius:6px;padding:8px;cursor:pointer;transition:0.3s;width:36px;height:36px;display:flex;align-items:center;justify-content:center;" title="Kelimeler"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#87CEEB;"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 4.5h16M4 4.5h16v12H6.5A2.5 2.5 0 0 1 4 14v-9.5z"/></svg></button><button onclick="showDailyTasksModal()" style="background:rgba(255,160,122,0.25);border:1px solid rgba(255,160,122,0.5);border-radius:6px;padding:8px;cursor:pointer;transition:0.3s;width:36px;height:36px;display:flex;align-items:center;justify-content:center;" title="Günlük Görevler"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></button><button onclick="showBadgesModal()" style="background:rgba(212,175,55,0.25);border:1px solid rgba(212,175,55,0.5);border-radius:6px;padding:8px;cursor:pointer;transition:0.3s;width:36px;height:36px;display:flex;align-items:center;justify-content:center;" title="Şeref Nişanları"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1" style="color:#FFD700;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></button><button onclick="resetAllStats()" style="background:rgba(220,53,69,0.3);border:1px solid rgba(220,53,69,0.6);border-radius:6px;padding:8px;cursor:pointer;transition:0.3s;width:36px;height:36px;display:flex;align-items:center;justify-content:center;" title="İstatistikleri sıfırla (Test)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#ff6b6b;"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="12" r="8"/><path d="M12 4v1m0 10v1m8-8h-1m-10 0h-1"/></svg></button>
+    <div id="topBar">
+      <button onclick="showStatsModal()" title="İstatistikler"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="12" width="4" height="9"/><rect x="10" y="3" width="4" height="18"/><rect x="17" y="7" width="4" height="14"/></svg></button>
+      <button onclick="showCalendarModal()" title="İbadete Devam"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></button>
+      <button onclick="showWordsModal()" title="Kelimeler"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#87CEEB;"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 4.5h16M4 4.5h16v12H6.5A2.5 2.5 0 0 1 4 14v-9.5z"/></svg></button>
+      <button onclick="showDailyTasksModal()" title="Günlük Görevler"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></button>
+      <button onclick="showBadgesModal()" title="Şeref Nişanları"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1" style="color:#FFD700;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></button>
+      <button onclick="resetAllStats()" title="İstatistikleri sıfırla (Test)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#ff6b6b;"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="12" r="8"/><path d="M12 4v1m0 10v1m8-8h-1m-10 0h-1"/></svg></button>
     </div>
   <div id="menu">
     <!-- MERTEBE/SEVIYE PANELİ -->
