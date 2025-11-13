@@ -916,7 +916,7 @@ function showCalendarModal() {
   // İstatistik özeti
   calendarHtml += '<div style="background:#f9f9f9;padding:12px;border-radius:8px;border-left:4px solid #1a7f3f;">';
   calendarHtml += '<h4 style="color:#1a7f3f;margin:0 0 8px 0;">📖 Son 2 Hafta İbadet Özeti</h4>';
-  let totalGames = 0, totalCorrect = 0;
+  let totalQuestions = 0, totalCorrect = 0;
   for (let i = 13; i >= 0; i--) {
     const d = new Date(today);
     d.setDate(d.getDate() - i);
@@ -926,11 +926,11 @@ function showCalendarModal() {
     const date = String(d.getDate()).padStart(2, '0');
     const k = `${year}-${month}-${date}`;
     const dayData = stats.daily[k] || {played: 0, correct: 0};
-    totalGames += dayData.played;
+    totalQuestions += dayData.played; // Her cevaplanan soru
     totalCorrect += dayData.correct;
   }
-  const avgRatio = totalGames > 0 ? ((totalCorrect / totalGames) * 100).toFixed(1) : 0;
-  calendarHtml += `<p style="margin:4px 0;"><strong>İbadatlar:</strong> ${totalGames} | <strong>Sahihleri:</strong> ${totalCorrect} | <strong>Başarı Oranı:</strong> %${avgRatio}</p>`;
+  const avgRatio = totalQuestions > 0 ? ((totalCorrect / totalQuestions) * 100).toFixed(1) : 0;
+  calendarHtml += `<p style="margin:4px 0;"><strong>İbadatlar:</strong> ${totalQuestions} | <strong>Sahihleri:</strong> ${totalCorrect} | <strong>Başarı Oranı:</strong> %${avgRatio}</p>`;
   calendarHtml += '</div>';
   
   document.getElementById('calendarContent').innerHTML = calendarHtml;
@@ -1292,23 +1292,28 @@ function initializeDailyTasks() {
     const parsed = JSON.parse(stored);
     if (parsed.lastReset !== today) {
       // Reset all tasks for new day
-      dailyTasks = {};
-      for (let key in DAILY_TASK_DEFINITIONS) {
-        dailyTasks[key] = { current: 0, earned_stars: 0 };
-      }
-      dailyTasks.lastReset = today;
-      saveDailyTasks();
+        dailyTasks = {};
+        for (let key in DAILY_TASK_DEFINITIONS) {
+          dailyTasks[key] = { current: 0, earned_stars: 0 };
+        }
+        // Özel alanları da sıfırla
+        dailyTasks.puanTracked = 0;
+        dailyTasks.mertebeCount = {};
+        dailyTasks.lastReset = today;
+        saveDailyTasks();
     } else {
       dailyTasks = parsed;
     }
   } else {
     // First time - initialize all tasks
-    dailyTasks = {};
-    for (let key in DAILY_TASK_DEFINITIONS) {
-      dailyTasks[key] = { current: 0, earned_stars: 0 };
-    }
-    dailyTasks.lastReset = today;
-    saveDailyTasks();
+      dailyTasks = {};
+      for (let key in DAILY_TASK_DEFINITIONS) {
+        dailyTasks[key] = { current: 0, earned_stars: 0 };
+      }
+      dailyTasks.puanTracked = 0;
+      dailyTasks.mertebeCount = {};
+      dailyTasks.lastReset = today;
+      saveDailyTasks();
   }
 }
 
@@ -1667,12 +1672,6 @@ async function showKelimeBul() {
         try {
           currentAudio = new Audio(q.ses_dosyasi);
           await currentAudio.play();
-            // Update statistics for ayetOku mode when audio is played
-            recordResult(true, 'ayetOku', 1);
-            // Update statistics for duaEt mode when audio is played
-            recordResult(true, 'duaEt', 1);
-            // Update statistics for hadisOku mode when audio is played
-            recordResult(true, 'hadisOku', 1);
           currentAudio.onended = () => {
             btn.disabled = false;
             btn.style.opacity = '1';
@@ -1937,9 +1936,6 @@ function showAyetOku() {
       try {
         currentAudio = new Audio(audioSrc);
         await currentAudio.play();
-          // Update statistics and daily task for ayetOku when audio is played
-          recordResult(true, 'ayetOku', 1);
-          updateDailyTask('ayet');
         currentAudio.onended = () => {
           btn.disabled = false;
           btn.style.opacity = '1';
@@ -1981,9 +1977,6 @@ function showDuaEt() {
       try {
         currentAudio = new Audio(audioSrc);
         await currentAudio.play();
-          // Update statistics and daily task for duaEt when audio is played
-          recordResult(true, 'duaEt', 1);
-          updateDailyTask('dua');
         currentAudio.onended = () => {
           btn.disabled = false;
           btn.style.opacity = '1';
